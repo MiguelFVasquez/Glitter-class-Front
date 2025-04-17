@@ -1,0 +1,159 @@
+/* Main container */
+.profile-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  /* Profile card */
+  .profile-card {
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  /* Profile header */
+  .profile-header {
+    background-color: #ec6425;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+  }
+  
+  .avatar-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+  
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+  }
+  
+  .edit-avatar-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: white;
+    color: #e5520d;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .profile-name {
+    margin: 0.5rem 0;
+    font-size: 1.8rem;
+  }
+  
+  .profile-role {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.9;
+  }
+  
+  /* Profile details */
+  .profile-details {
+    padding: 2rem;
+  }
+  
+  .detail-section {
+    margin-bottom: 2rem;
+  }
+  
+  .section-title {
+    color: #e5520d;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .detail-row {
+    display: flex;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .detail-label {
+    font-weight: 600;
+    color: #555;
+    min-width: 180px;
+  }
+  
+  .detail-value {
+    color: #333;
+  }
+  
+  /* Profile actions */
+  .profile-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem 2rem 2rem;
+  }
+  
+  .edit-profile-btn,
+  .change-password-btn {
+    background-color: #e5520d;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .edit-profile-btn:hover,
+  .change-password-btn:hover {
+    background-color: #d04a0b;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .detail-row {
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    
+    .profile-actions {
+      flex-direction: column;
+    }
+    
+    .edit-profile-btn,
+    .change-password-btn {
+      justify-content: center;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .profile-header {
+      padding: 1.5rem;
+    }
+    
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+    }
+    
+    .profile-name {
+      font-size: 1.5rem;
+    }
+  }
