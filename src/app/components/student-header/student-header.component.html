@@ -1,0 +1,20 @@
+<header class="student-header">
+  <div class="logo">
+    <h1>Glitter Class - Estudiante</h1>
+
+  </div>
+  <nav class="nav-links">
+    <a routerLink="/student/courses" routerLinkActive="active-link">
+      <i class="material-icons">school</i>
+      <span>Cursos</span>
+    </a>
+    <a routerLink="/student/profile" routerLinkActive="active-link">
+      <i class="material-icons">account_circle</i>
+      <span>Mi Perfil</span>
+    </a>
+    <a (click)="logout()">
+      <i class="material-icons">logout</i>
+      <span>Salir</span>
+    </a>
+  </nav>
+</header>
