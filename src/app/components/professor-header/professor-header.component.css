@@ -1,0 +1,109 @@
+.professor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #e5520d;
+    padding: 1rem 2rem;
+    color: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 100;
+  }
+  
+  .professor-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .professor-header .logo h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  
+  .professor-header .logo .role-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .professor-header .nav-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+  
+  .professor-header .nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.5rem 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .professor-header .nav-links a:hover {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .professor-header .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: white;
+    transition: width 0.3s ease;
+  }
+  
+  .professor-header .nav-links a:hover::after,
+  .professor-header .nav-links a.active-link::after {
+    width: 100%;
+  }
+  
+  .professor-header .nav-links a i {
+    font-size: 1.1rem;
+  }
+  
+  .professor-header .nav-links a.logout:hover {
+    color: #ffcccb;
+  }
+  
+  @media (max-width: 768px) {
+    .professor-header {
+      flex-direction: column;
+      padding: 1rem;
+      text-align: center;
+    }
+  
+    .professor-header .logo {
+      flex-direction: column;
+      margin-bottom: 1rem;
+    }
+  
+    .professor-header .logo .role-badge {
+      margin-top: 0.5rem;
+    }
+  
+    .professor-header .nav-links {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      width: 100%;
+    }
+  
+    .professor-header .nav-links a {
+      padding: 0.5rem;
+      font-size: 0.9rem;
+    }
+  }

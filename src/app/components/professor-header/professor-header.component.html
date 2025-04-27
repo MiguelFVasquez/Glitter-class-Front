@@ -1,1 +1,27 @@
-<p>professor-header works!</p>
+<header class="professor-header">
+  <div class="logo">
+    <h1>Glitter Class - Profesor</h1>
+  </div>
+  <nav class="nav-links">
+    <a routerLink="/professor/courses" routerLinkActive="active-link">
+      <i class="material-icons">school</i>
+      <span>Cursos</span>
+    </a>
+    <a routerLink="/professor/profile" routerLinkActive="active-link">
+      <i class="material-icons">account_circle</i>
+      <span>Mi Perfil</span>
+    </a>
+    <a routerLink="/professor/exams" routerLinkActive="active-link">
+      <i class="material-icons">assignment</i>
+      <span>Exámenes</span>
+    </a>
+    <a routerLink="/professor/questions" routerLinkActive="active-link">
+      <i class="material-icons">quiz</i>
+      <span>Preguntas</span>
+    </a>
+    <a (click)="logout()">
+      <i class="material-icons">logout</i>
+      <span>Salir</span>
+    </a>
+  </nav>
+</header>

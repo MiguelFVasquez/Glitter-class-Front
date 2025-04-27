@@ -4,6 +4,8 @@ import { StudentBoardComponent } from './components/student-board/student-board.
 import { ProfileComponent } from './components/profile/profile.component';
 import { CourseComponent } from './components/course/course.component';
 import { DetailCourseComponent } from './components/detail-course/detail-course.component';
+import { ProfessorBoardComponent } from './components/professor-board/professor-board.component';
+import { ProfessorProfileComponent } from './components/professor-profile/professor-profile.component';
 
 export const routes: Routes = [
     // Main page route
@@ -20,6 +22,15 @@ export const routes: Routes = [
             { path: 'courses', component:CourseComponent},
                 // Add course detail as child route under student
             { path: 'courses/:id', component: DetailCourseComponent }
+        ]
+    },
+    // Professor routes
+    {
+        path: 'professor',
+        component: ProfessorBoardComponent,
+        children: [
+            { path: '', redirectTo: 'profile', pathMatch: 'full' },
+            { path: 'profile', component: ProfessorProfileComponent },
         ]
     },
     
