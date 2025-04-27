@@ -1,1 +1,13 @@
-<p>course works!</p>
+<div class="courses-container">
+    <h1 class="courses-title">Available Courses</h1>
+    <div class="courses-grid">
+      <app-cursos-card 
+        *ngFor="let course of courses"
+        [courseId]="course.id"
+        [courseName]="course.name"
+        [professorName]="course.professor"
+        [imageUrl]="course.image"
+        [isEnrolled]="course.isEnrolled">
+      </app-cursos-card>
+    </div>
+  </div>

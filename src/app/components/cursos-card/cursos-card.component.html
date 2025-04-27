@@ -1,0 +1,14 @@
+<div class="course-card" [class.enrolled]="isEnrolled"  (click)="navigateToDetail()">
+    <div class="course-image-container">
+      <img [src]="imageUrl" [alt]="courseName" class="course-image">
+      <div class="enrolled-badge" *ngIf="isEnrolled">Inscrito</div>
+    </div>
+    
+    <div class="course-info">
+      <h3 class="course-name">{{ courseName }}</h3>
+      <p class="professor-name">
+        <i class="material-icons">person</i>
+        {{ professorName }}
+      </p>
+    </div>
+  </div>

@@ -3,6 +3,7 @@ import { HomeComponent } from './components/home/home.component';
 import { StudentBoardComponent } from './components/student-board/student-board.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { CourseComponent } from './components/course/course.component';
+import { DetailCourseComponent } from './components/detail-course/detail-course.component';
 
 export const routes: Routes = [
     // Main page route
@@ -16,7 +17,9 @@ export const routes: Routes = [
             // Default child route with proper pathMatch
             { path: '', redirectTo: 'profile', pathMatch: 'full' },
             { path: 'profile', component: ProfileComponent },
-            { path: 'courses', component:CourseComponent}
+            { path: 'courses', component:CourseComponent},
+                // Add course detail as child route under student
+            { path: 'courses/:id', component: DetailCourseComponent }
         ]
     },
     
