@@ -89,26 +89,70 @@
 
       <!-- Dynamic fields based on question type -->
       <div *ngIf="selectedQuestionType" class="question-type-fields">
-        <!-- This would be dynamically generated based on question type -->
-        <div class="form-group full-width">
-          <label>Opciones de respuesta</label>
+        <!-- Multiple choice options -->
+        <div *ngIf="selectedQuestionType.includes('Selección múltiple') || selectedQuestionType === 'Falso y verdadero'"
+             class="form-group full-width">
+          <label>Opciones de respuesta *</label>
           <div class="options-container">
-            <!-- Example for multiple choice -->
-            <div class="option-item" *ngIf="selectedQuestionType.includes('Selección múltiple')">
-              <input type="text" placeholder="Texto de la opción">
+            <div class="option-item" *ngFor="let option of opciones.controls; let i = index" [formGroupName]="i">
+              <input type="text" formControlName="texto" placeholder="Texto de la opción">
               <div class="option-controls">
                 <label>
-                  <input type="checkbox"> Correcta
+                  <input type="{{selectedQuestionType === 'Selección múltiple única respuesta' ? 'radio' : 'checkbox'}}" 
+                         formControlName="correcta" 
+                         name="{{selectedQuestionType === 'Selección múltiple única respuesta' ? 'correctOption' : 'correctOptions'}}">
+                  Correcta
                 </label>
-                <button type="button" class="btn-remove-option">
+                <button type="button" class="btn-remove-option" (click)="removeOption(i)">
                   <i class="material-icons">delete</i>
                 </button>
               </div>
             </div>
-            <button type="button" class="btn-add-option">
+            <button type="button" class="btn-add-option" (click)="addOption()">
               <i class="material-icons">add</i> Agregar opción
             </button>
           </div>
+        </div>
+
+        <!-- Matching pairs -->
+        <div *ngIf="selectedQuestionType === 'Emparejar'" class="form-group full-width">
+          <label>Pares para emparejar *</label>
+          <div class="pairs-container">
+            <div class="pair-item" *ngFor="let pair of pares.controls; let i = index" [formGroupName]="i">
+              <input type="text" formControlName="izquierda" placeholder="Elemento izquierdo">
+              <span class="pair-connector">→</span>
+              <input type="text" formControlName="derecha" placeholder="Elemento derecho">
+              <button type="button" class="btn-remove-pair" (click)="removePair(i)">
+                <i class="material-icons">delete</i>
+              </button>
+            </div>
+            <button type="button" class="btn-add-pair" (click)="addPair()">
+              <i class="material-icons">add</i> Agregar par
+            </button>
+          </div>
+        </div>
+
+        <!-- Ordering elements -->
+        <div *ngIf="selectedQuestionType === 'Ordenar'" class="form-group full-width">
+          <label>Elementos para ordenar *</label>
+          <div class="order-container">
+            <div class="order-item" *ngFor="let element of elementosOrdenar.controls; let i = index" [formGroupName]="i">
+              <input type="text" formControlName="texto" placeholder="Texto del elemento">
+              <button type="button" class="btn-remove-order" (click)="removeOrderElement(i)">
+                <i class="material-icons">delete</i>
+              </button>
+            </div>
+            <button type="button" class="btn-add-order" (click)="addOrderElement()">
+              <i class="material-icons">add</i> Agregar elemento
+            </button>
+          </div>
+        </div>
+
+        <!-- Completion question instructions -->
+        <div *ngIf="selectedQuestionType === 'Completar'" class="form-group full-width">
+          <label>Instrucciones para completar</label>
+          <p>Use guiones bajos (_____) para indicar los espacios a completar en el enunciado.</p>
+          <p>Ejemplo: "La capital de Francia es _____"</p>
         </div>
       </div>
 

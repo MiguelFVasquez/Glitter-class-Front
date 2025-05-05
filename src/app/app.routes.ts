@@ -7,6 +7,7 @@ import { DetailCourseComponent } from './components/detail-course/detail-course.
 import { ProfessorBoardComponent } from './components/professor-board/professor-board.component';
 import { ProfessorProfileComponent } from './components/professor-profile/professor-profile.component';
 import { QuestionBoardComponent } from './components/question-board/question-board.component';
+import { ExamBoardComponent } from './components/exam-board/exam-board.component';
 
 export const routes: Routes = [
     // Main page route
@@ -32,7 +33,8 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'profile', pathMatch: 'full' },
             { path: 'profile', component: ProfessorProfileComponent },
-            {path: 'questions', component: QuestionBoardComponent}
+            { path: 'questions', component: QuestionBoardComponent},
+            { path: 'exam', component: ExamBoardComponent}
         ]
     },
 
