@@ -6,14 +6,15 @@ import { CourseComponent } from './components/course/course.component';
 import { DetailCourseComponent } from './components/detail-course/detail-course.component';
 import { ProfessorBoardComponent } from './components/professor-board/professor-board.component';
 import { ProfessorProfileComponent } from './components/professor-profile/professor-profile.component';
+import { QuestionBoardComponent } from './components/question-board/question-board.component';
 
 export const routes: Routes = [
     // Main page route
     { path: '', component: HomeComponent },
-    
+
     // Student routes
     {
-        path: 'student', 
+        path: 'student',
         component: StudentBoardComponent,
         children: [
             // Default child route with proper pathMatch
@@ -31,9 +32,10 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'profile', pathMatch: 'full' },
             { path: 'profile', component: ProfessorProfileComponent },
+            {path: 'questions', component: QuestionBoardComponent}
         ]
     },
-    
+
     // Wildcard route (should be last)
     { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

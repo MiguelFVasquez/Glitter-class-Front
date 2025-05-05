@@ -1,0 +1,160 @@
+<div class="question-board-container">
+  <div class="header-section">
+    <h1>Banco de Preguntas</h1>
+    <div class="controls">
+      <button class="btn-new-question" (click)="toggleQuestionForm()">
+        <i class="material-icons">add</i>
+        Nueva Pregunta
+      </button>
+      <div class="filter">
+        <label for="filterType">Filtrar por tipo:</label>
+        <select id="filterType" [(ngModel)]="filterType">
+          <option value="">Todos</option>
+          <option *ngFor="let type of questionTypes" [value]="type">{{type}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="question-form-section" *ngIf="showQuestionForm">
+    <form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-group full-width">
+          <label for="enunciado">Enunciado *</label>
+          <textarea id="enunciado" formControlName="enunciado" rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="tipo">Tipo de pregunta *</label>
+          <select id="tipo" formControlName="tipo">
+            <option value="">Seleccione un tipo</option>
+            <option *ngFor="let type of questionTypes" [value]="type">{{type}}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="tema">Tema *</label>
+          <select id="tema" formControlName="tema">
+            <option value="">Seleccione un tema</option>
+            <option *ngFor="let topic of topics" [value]="topic">{{topic}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="categoria">Categoría *</label>
+          <select id="categoria" formControlName="categoria">
+            <option value="">Seleccione una categoría</option>
+            <option *ngFor="let category of categories" [value]="category">{{category}}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="dificultad">Dificultad *</label>
+          <select id="dificultad" formControlName="dificultad">
+            <option value="">Seleccione dificultad</option>
+            <option *ngFor="let level of difficultyLevels" [value]="level">{{level}}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="tiempoMaximo">Tiempo máximo (segundos) *</label>
+          <input type="number" id="tiempoMaximo" formControlName="tiempoMaximo" min="10">
+        </div>
+
+        <div class="form-group">
+          <label for="porcentaje">Porcentaje (%) *</label>
+          <input type="number" id="porcentaje" formControlName="porcentaje" min="1" max="100">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group radio-group">
+          <label>Visibilidad:</label>
+          <div class="radio-options">
+            <label>
+              <input type="radio" formControlName="publica" [value]="true"> Pública
+            </label>
+            <label>
+              <input type="radio" formControlName="publica" [value]="false"> Privada
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dynamic fields based on question type -->
+      <div *ngIf="selectedQuestionType" class="question-type-fields">
+        <!-- This would be dynamically generated based on question type -->
+        <div class="form-group full-width">
+          <label>Opciones de respuesta</label>
+          <div class="options-container">
+            <!-- Example for multiple choice -->
+            <div class="option-item" *ngIf="selectedQuestionType.includes('Selección múltiple')">
+              <input type="text" placeholder="Texto de la opción">
+              <div class="option-controls">
+                <label>
+                  <input type="checkbox"> Correcta
+                </label>
+                <button type="button" class="btn-remove-option">
+                  <i class="material-icons">delete</i>
+                </button>
+              </div>
+            </div>
+            <button type="button" class="btn-add-option">
+              <i class="material-icons">add</i> Agregar opción
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="toggleQuestionForm()">Cancelar</button>
+        <button type="submit" class="btn-submit" [disabled]="!questionForm.valid">Guardar Pregunta</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="questions-list">
+    <div class="question-card" *ngFor="let question of filteredQuestions">
+      <div class="question-header">
+        <h3>{{question.enunciado}}</h3>
+        <span class="question-type">{{question.tipo}}</span>
+      </div>
+      <div class="question-details">
+        <div class="detail-item">
+          <i class="material-icons">category</i>
+          <span>{{question.tema}} • {{question.categoria}}</span>
+        </div>
+        <div class="detail-item">
+          <i class="material-icons">speed</i>
+          <span>{{question.dificultad}}</span>
+        </div>
+        <div class="detail-item">
+          <i class="material-icons">timer</i>
+          <span>{{question.tiempo}} segundos</span>
+        </div>
+        <div class="detail-item">
+          <i class="material-icons">percent</i>
+          <span>{{question.porcentaje}}%</span>
+        </div>
+        <div class="detail-item">
+          <i class="material-icons">{{question.publica ? 'public' : 'lock'}}</i>
+          <span>{{question.publica ? 'Pública' : 'Privada'}}</span>
+        </div>
+      </div>
+      <div class="question-actions">
+        <button class="btn-edit">
+          <i class="material-icons">edit</i>
+        </button>
+        <button class="btn-delete">
+          <i class="material-icons">delete</i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
