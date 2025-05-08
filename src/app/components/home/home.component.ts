@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { showAlert } from '../../model/alert';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -21,7 +21,8 @@ export class HomeComponent {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
@@ -33,48 +34,47 @@ export class HomeComponent {
     this.showPassword = !this.showPassword;
   }
 
-    onSubmit(): void {
-      if (this.loginForm.invalid) {
-        return;
-      }
+  onSubmit(): void {
+    if (this.loginForm.invalid) {
+      return;
+    }
 
-      this.isLoading = true;
-      this.errorMessage = '';
+    this.isLoading = true;
+    this.errorMessage = '';
 
-      const { username, password } = this.loginForm.value; //Auth service, is not yet
-      
-      if (username === 'student@gmail.com' && password === 'student1234') {
-        //  redirect to 'student' component if the credential are correct
-        this.router.navigateByUrl('/student');
-      }else if(username === 'professor@gmail.com' && password === 'professor1234'){
-        //Redirect to 'professor ' component
-        this.router.navigateByUrl('/professor');
-      }else {
-        //  Error messagge if the credentials are incorrect
-        showAlert('Credenciales incorrectas. Inténtalo de nuevo.');
-      }
-    } 
-    
-    /*
-    this.authService.login(username, password).subscribe({
-      next: () => {
+    const loginDto = {
+      correo: this.loginForm.value.username,
+      contrasena: this.loginForm.value.password
+    };
+    this.authService.login(loginDto).subscribe({
+      next: (response) => {
+        const user = response.respuesta;
+        if (user.idRol === 3) {
+          this.router.navigateByUrl('/student');
+        } else if (user.idRol === 2) {
+          this.router.navigateByUrl('/professor');
+        } else {
+          this.errorMessage = 'Rol de usuario no reconocido.';
+        }
         this.isLoading = false;
-        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
+        this.errorMessage = 'Credenciales incorrectas o error del servidor.';
         this.isLoading = false;
-        this.errorMessage = err.message || 'Login failed. Please try again.';
       }
-    });*/
+      });
+  }
+
+
 
     get username() {
       return this.loginForm.get('username');
     }
-  
+
     get password() {
       return this.loginForm.get('password');
-    } 
-  
+    }
+
   }
 
 
