@@ -46,9 +46,12 @@ export class HomeComponent {
       correo: this.loginForm.value.username,
       contrasena: this.loginForm.value.password
     };
+
+    console.log("user: ", loginDto )
     this.authService.login(loginDto).subscribe({
+
       next: (response) => {
-        const user = response.respuesta;
+        const user = response.respuesta;  
         if (user.idRol === 3) {
           this.router.navigateByUrl('/student');
         } else if (user.idRol === 2) {
