@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import {loginDto} from '../../model/user/LoginDTO';
+import { StorageService } from '../../services/storage.service';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +23,8 @@ export class HomeComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private storageService: StorageService
   ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
@@ -51,7 +53,7 @@ export class HomeComponent {
     this.authService.login(loginDto).subscribe({
 
       next: (user) => {
-        localStorage.setItem('userId', user.idUsuario.toString()); //Se almacena el id del usuario en el local storage
+        this.storageService.set('userId', user.idUsuario.toString());
         if (user.idRol === 3) {
           this.router.navigateByUrl('/student');
         } else if (user.idRol === 2) {
