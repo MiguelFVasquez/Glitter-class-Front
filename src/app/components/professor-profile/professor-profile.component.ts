@@ -17,7 +17,7 @@ export class ProfessorProfileComponent implements OnInit {
   ngOnInit(): void {
     const id = localStorage.getItem('userId');
     if (id) {
-      this.usuarioService.getUsuarioById(+id).subscribe({
+      this.authService.getUsuarioById(+id).subscribe({
         next: (resp) => {
           this.usuario = resp.respuesta;
         },
