@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-
+import {loginDto} from '../../model/user/LoginDTO';
 
 @Component({
   selector: 'app-home',
@@ -42,7 +42,7 @@ export class HomeComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
-    const loginDto = {
+    const loginDto:loginDto =  {
       correo: this.loginForm.value.username,
       contrasena: this.loginForm.value.password
     };
@@ -50,8 +50,7 @@ export class HomeComponent {
     console.log("user: ", loginDto )
     this.authService.login(loginDto).subscribe({
 
-      next: (response) => {
-        const user = response.respuesta;  
+      next: (user) => {
         if (user.idRol === 3) {
           this.router.navigateByUrl('/student');
         } else if (user.idRol === 2) {
@@ -60,7 +59,8 @@ export class HomeComponent {
           this.errorMessage = 'Rol de usuario no reconocido.';
         }
         this.isLoading = false;
-      },
+      }
+      ,
       error: (err) => {
         this.errorMessage = 'Credenciales incorrectas o error del servidor.';
         this.isLoading = false;
@@ -68,17 +68,15 @@ export class HomeComponent {
       });
   }
 
-
-
-    get username() {
-      return this.loginForm.get('username');
-    }
-
-    get password() {
-      return this.loginForm.get('password');
-    }
-
+  get username() {
+    return this.loginForm.get('username');
   }
+
+  get password() {
+    return this.loginForm.get('password');
+  }
+
+}
 
 
 
