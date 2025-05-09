@@ -1,6 +1,6 @@
 import { Component,OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
 import {userProfileDto } from '../../model/user/userProfileDTO';
+import { PublicService } from '../../services/public.service';
 
 @Component({
   selector: 'app-professor-profile',
@@ -12,12 +12,12 @@ export class ProfessorProfileComponent implements OnInit {
   usuario?: userProfileDto;
 
 
-  constructor(private authService: AuthService) {}
+  constructor(private publicService:PublicService) {}
 
   ngOnInit(): void {
     const id = localStorage.getItem('userId');
     if (id) {
-      this.authService.getUsuarioById(+id).subscribe({
+      this.publicService.getUsuarioById(+id).subscribe({
         next: (resp) => {
           this.usuario = resp.respuesta;
         },
