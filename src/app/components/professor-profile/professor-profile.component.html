@@ -1,76 +1,76 @@
 <div class="professor-profile-container">
-<div class="profile-header">
+  <div class="profile-header">
     <h1>Perfil del Profesor</h1>
-</div>
+  </div>
 
-<div class="profile-card">
+  <div class="profile-card">
     <div class="profile-info">
-    <div class="avatar-section">
+      <div class="avatar-section">
         <img src="profile.png" alt="Professor Avatar" class="profile-avatar">
-    </div>
-    
-    <div class="details-section">
-        <h2 class="professor-name">Dr. Alejandro Rodríguez</h2>
-        <p class="professor-title">Profesor Titular</p>
-        
+      </div>
+
+      <div class="details-section">
+        <h2 class="professor-name">{{usuario?.nombre}} {{usuario?.apellido}} </h2>
+        <p class="professor-title">{{usuario?.idUnidad}}</p>
+
         <div class="contact-info">
-        <div class="contact-item">
+          <div class="contact-item">
             <i class="material-icons">email</i>
-            <span>arodriguezuniversidad.edu</span>
-        </div>
-        <div class="contact-item">
+            <span>{{usuario?.correo}}</span>
+          </div>
+          <div class="contact-item">
             <i class="material-icons">phone</i>
             <span>+52 55 1234 5678</span>
-        </div>
-        <div class="contact-item">
+          </div>
+          <div class="contact-item">
             <i class="material-icons">location_on</i>
             <span>Oficina 304, Edificio Principal</span>
+          </div>
         </div>
-        </div>
-    </div>
+      </div>
     </div>
 
     <div class="profile-sections">
-    <div class="section">
+      <div class="section">
         <h3 class="section-title">
-        <i class="material-icons">school</i>
-        Cursos Impartidos
+          <i class="material-icons">school</i>
+          Cursos Impartidos
         </h3>
         <ul class="courses-list">
-        <li>Bases de Datos Avanzadas</li>
-        <li>Inteligencia Artificial</li>
-        <li>Arquitectura de Software</li>
+          <li>Bases de Datos Avanzadas</li>
+          <li>Inteligencia Artificial</li>
+          <li>Arquitectura de Software</li>
         </ul>
-    </div>
+      </div>
 
-    <div class="section">
+      <div class="section">
         <h3 class="section-title">
-        <i class="material-icons">work</i>
-        Experiencia Académica
+          <i class="material-icons">work</i>
+          Experiencia Académica
         </h3>
         <div class="experience-item">
-        <h4>Universidad Nacional</h4>
-        <p class="date">2015 - Presente</p>
-        <p>Profesor Titular del Departamento de Ciencias Computacionales</p>
+          <h4>Universidad Nacional</h4>
+          <p class="date">2015 - Presente</p>
+          <p>Profesor Titular del Departamento de Ciencias Computacionales</p>
         </div>
         <div class="experience-item">
-        <h4>Instituto Tecnológico</h4>
-        <p class="date">2010 - 2015</p>
-        <p>Profesor Asociado</p>
+          <h4>Instituto Tecnológico</h4>
+          <p class="date">2010 - 2015</p>
+          <p>Profesor Asociado</p>
         </div>
-    </div>
-    
+      </div>
+
     </div>
 
     <div class="profile-actions">
-    <button class="edit-profile-btn">
+      <button class="edit-profile-btn">
         <i class="material-icons">edit</i>
         Editar Perfil
-    </button>
-    <button class="change-password-btn">
+      </button>
+      <button class="change-password-btn">
         <i class="material-icons">lock</i>
         Cambiar Contraseña
-    </button>
+      </button>
     </div>
-</div>
+  </div>
 </div>

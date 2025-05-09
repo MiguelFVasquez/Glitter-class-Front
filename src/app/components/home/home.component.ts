@@ -51,6 +51,7 @@ export class HomeComponent {
     this.authService.login(loginDto).subscribe({
 
       next: (user) => {
+        localStorage.setItem('userId', user.idUsuario.toString()); //Se almacena el id del usuario en el local storage
         if (user.idRol === 3) {
           this.router.navigateByUrl('/student');
         } else if (user.idRol === 2) {
