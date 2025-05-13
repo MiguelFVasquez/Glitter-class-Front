@@ -53,10 +53,10 @@ export class HomeComponent {
     this.authService.login(loginDto).subscribe({
 
       next: (user) => {
-        this.storageService.set('userId', user.idUsuario.toString());
-        if (user.idRol === 3) {
+        this.storageService.set('userId', user.respuesta.idUsuario.toString());
+        if (user.respuesta.idUsuario === 3) {
           this.router.navigateByUrl('/student');
-        } else if (user.idRol === 2) {
+        } else if (user.respuesta.idUsuario === 2) {
           this.router.navigateByUrl('/professor');
         } else {
           this.errorMessage = 'Rol de usuario no reconocido.';
@@ -66,7 +66,7 @@ export class HomeComponent {
       ,
       error: (err) => {
         this.errorMessage = 'Credenciales incorrectas o error del servidor.';
-        this.isLoading = false;
+        this.isLoading = false
       }
       });
   }

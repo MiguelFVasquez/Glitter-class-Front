@@ -16,8 +16,8 @@ export class AuthService {
 
 
 
-  login(login: loginDto): Observable<userReadDto> {
-    return this.http.post<userReadDto>(`${this.apiURL}/login`, login);
+  login(login: loginDto): Observable<Message<userReadDto>> {
+    return this.http.post<Message<userReadDto>>(`${this.apiURL}/login`, login);
   }
 
 }
