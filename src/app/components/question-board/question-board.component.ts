@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators,FormsModule,ReactiveFormsModule,FormArray } from '@angular/forms';
-
+import { PublicService } from '../../services/public.service';
+import { categoria } from '../../model/enums/categoriaDto';
+import {tipoPregunta} from '../../model/enums/tiposPreguntaDto'
+import {dificultad} from '../../model/enums/dificultadesDto'
 @Component({
   selector: 'app-question-board',
   imports: [CommonModule,FormsModule,ReactiveFormsModule],
@@ -9,26 +12,21 @@ import { FormBuilder, FormGroup, Validators,FormsModule,ReactiveFormsModule,Form
   styleUrl: './question-board.component.css'
 })
 
-export class QuestionBoardComponent {
+export class QuestionBoardComponent implements OnInit {
   questionForm!: FormGroup;
-  questionTypes = [
-    'Selección múltiple única respuesta',
-    'Selección múltiple múltiples respuestas',
-    'Falso y verdadero',
-    'Ordenar',
-    'Emparejar',
-    'Completar'
-  ];
-  topics = ['Matemáticas', 'Ciencias', 'Historia', 'Literatura', 'Programación'];
-  categories = ['Conceptual', 'Procedimental', 'Actitudinal'];
-  difficultyLevels = ['Baja', 'Media', 'Alta'];
+  categories: categoria[] = [];
+  difficultyLevels: dificultad[] = [];
+  questionTypes: tipoPregunta[] = [];
   questions: any[] = [];
   selectedQuestionType = '';
   showQuestionForm = false;
   filterType = '';
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private publicService:PublicService) {
     this.initializeForm();
+
     // Sample questions for demonstration
     this.questions = [
       {
@@ -77,7 +75,42 @@ export class QuestionBoardComponent {
     });
   }
 
+  ngOnInit(): void {
+    //Cargar categorías
+    this.publicService.getCategorias().subscribe({
+      next: resp => {
+        if (!resp.error) {
+          this.categories = resp.respuesta;
+        }else{
+          console.warn ('Error en getCategorias')
+        }
+      },
+      error: () => console.error('Error cargando categorías')
+    });
+    //Cargar tipos de pregunta
+    this.publicService.getTiposPregunta().subscribe({
+      next: resp => {
+        if (!resp.error) {
+          this.questionTypes = resp.respuesta;
+        } else {
+          console.warn('Error en getTiposPregunta');
+        }
+      },
+      error: err => console.error('Error al cargar tipos de pregunta', err)
+    });
 
+    // Cargar niveles de dificultad
+    this.publicService.getDificultades().subscribe({
+      next: resp => {
+        if (!resp.error) {
+          this.difficultyLevels = resp.respuesta;
+        } else {
+          console.warn('Error en getDificultades');
+        }
+      },
+      error: err => console.error('Error al cargar dificultades', err)
+    });
+  }
   get opciones(): FormArray {
     return this.questionForm.get('opciones') as FormArray;
   }

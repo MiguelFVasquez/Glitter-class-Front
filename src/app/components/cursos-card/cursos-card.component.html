@@ -1,6 +1,5 @@
 <div class="course-card" [class.enrolled]="isEnrolled"  (click)="navigateToDetail()">
     <div class="course-image-container">
-      <img [src]="imageUrl" [alt]="courseName" class="course-image">
       <div class="enrolled-badge" *ngIf="isEnrolled">Inscrito</div>
     </div>
     

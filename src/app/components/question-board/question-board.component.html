@@ -10,7 +10,7 @@
         <label for="filterType">Filtrar por tipo:</label>
         <select id="filterType" [(ngModel)]="filterType">
           <option value="">Todos</option>
-          <option *ngFor="let type of questionTypes" [value]="type">{{type}}</option>
+          <option *ngFor="let type of questionTypes" [value]="type">{{type.nombre}}</option>
         </select>
       </div>
     </div>
@@ -38,7 +38,7 @@
           <label for="tema">Tema *</label>
           <select id="tema" formControlName="tema">
             <option value="">Seleccione un tema</option>
-            <option *ngFor="let topic of topics" [value]="topic">{{topic}}</option>
+            <option *ngFor="let category of categories" [value]="categories">{{category.nombre}}</option>
           </select>
         </div>
       </div>
@@ -56,7 +56,7 @@
           <label for="dificultad">Dificultad *</label>
           <select id="dificultad" formControlName="dificultad">
             <option value="">Seleccione dificultad</option>
-            <option *ngFor="let level of difficultyLevels" [value]="level">{{level}}</option>
+            <option *ngFor="let level of difficultyLevels" [value]="level">{{level.nombre}}</option>
           </select>
         </div>
       </div>
@@ -91,16 +91,16 @@
       <div *ngIf="selectedQuestionType" class="question-type-fields">
         <!-- Multiple choice options -->
         <div *ngIf="selectedQuestionType.includes('Selección múltiple') || selectedQuestionType === 'Falso y verdadero'"
-             class="form-group full-width">
+          class="form-group full-width">
           <label>Opciones de respuesta *</label>
           <div class="options-container">
             <div class="option-item" *ngFor="let option of opciones.controls; let i = index" [formGroupName]="i">
               <input type="text" formControlName="texto" placeholder="Texto de la opción">
               <div class="option-controls">
                 <label>
-                  <input type="{{selectedQuestionType === 'Selección múltiple única respuesta' ? 'radio' : 'checkbox'}}" 
-                         formControlName="correcta" 
-                         name="{{selectedQuestionType === 'Selección múltiple única respuesta' ? 'correctOption' : 'correctOptions'}}">
+                  <input type="{{selectedQuestionType === 'Selección múltiple única respuesta' ? 'radio' : 'checkbox'}}"
+                    formControlName="correcta"
+                    name="{{selectedQuestionType === 'Selección múltiple única respuesta' ? 'correctOption' : 'correctOptions'}}">
                   Correcta
                 </label>
                 <button type="button" class="btn-remove-option" (click)="removeOption(i)">
@@ -136,7 +136,8 @@
         <div *ngIf="selectedQuestionType === 'Ordenar'" class="form-group full-width">
           <label>Elementos para ordenar *</label>
           <div class="order-container">
-            <div class="order-item" *ngFor="let element of elementosOrdenar.controls; let i = index" [formGroupName]="i">
+            <div class="order-item" *ngFor="let element of elementosOrdenar.controls; let i = index"
+              [formGroupName]="i">
               <input type="text" formControlName="texto" placeholder="Texto del elemento">
               <button type="button" class="btn-remove-order" (click)="removeOrderElement(i)">
                 <i class="material-icons">delete</i>
