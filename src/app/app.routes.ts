@@ -33,7 +33,7 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'profile', pathMatch: 'full' },
             { path: 'profile', component: ProfessorProfileComponent },
-            {path: 'courses', component: CourseComponents}
+            {path: 'courses', component: CourseComponent},
             { path: 'questions', component: QuestionBoardComponent},
             { path: 'exam', component: ExamBoardComponent}
         ]
