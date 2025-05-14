@@ -1,48 +1,47 @@
-<div class="detail-container" *ngIf="courseDetails">
-    <div class="detail-header">
-      <button class="back-button" routerLink="/student/courses">
-        <i class="material-icons">arrow_back</i>
-        Volver a cursos
-      </button>
-      <h1>{{ courseDetails.name }}</h1>
+<div class="detail-container" *ngIf="courseDetails; else loading">
+  <div class="detail-header">
+    <button class="back-button" routerLink="/student/courses">
+      <i class="material-icons">arrow_back</i>
+      Volver a cursos
+    </button>
+    <h1>{{ courseDetails.nombre }}</h1>
+  </div>
+
+  <div class="detail-content">
+    <!-- Si tuvieras imagen puedes dejar esto, o comentar -->
+    <!--
+    <div class="course-image">
+      <img [src]="courseDetails.imagenUrl" [alt]="courseDetails.nombre">
     </div>
-  
-    <div class="detail-content">
-      <div class="course-image">
-        <img [src]="courseDetails.image" [alt]="courseDetails.name">
+    -->
+
+    <div class="course-info">
+      <div class="info-section">
+        <h2>Descripción</h2>
+        <p>{{ courseDetails.descripcion }}</p>
       </div>
-      
-      <div class="course-info">
-        <div class="info-section">
-          <h2>Información del curso</h2>
-          <p>{{ courseDetails.description }}</p>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <i class="material-icons">school</i>
+          <div>
+            <h3>Créditos</h3>
+            <p>{{ courseDetails.creditos }}</p>
+          </div>
         </div>
-        
-        <div class="details-grid">
-          <div class="detail-item">
-            <i class="material-icons">person</i>
-            <div>
-              <h3>Profesor</h3>
-              <p>{{ courseDetails.professor }}</p>
-            </div>
-          </div>
-          
-          <div class="detail-item">
-            <i class="material-icons">schedule</i>
-            <div>
-              <h3>Horario</h3>
-              <p>{{ courseDetails.schedule }}</p>
-            </div>
-          </div>
-          
-          <div class="detail-item">
-            <i class="material-icons">school</i>
-            <div>
-              <h3>Créditos</h3>
-              <p>{{ courseDetails.credits }}</p>
-            </div>
+
+        <div class="detail-item">
+          <i class="material-icons">domain</i>
+          <div>
+            <h3>Unidad Académica</h3>
+            <p>{{ courseDetails.unidadAcademica }}</p>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+
+<ng-template #loading>
+  <p>Cargando información del curso…</p>
+</ng-template>

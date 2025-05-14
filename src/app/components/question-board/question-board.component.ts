@@ -77,7 +77,7 @@ export class QuestionBoardComponent implements OnInit {
 
   ngOnInit(): void {
     //Cargar categorías
-    this.publicService.getCategorias().subscribe({
+    this.publicService.getTemas().subscribe({
       next: resp => {
         if (!resp.error) {
           this.categories = resp.respuesta;

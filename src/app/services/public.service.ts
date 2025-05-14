@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Message } from '../model/message/messageDTO';
-import { userReadDto } from '../model/user/userReadDTO';
-import { loginDto } from '../model/user/LoginDTO';
 import { Observable } from 'rxjs';
 import { userProfileDto } from '../model/user/userProfileDTO';
 import {categoria} from '../model/enums/categoriaDto';
-
-import {curso} from '../model/enums/cursoDto';
 import {dificultad} from '../model/enums/dificultadesDto';
 import {tipoPregunta} from '../model/enums/tiposPreguntaDto';
+import { CourseDto } from '../model/courses/courseDto';
 
 @Injectable({
   providedIn: 'root'
@@ -23,12 +20,12 @@ export class PublicService {
     return this.http.get<Message<userProfileDto>>(`${this.apiURL}/obtener-usuario/${id}`);
   }
   //Method to get all categories, are like the theme of the question
-  getCategorias():Observable<Message<categoria[]>>{
-    return this.http.get<Message<categoria[]>>(`${this.apiURL}/obtener-categorias`);
+  getTemas():Observable<Message<categoria[]>>{
+    return this.http.get<Message<categoria[]>>(`${this.apiURL}/obtener-temas`);
   }
   //Method to get all cuourses
-  getCursos():Observable<Message<curso[]>>{
-    return this.http.get<Message<curso[]>>(`${this.apiURL}/obtener-cursos`);
+  getCursos():Observable<Message<CourseDto[]>>{
+    return this.http.get<Message<CourseDto[]>>(`${this.apiURL}/obtener-cursos`);
   }
   //Method to get all dificulties of the questions
   getDificultades():Observable<Message<dificultad[]>>{
@@ -37,5 +34,12 @@ export class PublicService {
   //Method to get all types of questions
   getTiposPregunta(): Observable<Message<tipoPregunta[]>>{
     return this.http.get<Message<tipoPregunta[]>>(`${this.apiURL}/obtener-tipos`);
+  }
+  //Method to get the professor courses,
+  getCoursesToProfessor(id: number): Observable<Message<CourseDto[]>> {
+    return this.http.get<Message<CourseDto[]>>(`${this.apiURL}/cursos-docente/${id}`);
+  }
+  getCoursesToStudent(id: number): Observable<Message<CourseDto[]>> {
+    return this.http.get<Message<CourseDto[]>>(`${this.apiURL}/cursos-estudiante/${id}`);
   }
 }

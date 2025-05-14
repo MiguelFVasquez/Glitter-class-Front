@@ -1,13 +1,16 @@
-<div class="course-card" [class.enrolled]="isEnrolled"  (click)="navigateToDetail()">
-    <div class="course-image-container">
-      <div class="enrolled-badge" *ngIf="isEnrolled">Inscrito</div>
-    </div>
-    
-    <div class="course-info">
-      <h3 class="course-name">{{ courseName }}</h3>
-      <p class="professor-name">
-        <i class="material-icons">person</i>
-        {{ professorName }}
-      </p>
-    </div>
+<div class="course-card" [class.enrolled]="isEnrolled" (click)="navigateToDetail()">
+  <div class="course-image-container">
+    <div class="enrolled-badge" *ngIf="isEnrolled">Inscrito</div>
   </div>
+
+  <div class="course-info">
+    <h3 class="course-name">{{ course.nombre }}</h3>
+    <p class="course-description">{{ course.descripcion }}</p>
+    <p class="course-detail">
+      <strong>Créditos:</strong> {{ course.creditos }}
+    </p>
+    <p class="course-detail">
+      <strong>Unidad Académica:</strong> {{ course.unidadAcademica }}
+    </p>
+  </div>
+</div>

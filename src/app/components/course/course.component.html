@@ -1,8 +1,8 @@
+<!-- course.component.html -->
 <div class="courses-container">
-  <h1 class="courses-title">Available Courses</h1>
+  <h1 class="courses-title">Cursos disponibles</h1>
   <div class="courses-grid">
-    <app-cursos-card *ngFor="let course of courses" [courseId]="course.id" [courseName]="course.name"
-      [professorName]="course.professor" [imageUrl]="course.image" [isEnrolled]="course.isEnrolled">
+    <app-cursos-card *ngFor="let course of courses" [course]="course">
     </app-cursos-card>
   </div>
 </div>

@@ -30,7 +30,7 @@
           <label for="tipo">Tipo de pregunta *</label>
           <select id="tipo" formControlName="tipo">
             <option value="">Seleccione un tipo</option>
-            <option *ngFor="let type of questionTypes" [value]="type">{{type}}</option>
+            <option *ngFor="let type of questionTypes" [value]="type">{{type.nombre}}</option>
           </select>
         </div>
 
@@ -43,23 +43,14 @@
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label for="categoria">Categoría *</label>
-          <select id="categoria" formControlName="categoria">
-            <option value="">Seleccione una categoría</option>
-            <option *ngFor="let category of categories" [value]="category">{{category}}</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="dificultad">Dificultad *</label>
-          <select id="dificultad" formControlName="dificultad">
-            <option value="">Seleccione dificultad</option>
-            <option *ngFor="let level of difficultyLevels" [value]="level">{{level.nombre}}</option>
-          </select>
-        </div>
+      <div class="form-group">
+        <label for="dificultad">Dificultad *</label>
+        <select id="dificultad" formControlName="dificultad">
+          <option value="">Seleccione dificultad</option>
+          <option *ngFor="let level of difficultyLevels" [value]="level">{{level.nombre}}</option>
+        </select>
       </div>
+
 
       <div class="form-row">
         <div class="form-group">

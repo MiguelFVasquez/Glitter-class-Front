@@ -54,9 +54,11 @@ export class HomeComponent {
 
       next: (user) => {
         this.storageService.set('userId', user.respuesta.idUsuario.toString());
-        if (user.respuesta.idRol === 3) {
+        if (user.respuesta.idRol === 1) {
+          this.storageService.setUserRole(user.respuesta.idRol);
           this.router.navigateByUrl('/student');
         } else if (user.respuesta.idRol === 2) {
+          this.storageService.setUserRole(user.respuesta.idRol);
           this.router.navigateByUrl('/professor');
         } else {
           this.errorMessage = 'Rol de usuario no reconocido.';
