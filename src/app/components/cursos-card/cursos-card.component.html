@@ -4,11 +4,20 @@
   </div>
 
   <div class="course-info">
-    <h3 class="course-name">{{ course.nombre }}</h3>
-    <p class="course-description">{{ course.descripcion }}</p>
+    <h3 class="course-name">{{ course.nombreCurso }}</h3>
+
+    <p class="course-detail">
+      <strong>Docente:</strong> {{ course.nombreDocente }}
+    </p>
+
+    <p class="course-detail">
+      <strong>Grupo:</strong> {{ course.nombreGrupo }}
+    </p>
+
     <p class="course-detail">
       <strong>Créditos:</strong> {{ course.creditos }}
     </p>
+
     <p class="course-detail">
       <strong>Unidad Académica:</strong> {{ course.unidadAcademica }}
     </p>

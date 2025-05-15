@@ -20,19 +20,16 @@ export class CourseComponent implements OnInit{
   ngOnInit(): void {
     this.loadCourses();
   }
-  
+
 
   loadCourses(){
     const idUsuario: number = Number(this.storageService.get('userId'));
-    console.log("Idusario" , idUsuario)
     const idRol: number = Number(this.storageService.getUserRole());
-    console.log("idrol" , idRol)
-    if (idRol==3) { //If currently rol is studen we get all courses from this student
+    if (idRol==3) { //If currently rol is student we get all courses from this student
       this.publicService.getCoursesToStudent(idUsuario).subscribe({
         next: (response) => {
           if (!response.error) {
             this.courses = response.respuesta;
-            
             console.log("Respuesta del back" , response.respuesta)
           } else {
             console.error('Error en la respuesta del backend');

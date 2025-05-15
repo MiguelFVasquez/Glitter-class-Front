@@ -1,7 +1,10 @@
 export interface CourseDto {
+  idUsuario: number;
   idCurso: number;
-  nombre: string;
-  descripcion: string;
+  nombreCurso: string;
   creditos: number;
   unidadAcademica: string;
+  idGrupo:number;
+  nombreGrupo:string;
+  nombreDocente: string;
 }
