@@ -54,7 +54,7 @@ export class HomeComponent {
 
       next: (user) => {
         this.storageService.set('userId', user.respuesta.idUsuario.toString());
-        if (user.respuesta.idRol === 1) {
+        if (user.respuesta.idRol === 3) {
           this.storageService.setUserRole(user.respuesta.idRol);
           this.router.navigateByUrl('/student');
         } else if (user.respuesta.idRol === 2) {
