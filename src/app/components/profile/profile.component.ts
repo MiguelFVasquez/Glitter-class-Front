@@ -4,6 +4,7 @@ import { Component,OnInit } from '@angular/core';
 import {userProfileDto } from '../../model/user/userProfileDTO';
 import { PublicService } from '../../services/public.service';
 import { StorageService } from '../../services/storage.service';
+import { CourseDto } from '../../model/courses/courseDto';
 
 
 @Component({
@@ -15,10 +16,13 @@ import { StorageService } from '../../services/storage.service';
 export class ProfileComponent implements OnInit {
 
   usuario?: userProfileDto;
+  courses: CourseDto[]= [];
+
   constructor(private publicService:PublicService, private storageService: StorageService) {}
 
   ngOnInit(): void {
     const id = this.storageService.get('userId');
+    const idUsuario: number = Number(id);
     if (id) {
       this.publicService.getUsuarioById(+id).subscribe({
         next: (resp) => {
@@ -29,5 +33,20 @@ export class ProfileComponent implements OnInit {
         }
       });
     }
+    //Load the courses of the professor
+    this.publicService.getCoursesToStudent(idUsuario).subscribe({
+      next: (response) => {
+        if (!response.error) {
+          this.courses = response.respuesta;
+        } else {
+          console.error('Error en la respuesta del backend');
+        }
+      },
+      error: (err) => {
+        console.error('Error de red o servidor', err);
+      }
+    });
+
+
   }
 }

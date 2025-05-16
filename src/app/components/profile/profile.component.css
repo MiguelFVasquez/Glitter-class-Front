@@ -126,6 +126,28 @@
     background-color: #d04a0b;
   }
   
+
+/* Cursos inscritos */
+.courses-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.courses-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.courses-list li small {
+  color: #777;
+  font-size: 0.85rem;
+}
+
+
+
   /* Responsive design */
   @media (max-width: 768px) {
     .detail-row {

@@ -4,7 +4,7 @@
       <div class="avatar-container">
         <img src="profile.png" alt="User avatar" class="profile-avatar">
       </div>
-      <h2 class="profile-name">Juan Miguel Florez</h2>
+      <h2 class="profile-name">{{usuario?.nombre}}</h2>
       <p class="profile-role">Estudiante</p>
     </div>
 
@@ -41,18 +41,20 @@
           <span class="detail-label">Semestre:</span>
           <span class="detail-value">7°</span>
         </div>
+        <h3 class="section-title">
+          <i class="material-icons">class</i>
+          Cursos Inscritos
+        </h3>
+        <ul class="courses-list">
+          <li *ngFor="let course of courses">
+            {{ course.nombreCurso }} - Grupo {{ course.nombreGrupo }}<br>
+            <small>Docente: {{ course.nombreDocente }}</small>
+          </li>
+          <li *ngIf="courses.length === 0">
+            Aún no estás inscrito en ningún curso.
+          </li>
+        </ul>
       </div>
-    </div>
-
-    <div class="profile-actions">
-      <button class="edit-profile-btn">
-        <i class="material-icons">edit</i>
-        Editar Perfil
-      </button>
-      <button class="change-password-btn">
-        <i class="material-icons">lock</i>
-        Cambiar Contraseña
-      </button>
     </div>
   </div>
 </div>

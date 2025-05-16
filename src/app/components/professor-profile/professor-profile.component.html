@@ -37,10 +37,12 @@
           Cursos Impartidos
         </h3>
         <ul class="courses-list">
-          <li>Bases de Datos Avanzadas</li>
-          <li>Inteligencia Artificial</li>
-          <li>Arquitectura de Software</li>
+          <li *ngFor="let course of courses">
+            {{ course.nombreCurso }} - Grupo {{ course.nombreGrupo }}
+          </li>
+          <li *ngIf="courses.length === 0">Este profesor aún no tiene cursos asignados.</li>
         </ul>
+        
       </div>
 
       <div class="section">
@@ -49,28 +51,17 @@
           Experiencia Académica
         </h3>
         <div class="experience-item">
-          <h4>Universidad Nacional</h4>
+          <h4>Universidad Nacional - sede Bogotá</h4>
           <p class="date">2015 - Presente</p>
           <p>Profesor Titular del Departamento de Ciencias Computacionales</p>
         </div>
         <div class="experience-item">
-          <h4>Instituto Tecnológico</h4>
+          <h4>Instituto Tecnológico de Pereira</h4>
           <p class="date">2010 - 2015</p>
           <p>Profesor Asociado</p>
         </div>
       </div>
 
-    </div>
-
-    <div class="profile-actions">
-      <button class="edit-profile-btn">
-        <i class="material-icons">edit</i>
-        Editar Perfil
-      </button>
-      <button class="change-password-btn">
-        <i class="material-icons">lock</i>
-        Cambiar Contraseña
-      </button>
     </div>
   </div>
 </div>

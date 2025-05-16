@@ -4,24 +4,32 @@
       <i class="material-icons">arrow_back</i>
       Volver a cursos
     </button>
-    <h1>{{ courseDetails.nombre }}</h1>
+    <h1>{{ courseDetails.nombreCurso }}</h1>
   </div>
 
   <div class="detail-content">
-    <!-- Si tuvieras imagen puedes dejar esto, o comentar -->
+    <!-- Imagen opcional (comentar si no tienes una propiedad de imagen) -->
     <!--
     <div class="course-image">
-      <img [src]="courseDetails.imagenUrl" [alt]="courseDetails.nombre">
+      <img [src]="courseDetails.imagenUrl" [alt]="courseDetails.nombreCurso">
     </div>
     -->
 
     <div class="course-info">
       <div class="info-section">
-        <h2>Descripción</h2>
-        <p>{{ courseDetails.descripcion }}</p>
+        <h2>Grupo</h2>
+        <p>{{ courseDetails.nombreGrupo }}</p>
       </div>
 
       <div class="details-grid">
+        <div class="detail-item">
+          <i class="material-icons">person</i>
+          <div>
+            <h3>Docente</h3>
+            <p>{{ courseDetails.nombreDocente }}</p>
+          </div>
+        </div>
+
         <div class="detail-item">
           <i class="material-icons">school</i>
           <div>
