@@ -3,8 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators,FormsModule,ReactiveFormsModule,FormArray } from '@angular/forms';
 import { PublicService } from '../../services/public.service';
 import { categoria } from '../../model/enums/categoriaDto';
-import {tipoPregunta} from '../../model/enums/tiposPreguntaDto'
-import {dificultad} from '../../model/enums/dificultadesDto'
+import {tipoPregunta} from '../../model/enums/tiposPreguntaDto';
+import {dificultad} from '../../model/enums/dificultadesDto';
+import {visibility} from '../../model/enums/visibilidadDto';
+import { readPublicQuestion } from '../../model/questions/readQuestionDto';
 @Component({
   selector: 'app-question-board',
   imports: [CommonModule,FormsModule,ReactiveFormsModule],
@@ -14,10 +16,13 @@ import {dificultad} from '../../model/enums/dificultadesDto'
 
 export class QuestionBoardComponent implements OnInit {
   questionForm!: FormGroup;
+  //Information about question
   categories: categoria[] = [];
   difficultyLevels: dificultad[] = [];
   questionTypes: tipoPregunta[] = [];
-  questions: any[] = [];
+  visibiliy: visibility[]=[];
+  //
+  questions: readPublicQuestion[] = [];
   selectedQuestionType = '';
   showQuestionForm = false;
   filterType = '';
@@ -26,32 +31,6 @@ export class QuestionBoardComponent implements OnInit {
     private fb: FormBuilder,
     private publicService:PublicService) {
     this.initializeForm();
-
-    // Sample questions for demonstration
-    this.questions = [
-      {
-        id: 1,
-        enunciado: '¿Cuál es la capital de Francia?',
-        tipo: 'Selección múltiple única respuesta',
-        tema: 'Geografía',
-        categoria: 'Conceptual',
-        dificultad: 'Media',
-        tiempo: 60,
-        porcentaje: 10,
-        publica: true
-      },
-      {
-        id: 2,
-        enunciado: '2+2=?',
-        tipo: 'Selección múltiple única respuesta',
-        tema: 'Matemáticas',
-        categoria: 'Procedimental',
-        dificultad: 'Baja',
-        tiempo: 30,
-        porcentaje: 5,
-        publica: false
-      }
-    ];
   }
 
   initializeForm(): void {
@@ -63,7 +42,7 @@ export class QuestionBoardComponent implements OnInit {
       dificultad: ['', Validators.required],
       tiempoMaximo: [60, [Validators.required, Validators.min(10)]],
       porcentaje: [10, [Validators.required, Validators.min(1), Validators.max(100)]],
-      publica: [true, Validators.required],
+      visibilidadId: [null, Validators.required],
       opciones: this.fb.array([]), // Will be dynamically managed based on question type
       pares: this.fb.array([]), // For matching questions
       elementosOrdenar: this.fb.array([]) // For ordering questions
@@ -77,6 +56,19 @@ export class QuestionBoardComponent implements OnInit {
 
   ngOnInit(): void {
     //Cargar categorías
+    this.loadThemes();
+    //Cargar tipos de pregunta
+    this.loadQuestionTypes();
+    // Cargar niveles de dificultad
+    this.loadDificulties();
+    // cargar visibilidad
+    this.loadVisibility();
+    //Cargar preguntas publicas
+    this.loadPublicQuestions();
+  }
+
+  //Method to get all themes
+  loadThemes(){
     this.publicService.getTemas().subscribe({
       next: resp => {
         if (!resp.error) {
@@ -87,8 +79,10 @@ export class QuestionBoardComponent implements OnInit {
       },
       error: () => console.error('Error cargando categorías')
     });
-    //Cargar tipos de pregunta
-    this.publicService.getTiposPregunta().subscribe({
+  }
+  //Method to get all types of questions
+  loadQuestionTypes(){
+      this.publicService.getTiposPregunta().subscribe({
       next: resp => {
         if (!resp.error) {
           this.questionTypes = resp.respuesta;
@@ -98,9 +92,10 @@ export class QuestionBoardComponent implements OnInit {
       },
       error: err => console.error('Error al cargar tipos de pregunta', err)
     });
-
-    // Cargar niveles de dificultad
-    this.publicService.getDificultades().subscribe({
+  }
+  //Method to load all dificulties
+  loadDificulties(){
+      this.publicService.getDificultades().subscribe({
       next: resp => {
         if (!resp.error) {
           this.difficultyLevels = resp.respuesta;
@@ -111,6 +106,34 @@ export class QuestionBoardComponent implements OnInit {
       error: err => console.error('Error al cargar dificultades', err)
     });
   }
+  //Method to load all the visibities
+  loadVisibility(){
+    this.publicService.getVisibility().subscribe({
+      next: resp =>{
+        if(!resp.error){
+          this.visibiliy=resp.respuesta;
+        }else{
+          console.warn('Error en get visibilidades')
+        }
+      },
+      error :err => console.error('Error al cargar las dificultades', err)
+    })
+  }
+
+  //Method to load all public questions
+  loadPublicQuestions(){
+    this.publicService.getPublicQuestions().subscribe({
+      next: resp => {
+        if(!resp.error){
+          this.questions=resp.respuesta;
+        }else{
+          console.warn('Error en getPublicQuestions')
+        }
+      },
+      error:err => console.log('Error al cargar las preguntas públicas', err)
+    })
+  }
+
   get opciones(): FormArray {
     return this.questionForm.get('opciones') as FormArray;
   }
@@ -229,7 +252,7 @@ export class QuestionBoardComponent implements OnInit {
   }
   get filteredQuestions() {
     if (!this.filterType) return this.questions;
-    return this.questions.filter(q => q.tipo === this.filterType);
+    return this.questions.filter(q => q.tipoPregunta === this.filterType);
   }
 }
 

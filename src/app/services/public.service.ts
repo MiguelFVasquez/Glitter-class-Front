@@ -7,6 +7,9 @@ import {categoria} from '../model/enums/categoriaDto';
 import {dificultad} from '../model/enums/dificultadesDto';
 import {tipoPregunta} from '../model/enums/tiposPreguntaDto';
 import { CourseDto } from '../model/courses/courseDto';
+import { visibility } from '../model/enums/visibilidadDto';
+import { readPublicQuestion } from '../model/questions/readQuestionDto';
+import { readExam } from '../model/exam/readExamDto';
 
 @Injectable({
   providedIn: 'root'
@@ -35,11 +38,27 @@ export class PublicService {
   getTiposPregunta(): Observable<Message<tipoPregunta[]>>{
     return this.http.get<Message<tipoPregunta[]>>(`${this.apiURL}/obtener-tipos`);
   }
+
+  getVisibility(): Observable<Message<visibility[]>>{
+    return this.http.get<Message<visibility[]>>(`${this.apiURL}/obtener-visibilidades`);
+  }
+
   //Method to get the professor courses,
   getCoursesToProfessor(id: number): Observable<Message<CourseDto[]>> {
     return this.http.get<Message<CourseDto[]>>(`${this.apiURL}/cursos-docente/${id}`);
   }
+  //Method to get the student courses
   getCoursesToStudent(id: number): Observable<Message<CourseDto[]>> {
     return this.http.get<Message<CourseDto[]>>(`${this.apiURL}/cursos-estudiante/${id}`);
   }
+
+  //------------Questions--------------
+  getPublicQuestions():Observable<Message<readPublicQuestion[]>>{
+    return this.http.get<Message<readPublicQuestion[]>>(`${this.apiURL}/obtener-preguntas-publicas`);
+  }
+  //-----------Exams-------------------
+  getExams():Observable<Message<readExam[]>>{
+    return this.http.get<Message<readExam[]>>(`${this.apiURL}/obtener-examenes`);
+  }
+
 }

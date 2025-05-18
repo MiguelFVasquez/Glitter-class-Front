@@ -68,11 +68,9 @@
         <div class="form-group radio-group">
           <label>Visibilidad:</label>
           <div class="radio-options">
-            <label>
-              <input type="radio" formControlName="publica" [value]="true"> Pública
-            </label>
-            <label>
-              <input type="radio" formControlName="publica" [value]="false"> Privada
+            <label *ngFor="let v of visibiliy">
+              <input type="radio" [value]="v.idVisibilidad" formControlName="visibilidadId">
+              {{ v.nombre }}
             </label>
           </div>
         </div>
@@ -159,38 +157,36 @@
     <div class="question-card" *ngFor="let question of filteredQuestions">
       <div class="question-header">
         <h3>{{question.enunciado}}</h3>
-        <span class="question-type">{{question.tipo}}</span>
+        <span class="question-type">{{question.tipoPregunta}}</span>
       </div>
       <div class="question-details">
         <div class="detail-item">
           <i class="material-icons">category</i>
-          <span>{{question.tema}} • {{question.categoria}}</span>
+          <span>{{question.tema}} • {{question.tema}}</span>
         </div>
         <div class="detail-item">
           <i class="material-icons">speed</i>
           <span>{{question.dificultad}}</span>
         </div>
+        <!--
         <div class="detail-item">
           <i class="material-icons">timer</i>
           <span>{{question.tiempo}} segundos</span>
-        </div>
+        </div>-->
+        <!--
         <div class="detail-item">
           <i class="material-icons">percent</i>
           <span>{{question.porcentaje}}%</span>
-        </div>
+        </div>-->
+  
         <div class="detail-item">
-          <i class="material-icons">{{question.publica ? 'public' : 'lock'}}</i>
-          <span>{{question.publica ? 'Pública' : 'Privada'}}</span>
-        </div>
+        <i class="material-icons">
+          {{ question.visibilidad === 'Pública' ? 'public' : 'lock' }}
+        </i>
+        <span>{{ question.visibilidad }}</span>
       </div>
-      <div class="question-actions">
-        <button class="btn-edit">
-          <i class="material-icons">edit</i>
-        </button>
-        <button class="btn-delete">
-          <i class="material-icons">delete</i>
-        </button>
       </div>
+
     </div>
   </div>
 </div>
