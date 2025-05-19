@@ -26,7 +26,7 @@ export const routes: Routes = [
             { path: 'courses/:id', component: DetailCourseComponent }
         ]
     },
-    // Professor routes
+     // Professor routes
     {
         path: 'professor',
         component: ProfessorBoardComponent,

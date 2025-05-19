@@ -6,187 +6,85 @@
         <i class="material-icons">add</i>
         Nueva Pregunta
       </button>
+
       <div class="filter">
         <label for="filterType">Filtrar por tipo:</label>
         <select id="filterType" [(ngModel)]="filterType">
           <option value="">Todos</option>
-          <option *ngFor="let type of questionTypes" [value]="type">{{type.nombre}}</option>
+          <option *ngFor="let type of questionTypes" [value]="type">{{ type.nombre }}</option>
         </select>
       </div>
     </div>
   </div>
 
-  <div class="question-form-section" *ngIf="showQuestionForm">
-    <form [formGroup]="questionForm" (ngSubmit)="onSubmit()">
-      <div class="form-row">
-        <div class="form-group full-width">
-          <label for="enunciado">Enunciado *</label>
-          <textarea id="enunciado" formControlName="enunciado" rows="3"></textarea>
+  <!-- ======== Sección: Preguntas Públicas ======== -->
+  <div class="questions-section">
+    <h2 class="section-title">
+      <i class="material-icons">public</i>
+      Preguntas Públicas
+    </h2>
+    <div class="questions-list">
+      <div class="question-card" *ngFor="let q of questions">
+        <!-- Reusa tu tarjeta -->
+        <div class="question-header">
+          <h3>{{ q.enunciado }}</h3>
+          <span class="question-type">{{ q.tipo }}</span>
         </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="tipo">Tipo de pregunta *</label>
-          <select id="tipo" formControlName="tipo">
-            <option value="">Seleccione un tipo</option>
-            <option *ngFor="let type of questionTypes" [value]="type">{{type.nombre}}</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="tema">Tema *</label>
-          <select id="tema" formControlName="tema">
-            <option value="">Seleccione un tema</option>
-            <option *ngFor="let category of categories" [value]="categories">{{category.nombre}}</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="dificultad">Dificultad *</label>
-        <select id="dificultad" formControlName="dificultad">
-          <option value="">Seleccione dificultad</option>
-          <option *ngFor="let level of difficultyLevels" [value]="level">{{level.nombre}}</option>
-        </select>
-      </div>
-
-
-      <div class="form-row">
-        <div class="form-group">
-          <label for="tiempoMaximo">Tiempo máximo (segundos) *</label>
-          <input type="number" id="tiempoMaximo" formControlName="tiempoMaximo" min="10">
-        </div>
-
-        <div class="form-group">
-          <label for="porcentaje">Porcentaje (%) *</label>
-          <input type="number" id="porcentaje" formControlName="porcentaje" min="1" max="100">
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group radio-group">
-          <label>Visibilidad:</label>
-          <div class="radio-options">
-            <label *ngFor="let v of visibiliy">
-              <input type="radio" [value]="v.idVisibilidad" formControlName="visibilidadId">
-              {{ v.nombre }}
-            </label>
+        <div class="question-details">
+          <div class="detail-item">
+            <i class="material-icons">category</i>
+            <span>{{ q.tema }}</span>
+          </div>
+          <div class="detail-item">
+            <i class="material-icons">speed</i>
+            <span>{{ q.dificultad }}</span>
+          </div>
+          <div class="detail-item">
+            <i class="material-icons">
+              {{ q.visibilidad === 'Pública' ? 'public' : 'lock' }}
+            </i>
+            <span>{{ q.visibilidad }}</span>
           </div>
         </div>
       </div>
-
-      <!-- Dynamic fields based on question type -->
-      <div *ngIf="selectedQuestionType" class="question-type-fields">
-        <!-- Multiple choice options -->
-        <div *ngIf="selectedQuestionType.includes('Selección múltiple') || selectedQuestionType === 'Falso y verdadero'"
-          class="form-group full-width">
-          <label>Opciones de respuesta *</label>
-          <div class="options-container">
-            <div class="option-item" *ngFor="let option of opciones.controls; let i = index" [formGroupName]="i">
-              <input type="text" formControlName="texto" placeholder="Texto de la opción">
-              <div class="option-controls">
-                <label>
-                  <input type="{{selectedQuestionType === 'Selección múltiple única respuesta' ? 'radio' : 'checkbox'}}"
-                    formControlName="correcta"
-                    name="{{selectedQuestionType === 'Selección múltiple única respuesta' ? 'correctOption' : 'correctOptions'}}">
-                  Correcta
-                </label>
-                <button type="button" class="btn-remove-option" (click)="removeOption(i)">
-                  <i class="material-icons">delete</i>
-                </button>
-              </div>
-            </div>
-            <button type="button" class="btn-add-option" (click)="addOption()">
-              <i class="material-icons">add</i> Agregar opción
-            </button>
-          </div>
-        </div>
-
-        <!-- Matching pairs -->
-        <div *ngIf="selectedQuestionType === 'Emparejar'" class="form-group full-width">
-          <label>Pares para emparejar *</label>
-          <div class="pairs-container">
-            <div class="pair-item" *ngFor="let pair of pares.controls; let i = index" [formGroupName]="i">
-              <input type="text" formControlName="izquierda" placeholder="Elemento izquierdo">
-              <span class="pair-connector">→</span>
-              <input type="text" formControlName="derecha" placeholder="Elemento derecho">
-              <button type="button" class="btn-remove-pair" (click)="removePair(i)">
-                <i class="material-icons">delete</i>
-              </button>
-            </div>
-            <button type="button" class="btn-add-pair" (click)="addPair()">
-              <i class="material-icons">add</i> Agregar par
-            </button>
-          </div>
-        </div>
-
-        <!-- Ordering elements -->
-        <div *ngIf="selectedQuestionType === 'Ordenar'" class="form-group full-width">
-          <label>Elementos para ordenar *</label>
-          <div class="order-container">
-            <div class="order-item" *ngFor="let element of elementosOrdenar.controls; let i = index"
-              [formGroupName]="i">
-              <input type="text" formControlName="texto" placeholder="Texto del elemento">
-              <button type="button" class="btn-remove-order" (click)="removeOrderElement(i)">
-                <i class="material-icons">delete</i>
-              </button>
-            </div>
-            <button type="button" class="btn-add-order" (click)="addOrderElement()">
-              <i class="material-icons">add</i> Agregar elemento
-            </button>
-          </div>
-        </div>
-
-        <!-- Completion question instructions -->
-        <div *ngIf="selectedQuestionType === 'Completar'" class="form-group full-width">
-          <label>Instrucciones para completar</label>
-          <p>Use guiones bajos (_____) para indicar los espacios a completar en el enunciado.</p>
-          <p>Ejemplo: "La capital de Francia es _____"</p>
-        </div>
-      </div>
-
-      <div class="form-actions">
-        <button type="button" class="btn-cancel" (click)="toggleQuestionForm()">Cancelar</button>
-        <button type="submit" class="btn-submit" [disabled]="!questionForm.valid">Guardar Pregunta</button>
-      </div>
-    </form>
+      <p *ngIf="questions.length === 0" class="empty-msg">
+        No hay preguntas públicas disponibles.
+      </p>
+    </div>
   </div>
 
-  <div class="questions-list">
-    <div class="question-card" *ngFor="let question of filteredQuestions">
-      <div class="question-header">
-        <h3>{{question.enunciado}}</h3>
-        <span class="question-type">{{question.tipoPregunta}}</span>
-      </div>
-      <div class="question-details">
-        <div class="detail-item">
-          <i class="material-icons">category</i>
-          <span>{{question.tema}} • {{question.tema}}</span>
+  <!-- ======== Sección: Mis Preguntas ======== -->
+  <div class="questions-section">
+    <h2 class="section-title">
+      <i class="material-icons">person</i>
+      Mis Preguntas
+    </h2>
+    <div class="questions-list">
+      <div class="question-card" *ngFor="let q of professorQuestio">
+        <div class="question-header">
+          <h3>{{ q.enunciado }}</h3>
+          <span class="question-type">{{ q.tipo }}</span>
         </div>
-        <div class="detail-item">
-          <i class="material-icons">speed</i>
-          <span>{{question.dificultad}}</span>
+        <div class="question-details">
+          <div class="detail-item">
+            <i class="material-icons">category</i>
+            <span>{{ q.tema }}</span>
+          </div>
+          <div class="detail-item">
+            <i class="material-icons">speed</i>
+            <span>{{ q.dificultad }}</span>
+          </div>
+          <div class="detail-item">
+            <i class="material-icons">
+              {{ q.visibilidad === 'Pública' ? 'public' : 'lock' }}
+            </i>
+            <span>{{ q.visibilidad }}</span>
+          </div>
         </div>
-        <!--
-        <div class="detail-item">
-          <i class="material-icons">timer</i>
-          <span>{{question.tiempo}} segundos</span>
-        </div>-->
-        <!--
-        <div class="detail-item">
-          <i class="material-icons">percent</i>
-          <span>{{question.porcentaje}}%</span>
-        </div>-->
-  
-        <div class="detail-item">
-        <i class="material-icons">
-          {{ question.visibilidad === 'Pública' ? 'public' : 'lock' }}
-        </i>
-        <span>{{ question.visibilidad }}</span>
       </div>
-      </div>
-
+      <p *ngIf="professorQuestio.length === 0" class="empty-msg">
+        Aún no has creado preguntas.
+      </p>
     </div>
   </div>
 </div>

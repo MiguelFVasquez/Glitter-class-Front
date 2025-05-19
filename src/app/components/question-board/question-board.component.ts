@@ -7,6 +7,8 @@ import {tipoPregunta} from '../../model/enums/tiposPreguntaDto';
 import {dificultad} from '../../model/enums/dificultadesDto';
 import {visibility} from '../../model/enums/visibilidadDto';
 import { readPublicQuestion } from '../../model/questions/readQuestionDto';
+import { StorageService } from '../../services/storage.service';
+import { QuestionService } from '../../services/question.service';
 @Component({
   selector: 'app-question-board',
   imports: [CommonModule,FormsModule,ReactiveFormsModule],
@@ -21,15 +23,20 @@ export class QuestionBoardComponent implements OnInit {
   difficultyLevels: dificultad[] = [];
   questionTypes: tipoPregunta[] = [];
   visibiliy: visibility[]=[];
-  //
-  questions: readPublicQuestion[] = [];
+  //questions
+  questions: readPublicQuestion[] = []; //All public questions
+  professorQuestio: readPublicQuestion[]=[] //All professor questions publics and privates
   selectedQuestionType = '';
   showQuestionForm = false;
   filterType = '';
+  //id
+  idUsuario:number=0;
 
   constructor(
     private fb: FormBuilder,
-    private publicService:PublicService) {
+    private publicService:PublicService,
+    private storageService: StorageService,
+    private questionService: QuestionService) {
     this.initializeForm();
   }
 
@@ -55,6 +62,8 @@ export class QuestionBoardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const id = this.storageService.get('userId');
+    this.idUsuario = Number(id);
     //Cargar categorías
     this.loadThemes();
     //Cargar tipos de pregunta
@@ -66,6 +75,7 @@ export class QuestionBoardComponent implements OnInit {
     //Cargar preguntas publicas
     this.loadPublicQuestions();
   }
+
 
   //Method to get all themes
   loadThemes(){
@@ -133,6 +143,20 @@ export class QuestionBoardComponent implements OnInit {
       error:err => console.log('Error al cargar las preguntas públicas', err)
     })
   }
+  //Method to get all professor questions
+  loadProfessorQuestions(id:number){
+    this.questionService.getQuestions(id).subscribe({
+      next: resp => {
+        if(!resp.error){
+          this.questions=resp.respuesta;
+        }else{
+          console.warn('Error en get professor question')
+        }
+      },
+      error:err => console.log('Error al cargar las preguntas públicas', err)
+    })
+  }
+
 
   get opciones(): FormArray {
     return this.questionForm.get('opciones') as FormArray;
@@ -252,7 +276,7 @@ export class QuestionBoardComponent implements OnInit {
   }
   get filteredQuestions() {
     if (!this.filterType) return this.questions;
-    return this.questions.filter(q => q.tipoPregunta === this.filterType);
+    return this.questions.filter(q => q.tipo === this.filterType);
   }
 }
 

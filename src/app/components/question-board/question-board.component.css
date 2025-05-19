@@ -585,6 +585,67 @@ textarea {
   background-color: #f9f9f9;
 }
 
+/* Contenedor principal */
+.question-board-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* Secciones de preguntas */
+.questions-section {
+  margin-bottom: 3rem;
+}
+
+.questions-section .section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  color: #e5520d;
+  margin-bottom: 1rem;
+}
+
+/* Lista de tarjetas */
+.questions-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Tarjeta de pregunta (reusa de tu CSS) */
+.question-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ubica las acciones (solo en Mis Preguntas) */
+.question-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+/* Mensaje cuando no hay ítems */
+.empty-msg {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #777;
+  font-style: italic;
+}
+
+/* Pequeños ajustes responsivos */
+@media (max-width: 768px) {
+  .questions-list { grid-template-columns: 1fr; }
+}
+
+
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .header-section {

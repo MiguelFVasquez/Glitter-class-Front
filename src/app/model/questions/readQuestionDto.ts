@@ -6,6 +6,9 @@ export interface readPublicQuestion{
     dificultad: string;
     docente: string;
     unidadAcademica: string;
-    tipoPregunta: string;
-
+    tipo: string;
+    porcentajeNota: number;
+    fechaCreacion: string;
+    estado:string
+    
 }
