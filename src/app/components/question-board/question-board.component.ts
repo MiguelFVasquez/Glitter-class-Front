@@ -9,6 +9,8 @@ import {visibility} from '../../model/enums/visibilidadDto';
 import { readPublicQuestion } from '../../model/questions/readQuestionDto';
 import { StorageService } from '../../services/storage.service';
 import { QuestionService } from '../../services/question.service';
+import { createQuestion } from '../../model/questions/createQuestionDto';
+import { unidadAcademica } from '../../model/enums/unidadDto';
 @Component({
   selector: 'app-question-board',
   imports: [CommonModule,FormsModule,ReactiveFormsModule],
@@ -23,14 +25,32 @@ export class QuestionBoardComponent implements OnInit {
   difficultyLevels: dificultad[] = [];
   questionTypes: tipoPregunta[] = [];
   visibiliy: visibility[]=[];
+  units: unidadAcademica[]=[];
   //questions
   questions: readPublicQuestion[] = []; //All public questions
-  professorQuestio: readPublicQuestion[]=[] //All professor questions publics and privates
+  professorQuestion: readPublicQuestion[]=[] //All professor questions publics and privates
   selectedQuestionType = '';
-  showQuestionForm = false;
   filterType = '';
-  //id
+  //id usuario
   idUsuario:number=0;
+
+  //variable to create questions
+  showQuestionForm = false;
+  newQuestion: createQuestion = {
+  enunciado: '',
+  idTema: 0,
+  idDificultad: 0,
+  idTipo: 0,
+  porcentajeNota: 0,
+  idVisibilidad: 0,
+  idDocente: this.idUsuario,
+  idUnidad: 0,
+  idEstado: 1 
+};
+
+createdQuestionId: number | null = null; 
+
+
 
   constructor(
     private fb: FormBuilder,
@@ -74,8 +94,24 @@ export class QuestionBoardComponent implements OnInit {
     this.loadVisibility();
     //Cargar preguntas publicas
     this.loadPublicQuestions();
+    //cargar las preguntas del profesor
+    this.loadProfessorQuestions(this.idUsuario);
   }
 
+  //-------------ENUMS-------------------
+  //Method to get all units
+  loadUnits(){
+    this.publicService.getUnidades().subscribe({
+      next: resp=>{
+        if(!resp.error){
+          this.units= resp.respuesta;
+        }else{
+          console.warn('Error en getUnidades')
+        }
+      },
+      error: () => console.warn('Error cargando las unidades')
+    })
+  }
 
   //Method to get all themes
   loadThemes(){
@@ -129,6 +165,8 @@ export class QuestionBoardComponent implements OnInit {
       error :err => console.error('Error al cargar las dificultades', err)
     })
   }
+
+  //-----------QUESIONS---------------
 
   //Method to load all public questions
   loadPublicQuestions(){
@@ -207,9 +245,11 @@ export class QuestionBoardComponent implements OnInit {
 
   toggleQuestionForm(): void {
     this.showQuestionForm = !this.showQuestionForm;
+    
     if (!this.showQuestionForm) {
       this.questionForm.reset();
       this.selectedQuestionType = '';
+
     }
   }
 
@@ -249,31 +289,21 @@ export class QuestionBoardComponent implements OnInit {
     this.elementosOrdenar.removeAt(index);
   }
 
-  onSubmit(): void {
-    if (this.questionForm.valid) {
-      const newQuestion = {
-        id: this.questions.length + 1,
-        ...this.questionForm.value,
-        // Process dynamic fields based on type
-        opciones: this.selectedQuestionType.includes('Selección múltiple') ||
-                 this.selectedQuestionType === 'Falso y verdadero'
-                 ? this.opciones.value : null,
-        pares: this.selectedQuestionType === 'Emparejar' ? this.pares.value : null,
-        elementosOrdenar: this.selectedQuestionType === 'Ordenar' ? this.elementosOrdenar.value : null
-      };
-
-      this.questions.unshift(newQuestion);
-      this.questionForm.reset();
-      this.showQuestionForm = false;
-      this.selectedQuestionType = '';
-    }
+  submitQuestion() {
+    this.questionService.createQuestion(this.newQuestion).subscribe({
+      next: (response) => {
+        this.createdQuestionId = response.respuesta; // Asegúrate que el backend retorna esto
+        alert('Pregunta creada exitosamente. Ahora agrega las opciones.');
+        // Aquí podrías abrir el formulario de opciones
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Error al crear la pregunta');
+      }
+    });
   }
 
-   loadSampleQuestions(): void {
-    this.questions = [
-      // ... existing sample questions
-    ];
-  }
+
   get filteredQuestions() {
     if (!this.filterType) return this.questions;
     return this.questions.filter(q => q.tipo === this.filterType);

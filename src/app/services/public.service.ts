@@ -10,6 +10,7 @@ import { CourseDto } from '../model/courses/courseDto';
 import { visibility } from '../model/enums/visibilidadDto';
 import { readPublicQuestion } from '../model/questions/readQuestionDto';
 import { readExam } from '../model/exam/readExamDto';
+import { unidadAcademica } from '../model/enums/unidadDto';
 
 @Injectable({
   providedIn: 'root'
@@ -22,13 +23,10 @@ export class PublicService {
   getUsuarioById(id: number): Observable<Message<userProfileDto>> {
     return this.http.get<Message<userProfileDto>>(`${this.apiURL}/obtener-usuario/${id}`);
   }
+  //-------------ENUMS-------------
   //Method to get all categories, are like the theme of the question
   getTemas():Observable<Message<categoria[]>>{
     return this.http.get<Message<categoria[]>>(`${this.apiURL}/obtener-temas`);
-  }
-  //Method to get all cuourses
-  getCursos():Observable<Message<CourseDto[]>>{
-    return this.http.get<Message<CourseDto[]>>(`${this.apiURL}/obtener-cursos`);
   }
   //Method to get all dificulties of the questions
   getDificultades():Observable<Message<dificultad[]>>{
@@ -39,10 +37,17 @@ export class PublicService {
     return this.http.get<Message<tipoPregunta[]>>(`${this.apiURL}/obtener-tipos`);
   }
 
+  getUnidades(): Observable<Message<unidadAcademica[]>>{
+    return this.http.get<Message<unidadAcademica[]>>(`${this.apiURL}/obtener-unidades`);
+  }
   getVisibility(): Observable<Message<visibility[]>>{
     return this.http.get<Message<visibility[]>>(`${this.apiURL}/obtener-visibilidades`);
   }
-
+  //--------COURSES-------------
+  //Method to get all cuourses
+  getCursos():Observable<Message<CourseDto[]>>{
+    return this.http.get<Message<CourseDto[]>>(`${this.apiURL}/obtener-cursos`);
+  }
   //Method to get the professor courses,
   getCoursesToProfessor(id: number): Observable<Message<CourseDto[]>> {
     return this.http.get<Message<CourseDto[]>>(`${this.apiURL}/cursos-docente/${id}`);

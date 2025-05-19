@@ -6,15 +6,116 @@
         <i class="material-icons">add</i>
         Nueva Pregunta
       </button>
+    </div>
+    <div class="filter">
+      <label for="filterType">Filtrar por tipo:</label>
+      <select id="filterType" [(ngModel)]="filterType">
+        <option value="">Todos</option>
+        <option *ngFor="let type of questionTypes" [value]="type">{{ type.nombre }}</option>
+      </select>
+    </div>
+  </div>
 
-      <div class="filter">
-        <label for="filterType">Filtrar por tipo:</label>
-        <select id="filterType" [(ngModel)]="filterType">
-          <option value="">Todos</option>
-          <option *ngFor="let type of questionTypes" [value]="type">{{ type.nombre }}</option>
+  <!-- ===== Formulario de creación ===== -->
+  <div *ngIf="showQuestionForm" class="question-form-section">
+    <form (ngSubmit)="submitQuestion()" #questionForm="ngForm">
+      <div class="form-group full-width">
+        <label for="enunciado">Enunciado *</label>
+        <textarea
+          id="enunciado"
+          [(ngModel)]="newQuestion.enunciado"
+          name="enunciado"
+          required
+        ></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="idTema">Tema *</label>
+          <select
+            id="idTema"
+            [(ngModel)]="newQuestion.idTema"
+            name="idTema"
+            required
+          >
+            <option *ngFor="let tema of categories" [value]="tema.idCategoria">
+              {{ tema.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="idDificultad">Dificultad *</label>
+          <select
+            id="idDificultad"
+            [(ngModel)]="newQuestion.idDificultad"
+            name="idDificultad"
+            required
+          >
+            <option *ngFor="let dif of difficultyLevels" [value]="dif.idiDificultad">
+              {{ dif.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="idTipo">Tipo *</label>
+          <select
+            id="idTipo"
+            [(ngModel)]="newQuestion.idTipo"
+            name="idTipo"
+            required
+          >
+            <option *ngFor="let tipo of questionTypes" [value]="tipo.idTipo">
+              {{ tipo.nombre }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Unidad</label>
+        <select [(ngModel)]="newQuestion.idUnidad" name="idUnidad" required>
+          <option *ngFor="let unidad of units" [value]="unidad.idUnidad">{{ unidad.nombre }}</option>
         </select>
       </div>
-    </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="idVisibilidad">Visibilidad *</label>
+          <select
+            id="idVisibilidad"
+            [(ngModel)]="newQuestion.idVisibilidad"
+            name="idVisibilidad"
+            required
+          >
+            <option *ngFor="let vis of visibiliy" [value]="vis.idVisibilidad">
+              {{ vis.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="porcentajeNota">Porcentaje (%) *</label>
+          <input
+            id="porcentajeNota"
+            type="number"
+            [(ngModel)]="newQuestion.porcentajeNota"
+            name="porcentajeNota"
+            min="0"
+            max="100"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="toggleQuestionForm()">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-submit" [disabled]="questionForm.invalid">
+          Guardar Pregunta
+        </button>
+      </div>
+    </form>
   </div>
 
   <!-- ======== Sección: Preguntas Públicas ======== -->
@@ -60,7 +161,7 @@
       Mis Preguntas
     </h2>
     <div class="questions-list">
-      <div class="question-card" *ngFor="let q of professorQuestio">
+      <div class="question-card" *ngFor="let q of professorQuestion">
         <div class="question-header">
           <h3>{{ q.enunciado }}</h3>
           <span class="question-type">{{ q.tipo }}</span>
@@ -82,9 +183,9 @@
           </div>
         </div>
       </div>
-      <p *ngIf="professorQuestio.length === 0" class="empty-msg">
+      <p *ngIf="professorQuestion.length === 0" class="empty-msg">
         Aún no has creado preguntas.
       </p>
     </div>
   </div>
-</div>
+
