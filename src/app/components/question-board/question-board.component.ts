@@ -43,7 +43,7 @@ export class QuestionBoardComponent implements OnInit {
   idTipo: 0,
   porcentajeNota: 0,
   idVisibilidad: 0,
-  idDocente: this.idUsuario,
+  idDocente:0,
   idUnidad: 0,
   idEstado: 1
 };
@@ -58,22 +58,20 @@ createdQuestionId: number | null = null;
     private storageService: StorageService,
     private questionService: QuestionService) {
     this.initializeForm();
+    this.newQuestion.idDocente=Number(this.storageService.get('userId'));
   }
 
   initializeForm(): void {
    this.questionForm = this.fb.group({
     enunciado:     ['', Validators.required],
-    tipo:          ['', Validators.required],
-    tema:          ['', Validators.required],
-    unidadId:      [null, Validators.required],   // <-- unidad académica
-    dificultad:    ['', Validators.required],
+    tipo:          [0, Validators.required],
+    tema:          [0, Validators.required],
+    unidadId:      [0, Validators.required],   // <-- unidad académica
+    dificultad:    [0, Validators.required],
     tiempoMaximo:  [60,  [Validators.required, Validators.min(10)]],
     porcentaje:    [10,  [Validators.required, Validators.min(1), Validators.max(100)]],
-    visibilidadId: [null, Validators.required],
-    estadoId:      [1],                            // <-- a 1
-    opciones:      this.fb.array([]),
-    pares:         this.fb.array([]),
-    elementosOrdenar: this.fb.array([])
+    visibilidadId: [0, Validators.required],
+    estadoId:      [1]
   });
 
     this.questionForm.get('tipo')?.valueChanges.subscribe(type => {
@@ -82,9 +80,11 @@ createdQuestionId: number | null = null;
     });
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
     const id = this.storageService.get('userId');
     this.idUsuario = Number(id);
+    this.newQuestion.idDocente=Number(this.storageService.get('userId'));
+
     //Cargar categorías
     this.loadThemes();
     //Cargar tipos de pregunta
@@ -110,7 +110,7 @@ createdQuestionId: number | null = null;
         }else{
           console.warn('Error en getUnidades')
         }
-      },
+      },   
       error: () => console.warn('Error cargando las unidades')
     })
   }
@@ -188,7 +188,7 @@ createdQuestionId: number | null = null;
     this.questionService.getQuestions(id).subscribe({
       next: resp => {
         if(!resp.error){
-          this.questions=resp.respuesta;
+          this.professorQuestion=resp.respuesta;
         }else{
           console.warn('Error en get professor question')
         }
@@ -292,38 +292,17 @@ createdQuestionId: number | null = null;
   }
 
 submitQuestion() {
-  if (this.questionForm.invalid) return;
-
-  const fv = this.questionForm.value;
-  console.log('Form raw:', fv);
-
-  const payload: createQuestion = {
-    enunciado:       fv.enunciado,
-    idTema:          Number(fv.categoria),
-    idDificultad:    Number(fv.dificultad),
-    idTipo:          Number(fv.tipo),
-    porcentajeNota:  Number(fv.porcentaje),
-    idVisibilidad:   Number(fv.visibilidadId),
-    idDocente:       Number(this.storageService.get('userId')),
-    idUnidad:        Number(fv.unidadId),
-    idEstado:        1
-  };
-
-  console.log('Payload a enviar:', payload);
-
-  this.questionService.createQuestion(payload).subscribe({
-    next: resp => {
-      if (!resp.error) {
-        this.createdQuestionId = resp.respuesta;
-        alert('✅ Pregunta creada con ID: ' + resp.respuesta);
-        // abre formulario de opciones
-      } else {
-        alert('Error en la creación de la pregunta');
-      }
+  
+  console.log('pregunta a enviar: ', this.newQuestion)
+  this.questionService.createQuestion(this.newQuestion).subscribe({
+    next: (response) => {
+      this.createdQuestionId = response.respuesta; // Asegúrate que el backend retorna esto
+      alert('Pregunta creada exitosamente. Ahora agrega las opciones.');
+      // Aquí podrías abrir el formulario de opciones
     },
-    error: err => {
-      console.error('Error HTTP:', err);
-      alert('❌ Error de conexión al crear la pregunta');
+    error: (err) => {
+      console.error(err);
+      alert('Error al crear la pregunta');
     }
   });
 }

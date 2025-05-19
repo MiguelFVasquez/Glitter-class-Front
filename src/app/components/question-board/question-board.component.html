@@ -38,7 +38,7 @@
             name="idTema"
             required
           >
-            <option *ngFor="let tema of themes" [value]="tema.idCategoria">
+            <option *ngFor="let tema of themes" [ngValue]="tema.idTema">
               {{ tema.nombre }}
             </option>
           </select>
@@ -52,7 +52,7 @@
             name="idDificultad"
             required
           >
-            <option *ngFor="let dif of difficultyLevels" [value]="dif.idiDificultad">
+            <option *ngFor="let dif of difficultyLevels" [ngValue]="dif.idDificultad">
               {{ dif.nombre }}
             </option>
           </select>
@@ -66,7 +66,7 @@
             name="idTipo"
             required
           >
-            <option *ngFor="let tipo of questionTypes" [value]="tipo.idTipo">
+            <option *ngFor="let tipo of questionTypes" [ngValue]="tipo.idTipo">
               {{ tipo.nombre }}
             </option>
           </select>
@@ -75,7 +75,7 @@
       <div class="form-group">
         <label>Unidad</label>
         <select [(ngModel)]="newQuestion.idUnidad" name="idUnidad" required>
-          <option *ngFor="let unidad of units" [value]="unidad.idUnidad">{{ unidad.nombre }}</option>
+          <option *ngFor="let unidad of units" [ngValue]="unidad.idUnidad">{{ unidad.nombre }}</option>
         </select>
       </div>
       <div class="form-row">
@@ -87,7 +87,7 @@
             name="idVisibilidad"
             required
           >
-            <option *ngFor="let vis of visibiliy" [value]="vis.idVisibilidad">
+            <option *ngFor="let vis of visibiliy" [ngValue]="vis.idVisibilidad">
               {{ vis.nombre }}
             </option>
           </select>

@@ -1,4 +1,4 @@
 export interface dificultad{
-  idiDificultad:number;
+  idDificultad:number;
   nombre:string;
 }
