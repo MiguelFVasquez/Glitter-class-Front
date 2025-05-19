@@ -21,7 +21,7 @@ import { unidadAcademica } from '../../model/enums/unidadDto';
 export class QuestionBoardComponent implements OnInit {
   questionForm!: FormGroup;
   //Information about question
-  categories: categoria[] = [];
+  themes: categoria[] = [];
   difficultyLevels: dificultad[] = [];
   questionTypes: tipoPregunta[] = [];
   visibiliy: visibility[]=[];
@@ -45,7 +45,7 @@ export class QuestionBoardComponent implements OnInit {
   idVisibilidad: 0,
   idDocente: this.idUsuario,
   idUnidad: 0,
-  idEstado: 1 
+  idEstado: 1
 };
 
 createdQuestionId: number | null = null; 
@@ -61,19 +61,20 @@ createdQuestionId: number | null = null;
   }
 
   initializeForm(): void {
-    this.questionForm = this.fb.group({
-      enunciado: ['', Validators.required],
-      tipo: ['', Validators.required],
-      tema: ['', Validators.required],
-      categoria: ['', Validators.required],
-      dificultad: ['', Validators.required],
-      tiempoMaximo: [60, [Validators.required, Validators.min(10)]],
-      porcentaje: [10, [Validators.required, Validators.min(1), Validators.max(100)]],
-      visibilidadId: [null, Validators.required],
-      opciones: this.fb.array([]), // Will be dynamically managed based on question type
-      pares: this.fb.array([]), // For matching questions
-      elementosOrdenar: this.fb.array([]) // For ordering questions
-    });
+   this.questionForm = this.fb.group({
+    enunciado:     ['', Validators.required],
+    tipo:          ['', Validators.required],
+    tema:          ['', Validators.required],
+    unidadId:      [null, Validators.required],   // <-- unidad académica
+    dificultad:    ['', Validators.required],
+    tiempoMaximo:  [60,  [Validators.required, Validators.min(10)]],
+    porcentaje:    [10,  [Validators.required, Validators.min(1), Validators.max(100)]],
+    visibilidadId: [null, Validators.required],
+    estadoId:      [1],                            // <-- a 1
+    opciones:      this.fb.array([]),
+    pares:         this.fb.array([]),
+    elementosOrdenar: this.fb.array([])
+  });
 
     this.questionForm.get('tipo')?.valueChanges.subscribe(type => {
       this.selectedQuestionType = type;
@@ -94,6 +95,7 @@ createdQuestionId: number | null = null;
     this.loadVisibility();
     //Cargar preguntas publicas
     this.loadPublicQuestions();
+    this.loadUnits();
     //cargar las preguntas del profesor
     this.loadProfessorQuestions(this.idUsuario);
   }
@@ -118,7 +120,7 @@ createdQuestionId: number | null = null;
     this.publicService.getTemas().subscribe({
       next: resp => {
         if (!resp.error) {
-          this.categories = resp.respuesta;
+          this.themes = resp.respuesta;
         }else{
           console.warn ('Error en getCategorias')
         }
@@ -289,19 +291,43 @@ createdQuestionId: number | null = null;
     this.elementosOrdenar.removeAt(index);
   }
 
-  submitQuestion() {
-    this.questionService.createQuestion(this.newQuestion).subscribe({
-      next: (response) => {
-        this.createdQuestionId = response.respuesta; // Asegúrate que el backend retorna esto
-        alert('Pregunta creada exitosamente. Ahora agrega las opciones.');
-        // Aquí podrías abrir el formulario de opciones
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Error al crear la pregunta');
+submitQuestion() {
+  if (this.questionForm.invalid) return;
+
+  const fv = this.questionForm.value;
+  console.log('Form raw:', fv);
+
+  const payload: createQuestion = {
+    enunciado:       fv.enunciado,
+    idTema:          Number(fv.categoria),
+    idDificultad:    Number(fv.dificultad),
+    idTipo:          Number(fv.tipo),
+    porcentajeNota:  Number(fv.porcentaje),
+    idVisibilidad:   Number(fv.visibilidadId),
+    idDocente:       Number(this.storageService.get('userId')),
+    idUnidad:        Number(fv.unidadId),
+    idEstado:        1
+  };
+
+  console.log('Payload a enviar:', payload);
+
+  this.questionService.createQuestion(payload).subscribe({
+    next: resp => {
+      if (!resp.error) {
+        this.createdQuestionId = resp.respuesta;
+        alert('✅ Pregunta creada con ID: ' + resp.respuesta);
+        // abre formulario de opciones
+      } else {
+        alert('Error en la creación de la pregunta');
       }
-    });
-  }
+    },
+    error: err => {
+      console.error('Error HTTP:', err);
+      alert('❌ Error de conexión al crear la pregunta');
+    }
+  });
+}
+
 
 
   get filteredQuestions() {
