@@ -40,6 +40,12 @@ export class PublicService {
   getUnidades(): Observable<Message<unidadAcademica[]>>{
     return this.http.get<Message<unidadAcademica[]>>(`${this.apiURL}/obtener-unidades`);
   }
+
+  //Get professor unities
+  getProfessorUnities(id:number): Observable<Message<unidadAcademica[]>>{
+    return this.http.get<Message<unidadAcademica[]>>(`${this.apiURL}/obtener-unidades-docente/${id} `);
+  }
+
   getVisibility(): Observable<Message<visibility[]>>{
     return this.http.get<Message<visibility[]>>(`${this.apiURL}/obtener-visibilidades`);
   }

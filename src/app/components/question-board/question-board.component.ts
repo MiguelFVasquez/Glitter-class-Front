@@ -95,15 +95,15 @@ createdQuestionId: number | null = null;
     this.loadVisibility();
     //Cargar preguntas publicas
     this.loadPublicQuestions();
-    this.loadUnits();
+    this.loadUnits(this.idUsuario);
     //cargar las preguntas del profesor
     this.loadProfessorQuestions(this.idUsuario);
   }
 
   //-------------ENUMS-------------------
   //Method to get all units
-  loadUnits(){
-    this.publicService.getUnidades().subscribe({
+  loadUnits(id:number){
+    this.publicService.getProfessorUnities(id).subscribe({
       next: resp=>{
         if(!resp.error){
           this.units= resp.respuesta;
