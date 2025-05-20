@@ -120,11 +120,6 @@
     <form #qForm="ngForm" (ngSubmit)="submitQuestion()">
       <!-- … campos de enunciado, select tema, tipo, … como antes, con [ngValue] para ID numérico … -->
 
-      <div class="form-actions">
-        <button type="button" class="btn-cancel" (click)="toggleQuestionForm()">Cancelar</button>
-        <!-- una vez envíes, deshabilita para no volver a pulsar -->
-        <button type="submit" class="btn-submit" [disabled]="qForm.invalid || createdQuestionId">Guardar Pregunta</button>
-      </div>
     </form>
   </div>
 
@@ -138,16 +133,6 @@
         [(ngModel)]="opt.textoOpcion"
         name="textoOpcion{{i}}"
         placeholder="Texto de la opción"
-        required
-      />
-
-      <input [disabled]="true"
-        type="number"
-        [(ngModel)]="opt.orden"
-        name="porcentaje{{i}}"
-        placeholder="Orden en que aparecen"
-        min="0"
-        max="100"
         required
       />
       <select

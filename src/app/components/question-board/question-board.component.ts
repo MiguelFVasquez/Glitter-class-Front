@@ -329,13 +329,13 @@ submitQuestion() {
   addOptionRow() {
     this.opcionesToCreate.push({
       textoOpcion: '',
-      orden: this.opcionesToCreate.length + 1,
       idTipoRespuesta: 2 // por defecto “incorrecta”
     });
   }
 
   submitOptions() {
     // Enviar cada opción vinculada al id de pregunta
+    console.log("Opciones a enviar", this.opcionesToCreate);
     const calls = this.opcionesToCreate.map(opt =>
       this.questionService
         .createOption(this.createdQuestionId, opt)
