@@ -34,6 +34,19 @@ export class StorageService {
     return isNaN(num) ? null : num;
   }
 
+  //IdUnidad
+  setUserUnit(unidad:number):void{
+    this.set('userUnit', unidad.toString());
+  }
+
+  getUserUnidad():number | null{
+    const raw = this.get('userUnit');
+    if (raw === null) return null;
+    const num = Number(raw);
+    return isNaN(num) ? null : num;
+  } 
+
+
   /** Limpia el rol */
   removeUserRole(): void {
     this.remove('userRole');

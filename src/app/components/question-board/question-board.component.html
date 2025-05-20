@@ -108,15 +108,76 @@
       </div>
 
       <div class="form-actions">
-        <button type="button" class="btn-cancel" (click)="toggleQuestionForm()">
-          Cancelar
-        </button>
-        <button type="submit" class="btn-submit" [disabled]="questionForm.invalid">
-          Guardar Pregunta
-        </button>
+        <button type="button" class="btn-cancel" (click)="toggleQuestionForm()">Cancelar</button>
+        <!-- una vez envíes, deshabilita para no volver a pulsar -->
+        <button type="submit" class="btn-submit" [disabled]="questionForm.invalid || createdQuestionId">Guardar Pregunta</button>
       </div>
     </form>
   </div>
+  <div class="question-board-container">
+  <div class="header-section">
+    <h1>Banco de Preguntas</h1>
+    <button class="btn-new-question" (click)="toggleQuestionForm()">
+      <i class="material-icons">add</i> Nueva Pregunta
+    </button>
+  </div>
+
+  <!-- 1️⃣ Formulario de creación de PREGUNTA -->
+  <div *ngIf="showQuestionForm" class="question-form-section">
+    <form #qForm="ngForm" (ngSubmit)="submitQuestion()">
+      <!-- … campos de enunciado, select tema, tipo, … como antes, con [ngValue] para ID numérico … -->
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="toggleQuestionForm()">Cancelar</button>
+        <!-- una vez envíes, deshabilita para no volver a pulsar -->
+        <button type="submit" class="btn-submit" [disabled]="qForm.invalid || createdQuestionId">Guardar Pregunta</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- 2️⃣ Formulario de creación de OPCIONES -->
+  <div *ngIf="showOptionForm" class="question-form-section">
+    <h2>Agrega Opciones (Pregunta #{{ createdQuestionId }})</h2>
+
+    <div *ngFor="let opt of opcionesToCreate; let i = index" class="form-row">
+      <input
+        type="text"
+        [(ngModel)]="opt.textoOpcion"
+        name="textoOpcion{{i}}"
+        placeholder="Texto de la opción"
+        required
+      />
+      <input
+        type="number"
+        [(ngModel)]="opt.porcentajeParcial"
+        name="porcentaje{{i}}"
+        placeholder="% Parcial"
+        min="0"
+        max="100"
+        required
+      />
+      <select
+        [(ngModel)]="opt.idTipoRespuesta"
+        name="tipoResp{{i}}"
+        required>
+        <option [ngValue]="1">Correcta</option>
+        <option [ngValue]="2">Incorrecta</option>
+      </select>
+      <button type="button" (click)="opcionesToCreate.splice(i,1)">🗑️</button>
+    </div>
+
+    <button type="button" class="btn-add-option" (click)="addOptionRow()">
+      <i class="material-icons">add</i> Agregar Opción
+    </button>
+
+    <div class="form-actions">
+      <button class="btn-submit" (click)="submitOptions()" [disabled]="!opcionesToCreate.length">
+        Guardar Opciones
+      </button>
+    </div>
+  </div>
+</div>
+
 
   <!-- ======== Sección: Preguntas Públicas ======== -->
   <div class="questions-section">

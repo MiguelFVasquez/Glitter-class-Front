@@ -4,6 +4,8 @@ import { Message } from '../model/message/messageDTO';
 import { Observable } from 'rxjs';
 import { readPublicQuestion } from '../model/questions/readQuestionDto';
 import { createQuestion } from '../model/questions/createQuestionDto';
+import { createOption } from '../model/questions/createOptionDto';
+import { optionCreated } from '../model/questions/optionReadDto';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +26,9 @@ export class QuestionService {
     return this.http.post<Message>(`${this.apiURL}/crear-pregunta`,question);
   }
 
-
+  //Method to create option
+  createOption(idQuestion:number, option:createOption): Observable<Message<optionCreated>>{
+    return this.http.post<Message<optionCreated>>(`${this.apiURL}/crear-opcion/${idQuestion}`,this.createOption);
+  }
 
 }

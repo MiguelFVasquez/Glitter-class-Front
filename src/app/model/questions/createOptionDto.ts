@@ -1,5 +1,6 @@
 export interface createOption {
-  texto: string;
-  esCorrecta: boolean;
-  idPregunta: number;
+  textoOpcion: string;
+  porcentajeParcial: number;
+  orden: number;
+  idTipoRespuesta: number;
 }

@@ -4,7 +4,8 @@ export interface userProfileDto {
   nombre: string;
   apellido: string;
   correo: string;
-  unidad: string;
+  idUnidad: number;
+  nombreUnidad: string;
   fechaRegistro: string;
   estado: boolean;
   idRol: number;

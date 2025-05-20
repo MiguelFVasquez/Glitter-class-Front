@@ -24,6 +24,7 @@ export class ProfessorProfileComponent implements OnInit {
       this.publicService.getUsuarioById(+id).subscribe({
         next: (resp) => {
           this.usuario = resp.respuesta;
+          this.storageService.setUserUnit(resp.respuesta.idUnidad);
         },
         error: (err) => {
           console.error('Error al obtener usuario', err);

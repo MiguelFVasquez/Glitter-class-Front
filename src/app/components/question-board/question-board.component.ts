@@ -11,6 +11,9 @@ import { StorageService } from '../../services/storage.service';
 import { QuestionService } from '../../services/question.service';
 import { createQuestion } from '../../model/questions/createQuestionDto';
 import { unidadAcademica } from '../../model/enums/unidadDto';
+import { createOption } from '../../model/questions/createOptionDto';
+import { forkJoin } from 'rxjs';
+
 @Component({
   selector: 'app-question-board',
   imports: [CommonModule,FormsModule,ReactiveFormsModule],
@@ -19,10 +22,12 @@ import { unidadAcademica } from '../../model/enums/unidadDto';
 })
 
 export class QuestionBoardComponent implements OnInit {
+  //Flags de UI
   questionForm!: FormGroup;
+  showOptionForm = false;
   //Information about question
   themes: categoria[] = [];
-  difficultyLevels: dificultad[] = [];
+  difficultyLevels: dificultad[] = []
   questionTypes: tipoPregunta[] = [];
   visibiliy: visibility[]=[];
   units: unidadAcademica[]=[];
@@ -33,7 +38,7 @@ export class QuestionBoardComponent implements OnInit {
   filterType = '';
   //id usuario
   idUsuario:number=0;
-
+  idUnidad:number=0;
   //variable to create questions
   showQuestionForm = false;
   newQuestion: createQuestion = {
@@ -48,7 +53,10 @@ export class QuestionBoardComponent implements OnInit {
   idEstado: 1
 };
 
-createdQuestionId: number | null = null; 
+createdQuestionId: number =0; //Id de la pregunta creada
+
+// Opciones que el usuario va agregando
+opcionesToCreate: createOption[] = [];
 
 
 
@@ -84,7 +92,7 @@ createdQuestionId: number | null = null;
     const id = this.storageService.get('userId');
     this.idUsuario = Number(id);
     this.newQuestion.idDocente=Number(this.storageService.get('userId'));
-
+    this.idUnidad = Number(this.storageService.getUserUnidad());
     //Cargar categorías
     this.loadThemes();
     //Cargar tipos de pregunta
@@ -95,11 +103,18 @@ createdQuestionId: number | null = null;
     this.loadVisibility();
     //Cargar preguntas publicas
     this.loadPublicQuestions();
+    //Cargar las unidaddes del profesor
     this.loadUnits(this.idUsuario);
     //cargar las preguntas del profesor
     this.loadProfessorQuestions(this.idUsuario);
   }
 
+  resetAll() {
+    this.showOptionForm = false;
+    this.createdQuestionId = 0 as any;
+    this.opcionesToCreate = [];
+    // reinicia newQuestion…
+  }
   //-------------ENUMS-------------------
   //Method to get all units
   loadUnits(id:number){
@@ -117,7 +132,7 @@ createdQuestionId: number | null = null;
 
   //Method to get all themes
   loadThemes(){
-    this.publicService.getTemas().subscribe({
+    this.publicService.getTemasUnidad(this.idUnidad).subscribe({
       next: resp => {
         if (!resp.error) {
           this.themes = resp.respuesta;
@@ -296,9 +311,12 @@ submitQuestion() {
   console.log('pregunta a enviar: ', this.newQuestion)
   this.questionService.createQuestion(this.newQuestion).subscribe({
     next: (response) => {
-      this.createdQuestionId = response.respuesta; // Asegúrate que el backend retorna esto
+      this.createdQuestionId = response.respuesta; //Respuesta del back con el id de la pregunta creada
       alert('Pregunta creada exitosamente. Ahora agrega las opciones.');
-      // Aquí podrías abrir el formulario de opciones
+        // una vez creada, se bloquea repetir envío…
+        this.showQuestionForm = false;
+        // se abre el formulario de opciones
+        this.showOptionForm = true;
     },
     error: (err) => {
       console.error(err);
@@ -308,6 +326,32 @@ submitQuestion() {
 }
 
 
+  addOptionRow() {
+    this.opcionesToCreate.push({
+      textoOpcion: '',
+      porcentajeParcial: 0,
+      orden: this.opcionesToCreate.length + 1,
+      idTipoRespuesta: 2 // por defecto “incorrecta”
+    });
+  }
+
+  submitOptions() {
+    // Enviar cada opción vinculada al id de pregunta
+    const calls = this.opcionesToCreate.map(opt =>
+      this.questionService
+        .createOption(this.createdQuestionId, opt)
+    );
+    forkJoin(calls).subscribe({
+      next: () => {
+        alert('Opciones guardadas correctamente');
+        this.resetAll();
+      },
+      error: err => {
+        console.error(err);
+        alert('Error al guardar opciones');
+      }
+    });
+  }
 
   get filteredQuestions() {
     if (!this.filterType) return this.questions;

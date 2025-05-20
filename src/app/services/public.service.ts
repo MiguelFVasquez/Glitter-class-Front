@@ -28,6 +28,11 @@ export class PublicService {
   getTemas():Observable<Message<categoria[]>>{
     return this.http.get<Message<categoria[]>>(`${this.apiURL}/obtener-temas`);
   }
+  //Method to get themes of units
+  getTemasUnidad(idUnidad: number): Observable<Message<categoria[]>>{
+    return this.http.get<Message<categoria[]>>(`${this.apiURL}/obtener-temas-unidad/${idUnidad}`);
+  }
+
   //Method to get all dificulties of the questions
   getDificultades():Observable<Message<dificultad[]>>{
     return this.http.get<Message<dificultad[]>>(`${this.apiURL}/obtener-dificultades`);
@@ -36,7 +41,7 @@ export class PublicService {
   getTiposPregunta(): Observable<Message<tipoPregunta[]>>{
     return this.http.get<Message<tipoPregunta[]>>(`${this.apiURL}/obtener-tipos`);
   }
-
+  //Method to get all academic unities
   getUnidades(): Observable<Message<unidadAcademica[]>>{
     return this.http.get<Message<unidadAcademica[]>>(`${this.apiURL}/obtener-unidades`);
   }
