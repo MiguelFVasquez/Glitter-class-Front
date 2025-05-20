@@ -114,13 +114,6 @@
       </div>
     </form>
   </div>
-  <div class="question-board-container">
-  <div class="header-section">
-    <h1>Banco de Preguntas</h1>
-    <button class="btn-new-question" (click)="toggleQuestionForm()">
-      <i class="material-icons">add</i> Nueva Pregunta
-    </button>
-  </div>
 
   <!-- 1️⃣ Formulario de creación de PREGUNTA -->
   <div *ngIf="showQuestionForm" class="question-form-section">
@@ -147,11 +140,12 @@
         placeholder="Texto de la opción"
         required
       />
-      <input
+
+      <input [disabled]="true"
         type="number"
-        [(ngModel)]="opt.porcentajeParcial"
+        [(ngModel)]="opt.orden"
         name="porcentaje{{i}}"
-        placeholder="% Parcial"
+        placeholder="Orden en que aparecen"
         min="0"
         max="100"
         required

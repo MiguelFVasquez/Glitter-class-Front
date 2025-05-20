@@ -329,7 +329,6 @@ submitQuestion() {
   addOptionRow() {
     this.opcionesToCreate.push({
       textoOpcion: '',
-      porcentajeParcial: 0,
       orden: this.opcionesToCreate.length + 1,
       idTipoRespuesta: 2 // por defecto “incorrecta”
     });

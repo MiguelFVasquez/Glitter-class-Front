@@ -28,7 +28,7 @@ export class QuestionService {
 
   //Method to create option
   createOption(idQuestion:number, option:createOption): Observable<Message<optionCreated>>{
-    return this.http.post<Message<optionCreated>>(`${this.apiURL}/crear-opcion/${idQuestion}`,this.createOption);
+    return this.http.post<Message<optionCreated>>(`${this.apiURL}/crear-opcion/${idQuestion}`,option);
   }
 
 }
