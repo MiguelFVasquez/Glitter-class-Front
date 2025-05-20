@@ -28,6 +28,7 @@ export class ProfessorProfileComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error al obtener usuario', err);
+          alert('Error al obtener los datos del usuario'+ err.mensaje)
         }
       });
     }
@@ -38,6 +39,7 @@ export class ProfessorProfileComponent implements OnInit {
           this.courses = response.respuesta;
         } else {
           console.error('Error en la respuesta del backend');
+          alert('Error al obtener los datos del usuario'+ response.mensaje)
         }
       },
       error: (err) => {

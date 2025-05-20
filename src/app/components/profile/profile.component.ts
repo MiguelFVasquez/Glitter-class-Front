@@ -26,7 +26,11 @@ export class ProfileComponent implements OnInit {
     if (id) {
       this.publicService.getUsuarioById(+id).subscribe({
         next: (resp) => {
-          this.usuario = resp.respuesta;
+          if(!resp.error){
+            this.usuario = resp.respuesta; 
+          }else{
+            alert('Erro al obtener los datos del usuario'+ resp.mensaje)
+          }
         },
         error: (err) => {
           console.error('Error al obtener usuario', err);
@@ -40,6 +44,7 @@ export class ProfileComponent implements OnInit {
           this.courses = response.respuesta;
         } else {
           console.error('Error en la respuesta del backend');
+          alert('Erro al obtener los cursos del estudiante'+ response.mensaje)
         }
       },
       error: (err) => {

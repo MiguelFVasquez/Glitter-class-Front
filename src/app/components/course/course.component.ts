@@ -33,19 +33,21 @@ export class CourseComponent implements OnInit{
             console.log("Respuesta del back" , response.respuesta)
           } else {
             console.error('Error en la respuesta del backend');
+            alert('Error al obtener los cursos del estudiante'+ response.mensaje)
           }
         },
         error: (err) => {
           console.error('Error de red o servidor', err);
         }
       });
-    }else{
+    }else{  //If the rol is professor, then load professor courses
       this.publicService.getCoursesToProfessor(idUsuario).subscribe({
         next: (response) => {
           if (!response.error) {
             this.courses = response.respuesta;
           } else {
             console.error('Error en la respuesta del backend');
+            alert('Error al obtener los cursos del profesor'+ response.mensaje)
           }
         },
         error: (err) => {

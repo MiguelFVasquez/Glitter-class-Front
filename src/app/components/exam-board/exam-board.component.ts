@@ -28,6 +28,7 @@ export class ExamBoardComponent implements OnInit {
         if(!resp.error){
           this.exams=resp.respuesta;
         }else{
+          alert('Error al obtener los examenes'+ resp.mensaje)
           console.warn('Error en getExam')
         }
       },

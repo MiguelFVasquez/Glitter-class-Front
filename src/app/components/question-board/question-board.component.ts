@@ -124,6 +124,7 @@ opcionesToCreate: createOption[] = [];
           this.units= resp.respuesta;
         }else{
           console.warn('Error en getUnidades')
+          alert('Erro al obtener las unidades '+ resp.mensaje)
         }
       },   
       error: () => console.warn('Error cargando las unidades')
@@ -138,9 +139,10 @@ opcionesToCreate: createOption[] = [];
           this.themes = resp.respuesta;
         }else{
           console.warn ('Error en getCategorias')
+          alert('Erro al obtener los temas '+ resp.mensaje)
         }
       },
-      error: () => console.error('Error cargando categorías')
+      error: () => console.error('Error cargando los temas')
     });
   }
   //Method to get all types of questions
@@ -151,6 +153,7 @@ opcionesToCreate: createOption[] = [];
           this.questionTypes = resp.respuesta;
         } else {
           console.warn('Error en getTiposPregunta');
+          alert('Erro al obtener los temas '+ resp.mensaje)
         }
       },
       error: err => console.error('Error al cargar tipos de pregunta', err)
@@ -164,6 +167,7 @@ opcionesToCreate: createOption[] = [];
           this.difficultyLevels = resp.respuesta;
         } else {
           console.warn('Error en getDificultades');
+          alert('Erro al obtener las dificultades '+ resp.mensaje)
         }
       },
       error: err => console.error('Error al cargar dificultades', err)
@@ -177,6 +181,7 @@ opcionesToCreate: createOption[] = [];
           this.visibiliy=resp.respuesta;
         }else{
           console.warn('Error en get visibilidades')
+          alert('Erro al obtener las visibilidades '+ resp.mensaje)
         }
       },
       error :err => console.error('Error al cargar las dificultades', err)
@@ -193,6 +198,7 @@ opcionesToCreate: createOption[] = [];
           this.questions=resp.respuesta;
         }else{
           console.warn('Error en getPublicQuestions')
+          alert('Erro al obtener las preguntas publicas '+ resp.mensaje)
         }
       },
       error:err => console.log('Error al cargar las preguntas públicas', err)
@@ -206,6 +212,7 @@ opcionesToCreate: createOption[] = [];
           this.professorQuestion=resp.respuesta;
         }else{
           console.warn('Error en get professor question')
+          alert('Erro al obtener las preguntas del profesor '+ resp.mensaje)
         }
       },
       error:err => console.log('Error al cargar las preguntas públicas', err)
@@ -320,7 +327,7 @@ submitQuestion() {
     },
     error: (err) => {
       console.error(err);
-      alert('Error al crear la pregunta');
+      alert('Error al crear la pregunta' + err.mensaje);
     }
   });
 }
@@ -347,7 +354,7 @@ submitQuestion() {
       },
       error: err => {
         console.error(err);
-        alert('Error al guardar opciones');
+        alert('Error al guardar opciones' + err.mensaje);
       }
     });
   }

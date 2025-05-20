@@ -72,12 +72,14 @@ export class HomeComponent {
           this.router.navigateByUrl('/professor');
         } else {
           this.errorMessage = 'Rol de usuario no reconocido.';
+          alert('Error al obtener el rol del usuario'+ user.mensaje)
         }
         this.isLoading = false;
       }
       ,
       error: (err) => {
         this.errorMessage = 'Credenciales incorrectas o error del servidor.';
+        alert('Error al obtener los datos del usuario'+ err.mensaje)
         this.isLoading = false
       }
       });
