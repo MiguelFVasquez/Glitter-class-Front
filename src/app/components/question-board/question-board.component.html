@@ -126,6 +126,31 @@
   <!-- 2️⃣ Formulario de creación de OPCIONES -->
   <div *ngIf="showOptionForm" class="question-form-section">
     <h2>Agrega Opciones (Pregunta #{{ createdQuestionId }})</h2>
+          <!-- Si es verdadero/falso, muestra radios -->
+      <div *ngIf="isTrueFalseType()">
+        <label><strong>Selecciona la respuesta correcta:</strong></label>
+        <div class="form-group">
+          <label>
+            <input
+              type="radio"
+              name="trueFalseAnswer"
+              [value]="'Verdadero'"
+              [(ngModel)]="selectedTrueFalse"
+            />
+            Verdadero
+          </label>
+          <label style="margin-left: 2em;">
+            <input
+              type="radio"
+              name="trueFalseAnswer"
+              [value]="'Falso'"
+              [(ngModel)]="selectedTrueFalse"
+            />
+            Falso
+          </label>
+        </div>
+      </div>
+
 
     <div *ngFor="let opt of opcionesToCreate; let i = index" class="form-row">
       <input
@@ -186,6 +211,10 @@
             </i>
             <span>{{ q.visibilidad }}</span>
           </div>
+         <div class="detail-item">
+          <i class="material-icons">person</i>
+          <span>{{ q.docente }}</span>
+        </div>
         </div>
       </div>
       <p *ngIf="questions.length === 0" class="empty-msg">
@@ -221,6 +250,10 @@
             </i>
             <span>{{ q.visibilidad }}</span>
           </div>
+          <div class="detail-item">
+          <i class="material-icons">person</i>
+          <span>{{ q.docente }}</span>
+        </div>
         </div>
       </div>
       <p *ngIf="professorQuestion.length === 0" class="empty-msg">

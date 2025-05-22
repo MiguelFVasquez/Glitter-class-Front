@@ -36,6 +36,7 @@ export class QuestionBoardComponent implements OnInit {
   professorQuestion: readPublicQuestion[]=[] //All professor questions publics and privates
   selectedQuestionType = '';
   filterType = '';
+  selectedTrueFalse: 'true' | 'false' | null = null;
   //id usuario
   idUsuario:number=0;
   idUnidad:number=0;
@@ -313,24 +314,29 @@ opcionesToCreate: createOption[] = [];
     this.elementosOrdenar.removeAt(index);
   }
 
-submitQuestion() {
-  
-  console.log('pregunta a enviar: ', this.newQuestion)
-  this.questionService.createQuestion(this.newQuestion).subscribe({
-    next: (response) => {
-      this.createdQuestionId = response.respuesta; //Respuesta del back con el id de la pregunta creada
-      alert('Pregunta creada exitosamente. Ahora agrega las opciones.');
-        // una vez creada, se bloquea repetir envío…
-        this.showQuestionForm = false;
-        // se abre el formulario de opciones
-        this.showOptionForm = true;
-    },
-    error: (err) => {
-      console.error(err);
-      alert('Error al crear la pregunta' + err.mensaje);
-    }
-  });
-}
+  submitQuestion() {
+    
+    console.log('pregunta a enviar: ', this.newQuestion)
+    this.questionService.createQuestion(this.newQuestion).subscribe({
+      next: (response) => {
+        this.createdQuestionId = response.respuesta; //Respuesta del back con el id de la pregunta creada
+        alert('Pregunta creada exitosamente. Ahora agrega las opciones.');
+          // una vez creada, se bloquea repetir envío…
+          this.showQuestionForm = false;
+          // se abre el formulario de opciones
+          this.showOptionForm = true;
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Error al crear la pregunta' + err.mensaje);
+      }
+    });
+  }
+
+  //Method to valid the type seleceted: 
+  isTrueFalseType(): boolean {
+  return this.newQuestion.idTipo === 3; // Asegurar que el tipo verdadero o falso sea el id=3
+  }
 
 
   addOptionRow() {
@@ -343,6 +349,19 @@ submitQuestion() {
   submitOptions() {
     // Enviar cada opción vinculada al id de pregunta
     console.log("Opciones a enviar", this.opcionesToCreate);
+    if (this.selectedTrueFalse !== null && this.isTrueFalseType()) {
+      this.opcionesToCreate = [
+        {
+          textoOpcion: 'Verdadero',
+          idTipoRespuesta: this.selectedTrueFalse === 'true' ? 1 : 2
+        },
+        {
+          textoOpcion: 'Falso',
+          idTipoRespuesta: this.selectedTrueFalse === 'false' ? 1 : 2
+        }
+      ];
+    }
+
     const calls = this.opcionesToCreate.map(opt =>
       this.questionService
         .createOption(this.createdQuestionId, opt)

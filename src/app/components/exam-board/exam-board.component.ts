@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
+import {ReactiveFormsModule } from '@angular/forms';
 
 import { CommonModule } from '@angular/common';
 import { readExam } from '../../model/exam/readExamDto';
 import { PublicService } from '../../services/public.service';
-import { error } from 'console';
+import { ExamService } from '../../services/exam.service';
+import { StorageService } from '../../services/storage.service';
+
 
 @Component({
   selector: 'app-exam-board',
@@ -13,17 +15,31 @@ import { error } from 'console';
   styleUrl: './exam-board.component.css'
 })
 export class ExamBoardComponent implements OnInit {
+  
+  //Exams
   exams: readExam[] = [];
+  //User information
+  idUsuario: number=0;
+  idUnidad: number=0;
 
-  constructor(private publicService: PublicService){}
+  constructor(
+    private publicService: PublicService,
+    private storageService: StorageService,
+    private examService: ExamService
+  ){}
   
   ngOnInit(): void {
-    this.loadExams();
+    //Load user information
+    const idUsuario= this.storageService.get('userId');
+    this.idUsuario= Number(idUsuario);
+
+    //Load exams
+    this.loadExams(this.idUsuario);
   }
   
-  
-  loadExams(){
-    this.publicService.getExams().subscribe({
+  //Method to get all professor exams
+  loadExams(id:number){
+    this.examService.getExams(id).subscribe({
       next: resp =>{
         if(!resp.error){
           this.exams=resp.respuesta;
@@ -32,7 +48,11 @@ export class ExamBoardComponent implements OnInit {
           console.warn('Error en getExam')
         }
       },
-      error:err => console.log('Error al cargar los examenes', err)
+      error:err => {
+        console.log('Error al cargar los examenes', err)
+        alert('Error al obtener los examenes'+ err.mensaje)
+      
+      }
     })
   }
 
