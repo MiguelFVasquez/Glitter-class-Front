@@ -1,4 +1,4 @@
-export function showAlert(message: string, type: 'success' | 'error'): void {
+export function showAlert(message: string, type: 'success' | 'error' | 'warning'): void {
   const alertBox = document.createElement('div');
   alertBox.className = `custom-alert ${type}`;
   alertBox.innerText = message;

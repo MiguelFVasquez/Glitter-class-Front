@@ -13,6 +13,7 @@ export interface createExam {
 }
 export interface preguntaExamenDto {
   idPregunta: number;
+  idExamen: number;
   porcentaje: number;
 }
 

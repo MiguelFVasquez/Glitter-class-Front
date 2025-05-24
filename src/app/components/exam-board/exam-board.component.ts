@@ -12,7 +12,10 @@ import { preguntaExamenDto } from '../../model/exam/createExamDto';
 import { Message } from '../../model/message/messageDTO';
 import { showAlert } from '../../model/alert';
 import { grupoDocente } from '../../model/grupos/grupoDto';
-
+import { readPublicQuestion } from '../../model/questions/readQuestionDto';
+import { QuestionService } from '../../services/question.service';
+import { createdExam } from '../../model/exam/createdExamDto';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-exam-board',
@@ -25,17 +28,29 @@ export class ExamBoardComponent implements OnInit {
   //Exams
   exams: readExam[] = [];
   showCreateForm = false;
+  
   //Exam information
   units: unidadAcademica[]=[];
   themes: categoria[] = [];
   groups: grupoDocente[]=[]
-
+  //After create
+  idTheme: createdExam ={
+    idExamen:0,
+    idTemas:0
+  }
   // Listas para selects
   grupos: { idGrupo: number; nombre: string }[] = [];
   temas: { idTema: number; nombre: string }[] = [];
   unidades: { idUnidad: number; nombre: string }[] = [];
-  preguntasDisponibles: { idPregunta: number; enunciado: string }[] = [];
 
+  //Modal to add question to exam
+  showQuestionForm = false;    // para el segundo modal (asignar preguntas)
+  createdExamId: number = 0;
+  createExamThemId: number | null=null;
+  createdExamTitle = '';
+  listaPreguntas: preguntaExamenDto[]=[];
+  
+  tab: 'publicas' | 'propias' = 'publicas';
   // DTO para crear examen
   newExam: createExam = {
     idGrupo: 0,
@@ -53,19 +68,23 @@ export class ExamBoardComponent implements OnInit {
   //User information
   idUsuario: number=0;
   idUnidad: number=0;
+  
 
   constructor(
     private publicService: PublicService,
     private storageService: StorageService,
-    private examService: ExamService
-  ){}
+    private examService: ExamService,
+    private questionService: QuestionService)
+    {
+    this.newExam.idDocente= Number(this.storageService.get('userId'));
+  }
   
   ngOnInit(): void {
     //Load user information
     const idUsuario= this.storageService.get('userId');
     this.idUsuario= Number(idUsuario);
     this.idUnidad = Number(this.storageService.getUserUnidad());
-
+    this.newExam.idDocente= this.idUsuario
     //Load exams
     this.loadExams(this.idUsuario);
     //Load units
@@ -145,20 +164,19 @@ export class ExamBoardComponent implements OnInit {
   
   //----------------Create exam-------------------------------\\
 
-    // Obtener el enunciado de una pregunta por su ID
-  getPreguntaEnunciado(idPregunta: number): string {
-    const pregunta = this.preguntasDisponibles.find(p => p.idPregunta === idPregunta);
-    return pregunta ? pregunta.enunciado : 'Pregunta eliminada';
-  }
-
   // Envía el examen al backend
   submitExam() {
+    console.log("Examen enviado al back: " , this.newExam);
     this.examService.createExam(this.newExam).subscribe({
-      next: (resp: Message<number>) => {
+      next: (resp: Message<createdExam>) => {
         if (!resp.error) {
-          showAlert('Examen creado con ID ' + resp.respuesta, 'success');
-          this.showCreateForm = false;
-          this.loadExams(this.idUsuario);
+          this.createdExamId   = resp.respuesta.idExamen;
+          this.createExamThemId = resp.respuesta.idTemas;
+          this.createdExamTitle = this.newExam.titulo;
+          showAlert(`Examen creado (#${resp.respuesta.idExamen}). Ahora asocia preguntas.`, 'success');
+          this.loadQuestions();  
+          this.showQuestionForm = true; // abre el segundo modal
+      
         } else {
           showAlert('Error creando examen: ' + resp.mensaje, 'error');
         }
@@ -171,4 +189,84 @@ export class ExamBoardComponent implements OnInit {
   }
 
 
+//-----------------ADD questions to exam-------------
+  // Catálogo de preguntas: públicas y propias
+  preguntasPublicas: readPublicQuestion[] = [];
+  preguntasPropias:  readPublicQuestion[] = [];
+
+
+  submitQuestions() {
+    if (this.getTotalPorcentaje() !== 100) {
+      showAlert('El porcentaje total debe ser 100%', 'error');
+      return;
+    }
+
+    // Generamos un array de Observables, uno por cada pregunta
+    const calls = this.listaPreguntas.map(q =>
+      this.examService.addQuestion(this.createdExamId, q.idPregunta)
+    );
+
+    // forkJoin espera a que todas terminen
+    forkJoin(calls).subscribe({
+      next: results => {
+        showAlert('Todas las preguntas fueron agregadas exitosamente', 'success');
+        this.showQuestionForm = false;
+        this.listaPreguntas = [];
+        // refresca tu vista si es necesario
+      },
+      error: err => {
+        console.error('Error asociando preguntas:', err);
+        showAlert('Ocurrió un error al asociar preguntas', 'error');
+      }
+    });
+  }
+
+
+  loadQuestions() {
+    // públicos
+    this.questionService.getQuestionByThem(this.idTheme.idTemas).subscribe(r => {
+      if (!r.error) this.preguntasPublicas = r.respuesta;
+    });
+    // propios (por idDocente)
+    this.questionService.getQuestions(this.newExam.idDocente).subscribe(r => {
+      if (!r.error) this.preguntasPropias = r.respuesta;
+    });
+  }
+    isAdded(idPregunta: number): boolean {
+    return this.listaPreguntas.some(q => q.idPregunta === idPregunta);
+  }
+
+  // Obtener el enunciado de una pregunta por su ID
+  getPreguntaEnunciado(idPregunta: number): string {
+    const pregunta = this.preguntasPublicas.find(p => p.idPregunta === idPregunta);
+    return pregunta ? pregunta.enunciado : 'Pregunta eliminada';
+  }
+  getPreguntaEnunciadoPriv(idPregunta: number): string {
+    const pregunta = this.preguntasPropias.find(p => p.idPregunta === idPregunta);
+    return pregunta ? pregunta.enunciado : 'Pregunta eliminada';
+  }
+  // Calcular porcentaje total
+
+  getTotalPorcentaje(): number {
+    return this.listaPreguntas.reduce((sum, q) => sum + q.porcentaje, 0);
+  }
+
+  addQuestionToExam(idPregunta: number) {
+    if (!this.createdExamId) {
+      showAlert('Primero guarda el examen para obtener su ID', 'error');
+      return;
+    }
+    if (!this.isAdded(idPregunta)) {
+      this.listaPreguntas.push({
+        idPregunta,
+        porcentaje: 0,
+        idExamen: this.createdExamId
+      });
+    }
+  }
+
+  // Quita una pregunta de la lista
+  removeQuestionFromExam(index: number) {
+    this.listaPreguntas.splice(index, 1);
+  }
 }

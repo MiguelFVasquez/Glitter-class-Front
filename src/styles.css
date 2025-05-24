@@ -25,6 +25,9 @@
 .custom-alert.error {
   background-color: #F44336; /* rojo */
 }
+.custom-alert.warning {
+  background-color: #eeff00; /* amarillo */
+}
 
 /* Animación de entrada y salida */
 @keyframes fadeInOut {

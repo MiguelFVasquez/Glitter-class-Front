@@ -218,4 +218,19 @@
   background: #ccc;
   cursor: not-allowed;
 }
+.questions-tabs {
+  display: flex;
+  margin-bottom: 1rem;
+}
+.questions-tabs button {
+  flex: 1;
+  padding: 0.5rem;
+  border: none;
+  background: #f0f0f0;
+  cursor: pointer;
+}
+.questions-tabs button.active {
+  background: #097887;
+  color: white;
+}
 
