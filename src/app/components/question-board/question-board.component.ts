@@ -6,7 +6,7 @@ import { categoria } from '../../model/enums/categoriaDto';
 import {tipoPregunta} from '../../model/enums/tiposPreguntaDto';
 import {dificultad} from '../../model/enums/dificultadesDto';
 import {visibility} from '../../model/enums/visibilidadDto';
-import { readPublicQuestion } from '../../model/questions/readQuestionDto';
+import { opcionRespuesta, readPublicQuestion } from '../../model/questions/readQuestionDto';
 import { StorageService } from '../../services/storage.service';
 import { QuestionService } from '../../services/question.service';
 import { createQuestion } from '../../model/questions/createQuestionDto';
@@ -35,6 +35,9 @@ export class QuestionBoardComponent implements OnInit {
   //questions
   questions: readPublicQuestion[] = []; //All public questions
   professorQuestion: readPublicQuestion[]=[] //All professor questions publics and privates
+  questionOptions: opcionRespuesta[]=[]
+  selectedQuestion: readPublicQuestion | null = null;
+
   selectedQuestionType = '';
   filterType = '';
   selectedTrueFalse: 'true' | 'false' | null = null;
@@ -84,7 +87,7 @@ opcionesToCreate: createOption[] = [];
     estadoId:      [1]
   });
 
-    this.questionForm.get('tipo')?.valueChanges.subscribe(type => {
+  this.questionForm.get('tipo')?.valueChanges.subscribe(type => {
       this.selectedQuestionType = type;
       this.updateFormForQuestionType();
     });
@@ -401,5 +404,16 @@ opcionesToCreate: createOption[] = [];
     if (!this.filterType) return this.questions;
     return this.questions.filter(q => q.tipo === this.filterType);
   }
+  //---------------------QUESTION DETAIL----------------
+
+
+  openQuestionDetail(q: readPublicQuestion) {
+    this.selectedQuestion = q;
+  }
+
+  closeModal() {
+    this.selectedQuestion = null;
+  }
+
 }
 

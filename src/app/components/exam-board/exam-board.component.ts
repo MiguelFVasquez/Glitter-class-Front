@@ -11,6 +11,7 @@ import { createExam } from '../../model/exam/createExamDto';
 import { preguntaExamenDto } from '../../model/exam/createExamDto';
 import { Message } from '../../model/message/messageDTO';
 import { showAlert } from '../../model/alert';
+import { grupoDocente } from '../../model/grupos/grupoDto';
 
 
 @Component({
@@ -27,6 +28,8 @@ export class ExamBoardComponent implements OnInit {
   //Exam information
   units: unidadAcademica[]=[];
   themes: categoria[] = [];
+  groups: grupoDocente[]=[]
+
   // Listas para selects
   grupos: { idGrupo: number; nombre: string }[] = [];
   temas: { idTema: number; nombre: string }[] = [];
@@ -40,17 +43,12 @@ export class ExamBoardComponent implements OnInit {
     idTema: 0,
     titulo: '',
     descripcion: '',
-    preguntasMostradas: 1,
     tiempoLimite: 1,
     fechaDisponible: new Date().toISOString().slice(0,16),
     fechaCierre: new Date().toISOString().slice(0,16),
     pesoEnCurso: 0,
     umbralAprobacion: 0,
-    aleatorizarPreguntas: 0,
-    mostrarResultados: 0,
-    idUnidad: 0,
-    idEstado: 1,            // hardcodeado
-    listaPreguntas: []
+    idUnidad: 0
   };
   //User information
   idUsuario: number=0;
@@ -74,6 +72,8 @@ export class ExamBoardComponent implements OnInit {
     this.loadUnits(this.idUsuario);
     //Load themes
     this.loadThemes(this.idUnidad);
+    //Load groups
+    this.loadGroups(this.idUsuario);
 
   }
   
@@ -103,10 +103,27 @@ export class ExamBoardComponent implements OnInit {
           this.units= resp.respuesta;
         }else{
           console.warn('Error en getUnidades')
-          showAlert('Erro al obtener las unidades '+ resp.mensaje, 'error')
+          showAlert('Error al obtener las unidades '+ resp.mensaje, 'error')
         }
       },   
       error: () => console.warn('Error cargando las unidades')
+    })
+  }
+
+  //Method to get all professor groups
+  loadGroups(id:number){
+    this.publicService.getGruposProfessor(id).subscribe({
+      next: resp =>{
+        if(!resp.error){
+          this.groups=resp.respuesta;
+        }else{
+          console.warn('Error en getGroups')
+          showAlert('Error al obtener los grupos '+ resp.mensaje, 'error')
+        }
+      },
+      error:(err) =>{
+        showAlert('Error al obtener los grupos del profesor '+ err.mensaje, 'error')
+      }
     })
   }
 
@@ -132,27 +149,6 @@ export class ExamBoardComponent implements OnInit {
   getPreguntaEnunciado(idPregunta: number): string {
     const pregunta = this.preguntasDisponibles.find(p => p.idPregunta === idPregunta);
     return pregunta ? pregunta.enunciado : 'Pregunta eliminada';
-  }
-
-  // Calcular porcentaje total
-  getTotalPorcentaje(): number {
-    return this.newExam.listaPreguntas.reduce((sum, q) => sum + q.porcentaje, 0);
-  }
-
-
-  // Añade una pregunta al examen
-  addQuestionToExam(idPregunta: number, porcentaje: number) {
-    if (!this.newExam.listaPreguntas.find(q => q.idPregunta === idPregunta)) {
-      this.newExam.listaPreguntas.push({ 
-        idPregunta, 
-        porcentaje 
-      });
-    }
-  }
-
-  // Quita una pregunta de la lista
-  removeQuestionFromExam(index: number) {
-    this.newExam.listaPreguntas.splice(index, 1);
   }
 
   // Envía el examen al backend

@@ -190,7 +190,7 @@
       Preguntas Públicas
     </h2>
     <div class="questions-list">
-      <div class="question-card" *ngFor="let q of questions">
+      <div class="question-card" *ngFor="let q of questions" (click)="openQuestionDetail(q)">
         <!-- Reusa tu tarjeta -->
         <div class="question-header">
           <h3>{{ q.enunciado }}</h3>
@@ -230,7 +230,7 @@
       Mis Preguntas
     </h2>
     <div class="questions-list">
-      <div class="question-card" *ngFor="let q of professorQuestion">
+      <div class="question-card" *ngFor="let q of professorQuestion" (click)="openQuestionDetail(q)">
         <div class="question-header">
           <h3>{{ q.enunciado }}</h3>
           <span class="question-type">{{ q.tipo }}</span>
@@ -260,5 +260,30 @@
         Aún no has creado preguntas.
       </p>
     </div>
+    <!-- Modal Detalle de Pregunta -->
+  <div class="modal" *ngIf="selectedQuestion" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3>Detalle de la Pregunta</h3>
+      <p><strong>Enunciado:</strong> {{ selectedQuestion.enunciado }}</p>
+      <p><strong>Tema:</strong> {{ selectedQuestion.tema }}</p>
+      <p><strong>Dificultad:</strong> {{ selectedQuestion.dificultad }}</p>
+      <p><strong>Visibilidad:</strong> {{ selectedQuestion.visibilidad }}</p>
+      <p><strong>Docente:</strong> {{ selectedQuestion.docente }}</p>
+
+      <div *ngIf="selectedQuestion.opciones?.length">
+        <h4>Opciones de Respuesta</h4>
+        <ul>
+          <li *ngFor="let o of selectedQuestion.opciones">
+            {{ o.textoOpcion }}
+            <span *ngIf="o.idTipoRespuesta === 1" style="color: green;">✔ Correcta</span>
+            <span *ngIf="o.idTipoRespuesta !== 1" style="color: red;">✘ Incorrecta</span>
+          </li>
+        </ul>
+      </div>
+
+      <button (click)="closeModal()">Cerrar</button>
+    </div>
   </div>
+
+</div>
 

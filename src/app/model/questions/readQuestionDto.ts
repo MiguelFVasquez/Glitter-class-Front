@@ -10,5 +10,10 @@ export interface readPublicQuestion{
     porcentajeNota: number;
     fechaCreacion: string;
     estado:string
-    
+    opciones: opcionRespuesta[]
+}
+export interface opcionRespuesta{
+    idOpcionRespuesta: number,
+    textoOpcion: string,
+    idTipoRespuesta: number;
 }

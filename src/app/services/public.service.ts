@@ -11,6 +11,7 @@ import { visibility } from '../model/enums/visibilidadDto';
 import { readPublicQuestion } from '../model/questions/readQuestionDto';
 import { readExam } from '../model/exam/readExamDto';
 import { unidadAcademica } from '../model/enums/unidadDto';
+import { grupoDocente } from '../model/grupos/grupoDto';
 
 @Injectable({
   providedIn: 'root'
@@ -76,5 +77,8 @@ export class PublicService {
   getExams():Observable<Message<readExam[]>>{
     return this.http.get<Message<readExam[]>>(`${this.apiURL}/obtener-examenes`);
   }
-
+  //-----------Grupos------------------
+  getGruposProfessor(id:number):Observable<Message<grupoDocente[]>>{
+    return this.http.get<Message<grupoDocente[]>>(`${this.apiURL}//obtener-grupos-docente/${id}`);
+  }
 }
