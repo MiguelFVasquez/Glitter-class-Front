@@ -1,4 +1,12 @@
-export function showAlert(message: string, type: 'success' | 'error' = 'success'): void {
-    alert(`${type.toUpperCase()}: ${message}`);
+export function showAlert(message: string, type: 'success' | 'error'): void {
+  const alertBox = document.createElement('div');
+  alertBox.className = `custom-alert ${type}`;
+  alertBox.innerText = message;
+  console.log('Clase aplicada:', alertBox.className); // << Aquí
+  document.body.appendChild(alertBox);
+
+  // Autoeliminar después de 3 segundos
+  setTimeout(() => {
+    alertBox.remove();
+  }, 3000);
 }
-  

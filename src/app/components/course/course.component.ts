@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PublicService } from '../../services/public.service';
 import { StorageService } from '../../services/storage.service';
 import { CourseDto } from '../../model/courses/courseDto';
+import { showAlert } from '../../model/alert';
 
 @Component({
   selector: 'app-course',
@@ -33,11 +34,12 @@ export class CourseComponent implements OnInit{
             console.log("Respuesta del back" , response.respuesta)
           } else {
             console.error('Error en la respuesta del backend');
-            alert('Error al obtener los cursos del estudiante'+ response.mensaje)
+            showAlert('Error al obtener los cursos del estudiante '+ response.mensaje, 'error')
           }
         },
         error: (err) => {
-          console.error('Error de red o servidor', err);
+          console.error('Error de red o servidor ', err);
+          showAlert('Error de servidor '+ err, 'error')
         }
       });
     }else{  //If the rol is professor, then load professor courses
@@ -47,11 +49,12 @@ export class CourseComponent implements OnInit{
             this.courses = response.respuesta;
           } else {
             console.error('Error en la respuesta del backend');
-            alert('Error al obtener los cursos del profesor'+ response.mensaje)
+            showAlert('Error al obtener los cursos del profesor '+ response.mensaje, 'error')
           }
         },
         error: (err) => {
           console.error('Error de red o servidor', err);
+          showAlert('Error al obtener los cursos del profesor '+ err, 'error')
         }
       });
     }

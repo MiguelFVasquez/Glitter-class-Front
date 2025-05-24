@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import {loginDto} from '../../model/user/LoginDTO';
 import { StorageService } from '../../services/storage.service';
+import { showAlert } from '../../model/alert';
 
 @Component({
   selector: 'app-home',
@@ -58,7 +59,6 @@ export class HomeComponent {
        this.router.navigateByUrl('/professor');
     }
 
-
     console.log("user: ", loginDto )
     this.authService.login(loginDto).subscribe({
 
@@ -72,14 +72,14 @@ export class HomeComponent {
           this.router.navigateByUrl('/professor');
         } else {
           this.errorMessage = 'Rol de usuario no reconocido.';
-          alert('Error al obtener el rol del usuario'+ user.mensaje)
+          showAlert('Error al obtener el rol del usuario: '+ user.mensaje, 'success')
         }
         this.isLoading = false;
       }
       ,
       error: (err) => {
         this.errorMessage = 'Credenciales incorrectas o error del servidor.';
-        alert('Error al obtener los datos del usuario'+ err.mensaje)
+        showAlert('Error al obtener los datos del usuario'+ err.mensaje, 'error')
         this.isLoading = false
       }
       });

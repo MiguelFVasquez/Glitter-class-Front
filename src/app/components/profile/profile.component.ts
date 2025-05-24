@@ -5,6 +5,7 @@ import {userProfileDto } from '../../model/user/userProfileDTO';
 import { PublicService } from '../../services/public.service';
 import { StorageService } from '../../services/storage.service';
 import { CourseDto } from '../../model/courses/courseDto';
+import { showAlert } from '../../model/alert';
 
 
 @Component({
@@ -29,11 +30,12 @@ export class ProfileComponent implements OnInit {
           if(!resp.error){
             this.usuario = resp.respuesta; 
           }else{
-            alert('Erro al obtener los datos del usuario'+ resp.mensaje)
+            showAlert('Error al obtener los datos del usuario'+ resp.mensaje, 'error')
           }
         },
         error: (err) => {
           console.error('Error al obtener usuario', err);
+          showAlert('Error del servidor al obtener los datos del usuario'+ err, 'error')
         }
       });
     }
@@ -44,11 +46,12 @@ export class ProfileComponent implements OnInit {
           this.courses = response.respuesta;
         } else {
           console.error('Error en la respuesta del backend');
-          alert('Erro al obtener los cursos del estudiante'+ response.mensaje)
+          showAlert('Error al obtener los cursos del estudiante '+ response.mensaje, 'error')
         }
       },
       error: (err) => {
         console.error('Error de red o servidor', err);
+        showAlert('Error del servidor al obtener los cursos del usuario '+ err.mensaje, 'error')
       }
     });
 

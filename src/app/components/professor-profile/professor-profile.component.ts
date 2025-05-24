@@ -4,6 +4,7 @@ import { PublicService } from '../../services/public.service';
 import { StorageService } from '../../services/storage.service';
 import { CourseDto } from '../../model/courses/courseDto';
 import { CommonModule } from '@angular/common';
+import { showAlert } from '../../model/alert';
 
 @Component({
   selector: 'app-professor-profile',
@@ -28,7 +29,7 @@ export class ProfessorProfileComponent implements OnInit {
         },
         error: (err) => {
           console.error('Error al obtener usuario', err);
-          alert('Error al obtener los datos del usuario'+ err.mensaje)
+          showAlert('Error al obtener los datos del usuario '+ err.mensaje, 'error')
         }
       });
     }
@@ -39,11 +40,12 @@ export class ProfessorProfileComponent implements OnInit {
           this.courses = response.respuesta;
         } else {
           console.error('Error en la respuesta del backend');
-          alert('Error al obtener los datos del usuario'+ response.mensaje)
+          showAlert('Error al obtener los datos del usuario '+ response.mensaje, 'error')
         }
       },
       error: (err) => {
         console.error('Error de red o servidor', err);
+        showAlert('Error del servidor  al obtener los datos del usuario '+ err.mensaje, 'error')
       }
     });
 

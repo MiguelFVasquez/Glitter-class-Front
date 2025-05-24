@@ -10,6 +10,7 @@ import { categoria } from '../../model/enums/categoriaDto';
 import { createExam } from '../../model/exam/createExamDto';
 import { preguntaExamenDto } from '../../model/exam/createExamDto';
 import { Message } from '../../model/message/messageDTO';
+import { showAlert } from '../../model/alert';
 
 
 @Component({
@@ -83,13 +84,13 @@ export class ExamBoardComponent implements OnInit {
         if(!resp.error){
           this.exams=resp.respuesta;
         }else{
-          alert('Error al obtener los examenes'+ resp.mensaje)
+          showAlert('Error al obtener los examenes'+ resp.mensaje, 'error')
           console.warn('Error en getExam')
         }
       },
       error:err => {
         console.log('Error al cargar los examenes', err)
-        alert('Error al obtener los examenes'+ err.mensaje)
+        showAlert('Error al obtener los examenes'+ err.mensaje, 'error')
       
       }
     })
@@ -102,7 +103,7 @@ export class ExamBoardComponent implements OnInit {
           this.units= resp.respuesta;
         }else{
           console.warn('Error en getUnidades')
-          alert('Erro al obtener las unidades '+ resp.mensaje)
+          showAlert('Erro al obtener las unidades '+ resp.mensaje, 'error')
         }
       },   
       error: () => console.warn('Error cargando las unidades')
@@ -117,7 +118,7 @@ export class ExamBoardComponent implements OnInit {
           this.themes = resp.respuesta;
         }else{
           console.warn ('Error en getCategorias')
-          alert('Erro al obtener los temas '+ resp.mensaje)
+          showAlert('Erro al obtener los temas ' + resp.mensaje , 'error')
         }
       },
       error: () => console.error('Error cargando los temas')
@@ -159,16 +160,16 @@ export class ExamBoardComponent implements OnInit {
     this.examService.createExam(this.newExam).subscribe({
       next: (resp: Message<number>) => {
         if (!resp.error) {
-          alert('Examen creado con ID ' + resp.respuesta);
+          showAlert('Examen creado con ID ' + resp.respuesta, 'success');
           this.showCreateForm = false;
           this.loadExams(this.idUsuario);
         } else {
-          alert('Error creando examen: ' + resp.mensaje);
+          showAlert('Error creando examen: ' + resp.mensaje, 'error');
         }
       },
       error: err => {
         console.error(err);
-        alert('Error de comunicación');
+        showAlert('Error de comunicación ' + err , 'error');
       }
     });
   }

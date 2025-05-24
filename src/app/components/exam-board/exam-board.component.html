@@ -37,7 +37,7 @@
         <div class="form-group">
           <label for="idUnidad">Unidad Académica *</label>
           <select id="idUnidad" [(ngModel)]="newExam.idUnidad" name="idUnidad" required>
-            <option *ngFor="let u of unidades" [ngValue]="u.idUnidad">{{ u.nombre }}</option>
+            <option *ngFor="let u of units" [ngValue]="u.idUnidad">{{ u.nombre }}</option>
           </select>
         </div>
         <div class="form-row">
@@ -50,7 +50,7 @@
           <div class="form-group">
             <label for="idTema">Tema *</label>
             <select id="idTema" [(ngModel)]="newExam.idTema" name="idTema" required>
-              <option *ngFor="let t of temas" [ngValue]="t.idTema">{{ t.nombre }}</option>
+              <option *ngFor="let t of themes" [ngValue]="t.idTema">{{ t.nombre }}</option>
             </select>
           </div>
         </div>

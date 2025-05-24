@@ -13,6 +13,7 @@ import { createQuestion } from '../../model/questions/createQuestionDto';
 import { unidadAcademica } from '../../model/enums/unidadDto';
 import { createOption } from '../../model/questions/createOptionDto';
 import { forkJoin } from 'rxjs';
+import { showAlert } from '../../model/alert';
 
 @Component({
   selector: 'app-question-board',
@@ -139,11 +140,14 @@ opcionesToCreate: createOption[] = [];
         if (!resp.error) {
           this.themes = resp.respuesta;
         }else{
-          console.warn ('Error en getCategorias')
-          alert('Erro al obtener los temas '+ resp.mensaje)
+          console.warn ('Error en getCategorias');
+          showAlert('Error al obtener los temas '+ resp.mensaje, 'error');
         }
       },
-      error: () => console.error('Error cargando los temas')
+      error: (err) => {
+        console.error('Error cargando los temas')
+        showAlert('Error del servidor al obtener los temas '+ err.mensaje, 'error');
+      }
     });
   }
   //Method to get all types of questions
@@ -154,10 +158,13 @@ opcionesToCreate: createOption[] = [];
           this.questionTypes = resp.respuesta;
         } else {
           console.warn('Error en getTiposPregunta');
-          alert('Erro al obtener los temas '+ resp.mensaje)
+          showAlert('Error al obtener los tipos de pregunta '+ resp.mensaje, 'error')
         }
       },
-      error: err => console.error('Error al cargar tipos de pregunta', err)
+      error: err => {
+        console.error('Error al cargar tipos de pregunta', err)
+        showAlert('Error del servidor al obtener las categorias '+ err.mensaje, 'error');
+      }
     });
   }
   //Method to load all dificulties
@@ -168,10 +175,13 @@ opcionesToCreate: createOption[] = [];
           this.difficultyLevels = resp.respuesta;
         } else {
           console.warn('Error en getDificultades');
-          alert('Erro al obtener las dificultades '+ resp.mensaje)
+          showAlert('Error al obtener las dificultades '+ resp.mensaje, 'error')
         }
       },
-      error: err => console.error('Error al cargar dificultades', err)
+      error: err => {
+        console.error('Error al cargar dificultades', err)
+        showAlert('Error del servidor al obtener las dificultades '+ err.mensaje, 'error');
+      }
     });
   }
   //Method to load all the visibities
@@ -182,10 +192,13 @@ opcionesToCreate: createOption[] = [];
           this.visibiliy=resp.respuesta;
         }else{
           console.warn('Error en get visibilidades')
-          alert('Erro al obtener las visibilidades '+ resp.mensaje)
+          showAlert('Error al obtener las visibilidades '+ resp.mensaje, 'error')
         }
       },
-      error :err => console.error('Error al cargar las dificultades', err)
+      error :err => {
+        console.error('Error al cargar las visibilidades', err)
+        showAlert('Error del servidor al obtener las visibilidades '+ err.mensaje, 'error');
+      }
     })
   }
 
@@ -199,10 +212,13 @@ opcionesToCreate: createOption[] = [];
           this.questions=resp.respuesta;
         }else{
           console.warn('Error en getPublicQuestions')
-          alert('Erro al obtener las preguntas publicas '+ resp.mensaje)
+          showAlert('Error al obtener las preguntas publicas '+ resp.mensaje, 'error')
         }
       },
-      error:err => console.log('Error al cargar las preguntas públicas', err)
+      error:err => {
+        console.log('Error al cargar las preguntas públicas', err)
+        showAlert('Error del servidor al obtener las preguntas publicas '+ err.mensaje, 'error');
+      }
     })
   }
   //Method to get all professor questions
@@ -213,10 +229,13 @@ opcionesToCreate: createOption[] = [];
           this.professorQuestion=resp.respuesta;
         }else{
           console.warn('Error en get professor question')
-          alert('Erro al obtener las preguntas del profesor '+ resp.mensaje)
+          showAlert('Error al obtener las preguntas del profesor '+ resp.mensaje, 'error')
         }
       },
-      error:err => console.log('Error al cargar las preguntas públicas', err)
+      error:err => {
+        console.log('Error al cargar las preguntas públicas', err)
+        showAlert('Error del servidor al obtener las preguntas del profesor '+ err.mensaje, 'error');
+      }
     })
   }
 
@@ -278,7 +297,7 @@ opcionesToCreate: createOption[] = [];
     }
   }
 
-    addOption(texto: string = ''): void {
+  addOption(texto: string = ''): void {
     const optionGroup = this.fb.group({
       texto: [texto, Validators.required],
       correcta: [false]
@@ -320,7 +339,7 @@ opcionesToCreate: createOption[] = [];
     this.questionService.createQuestion(this.newQuestion).subscribe({
       next: (response) => {
         this.createdQuestionId = response.respuesta; //Respuesta del back con el id de la pregunta creada
-        alert('Pregunta creada exitosamente. Ahora agrega las opciones.');
+        showAlert('Pregunta creada exitosamente. Ahora agrega las opciones.', 'success');
           // una vez creada, se bloquea repetir envío…
           this.showQuestionForm = false;
           // se abre el formulario de opciones
@@ -328,7 +347,7 @@ opcionesToCreate: createOption[] = [];
       },
       error: (err) => {
         console.error(err);
-        alert('Error al crear la pregunta' + err.mensaje);
+        showAlert('Error al crear la pregunta' + err.mensaje, 'error');
       }
     });
   }
@@ -368,12 +387,12 @@ opcionesToCreate: createOption[] = [];
     );
     forkJoin(calls).subscribe({
       next: () => {
-        alert('Opciones guardadas correctamente');
+        showAlert('Opciones guardadas correctamente', 'success');
         this.resetAll();
       },
       error: err => {
         console.error(err);
-        alert('Error al guardar opciones' + err.mensaje);
+        showAlert('Error al guardar opciones' + err.mensaje, 'error');
       }
     });
   }
