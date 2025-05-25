@@ -226,36 +226,38 @@ export class ExamBoardComponent implements OnInit {
 
   loadQuestions() {
     forkJoin({
-    pub: this.questionService.getQuestionByTheme(this.newExam.idTema),
-    own: this.questionService.getQuestions(this.newExam.idDocente)
+      pub: this.questionService.getQuestionByTheme(this.newExam.idTema),
+      own: this.questionService.getQuestions(this.newExam.idDocente)
     }).subscribe(({pub, own}) => {
-      this.preguntasDisponibles = [
-        ... (pub.error ? [] : pub.respuesta),
-        ... (own.error ? [] : own.respuesta)
-      ];
-    });
-      // públicos
-    this.questionService.getQuestionByTheme(this.idTheme.idTemas).subscribe(r => {
-      if (!r.error) this.preguntasPublicas = r.respuesta;
-    });
-    // propios (por idDocente)
-    this.questionService.getQuestions(this.newExam.idDocente).subscribe(r => {
-      if (!r.error) this.preguntasPropias = r.respuesta;
+      this.preguntasPublicas = pub.error ? [] : pub.respuesta;
+      this.preguntasPropias = own.error ? [] : own.respuesta;
+      this.preguntasDisponibles = [...this.preguntasPublicas, ...this.preguntasPropias];
     });
   }
-    isAdded(idPregunta: number): boolean {
+
+  isAdded(idPregunta: number): boolean {
     return this.listaPreguntas.some(q => q.idPregunta === idPregunta);
   }
 
   // Obtener el enunciado de una pregunta por su ID
   getPreguntaEnunciado(idPregunta: number): string {
-    const pregunta = this.preguntasPublicas.find(p => p.idPregunta === idPregunta);
-    return pregunta ? pregunta.enunciado : 'Pregunta eliminada';
+    // Busca primero en públicas
+    let pregunta = this.preguntasPublicas.find(p => p.idPregunta === idPregunta);
+    // Si no la encuentra, busca en propias
+    if (!pregunta) {
+      pregunta = this.preguntasPropias.find(p => p.idPregunta === idPregunta);
+      if (!pregunta) {
+        console.warn(`Pregunta no encontrada: ID ${idPregunta}`);
+        console.warn('Preguntas públicas:', this.preguntasPublicas);
+        console.warn('Preguntas propias:', this.preguntasPropias);
+      }
+    }
+    
+    return pregunta ? pregunta.enunciado : 'Pregunta eliminada 😭';
   }
-  getPreguntaEnunciadoPriv(idPregunta: number): string {
-    const pregunta = this.preguntasPropias.find(p => p.idPregunta === idPregunta);
-    return pregunta ? pregunta.enunciado : 'Pregunta eliminada';
-  }
+
+// Elimina getPreguntaEnunciadoPriv ya que no es necesaria
+
   // Calcular porcentaje total
 
   getTotalPorcentaje(): number {
@@ -275,6 +277,7 @@ export class ExamBoardComponent implements OnInit {
       });
     }
   }
+
 
   // Quita una pregunta de la lista
   removeQuestionFromExam(index: number) {
