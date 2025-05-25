@@ -25,7 +25,7 @@ export const routes: Routes = [
             { path: 'profile', component: ProfileComponent },
             { path: 'groups', component:GroupsComponent},
                 // Add course detail as child route under student
-            { path: 'group/:id', component: DetailGroupComponent }
+            { path: 'groups/:id', component: DetailGroupComponent }
         ]
     },
      // Professor routes

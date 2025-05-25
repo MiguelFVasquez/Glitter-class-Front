@@ -221,7 +221,6 @@ export class ExamBoardComponent implements OnInit {
         showAlert('Todas las preguntas fueron agregadas exitosamente', 'success');
         this.showQuestionForm = false;
         this.openCantidadModal()
-        this.listaPreguntas = [];
         this.showCreateForm=false;
          // abre el modal de cantidad
       },
