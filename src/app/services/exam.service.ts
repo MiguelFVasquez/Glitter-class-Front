@@ -11,6 +11,7 @@ import { cantidadPreguntas } from '../model/exam/cantidadPreguntasDto';
 @Injectable({
   providedIn: 'root'
 })
+
 export class ExamService {
 
   private apiURL= "http://localhost:8080/api/examen"
@@ -42,4 +43,5 @@ export class ExamService {
       cantidades
     );
   }
+
 }

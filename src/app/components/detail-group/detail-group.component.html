@@ -93,7 +93,7 @@
           <button
             class="btn-activity"
             *ngIf="exam.estado === 'activo'"
-            [routerLink]="['/exam', exam.idExamen]"
+            [routerLink]="['student/exam', exam.idExamen]"
           >
             ▶️ Realizar Examen
           </button>

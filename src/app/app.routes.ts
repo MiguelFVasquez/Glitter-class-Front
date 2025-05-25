@@ -10,6 +10,7 @@ import { QuestionBoardComponent } from './components/question-board/question-boa
 import { ExamBoardComponent } from './components/exam-board/exam-board.component';
 import { GroupsComponent } from './components/groups/groups.component';
 import { DetailGroupComponent } from './components/detail-group/detail-group.component';
+import { ExamStudentComponent } from './components/exam-student/exam-student.component';
 
 export const routes: Routes = [
     // Main page route
@@ -25,7 +26,8 @@ export const routes: Routes = [
             { path: 'profile', component: ProfileComponent },
             { path: 'groups', component:GroupsComponent},
                 // Add course detail as child route under student
-            { path: 'groups/:id', component: DetailGroupComponent }
+            { path: 'groups/:id', component: DetailGroupComponent },
+            { path: 'exam/:id', component:ExamStudentComponent}
         ]
     },
      // Professor routes

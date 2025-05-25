@@ -51,6 +51,8 @@ export class DetailGroupComponent implements OnInit {
     });
   }*/ 
   //----------------Load information-------------------
+  
+  //Method to load all group exams
   loadGroupExams() {
     this.examService.getGroupExam(this.groupId).subscribe({
       next: (response: Message<groupExam[]>) => {
@@ -68,6 +70,7 @@ export class DetailGroupComponent implements OnInit {
       }
     });
   }
+  //Method to format the exam date
   formatDate(dateString: string): string {
     const date = new Date(dateString);
     return date.toLocaleString('es-ES', {
