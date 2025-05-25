@@ -3,7 +3,7 @@ import { grupoDocente } from '../../model/grupos/grupoDto';
 import { groupExam } from '../../model/exam/groupExamDto';
 import { Message } from '../../model/message/messageDTO';
 import { PublicService } from '../../services/public.service';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule,Router } from '@angular/router';
 import { ExamService } from '../../services/exam.service';
 import { CommonModule } from '@angular/common';
 @Component({
@@ -21,14 +21,14 @@ export class DetailGroupComponent implements OnInit {
 
 
   constructor(
-    private route: ActivatedRoute,
-    private publicService: PublicService,
-    private examService: ExamService
+    private router: Router,
+    private examService: ExamService,
+    private aRouter: ActivatedRoute
 
   ) { }
 
   ngOnInit(): void {
-    this.groupId = Number(this.route.snapshot.paramMap.get('id'));
+    this.groupId = Number(this.aRouter.snapshot.paramMap.get('id'));
     //this.loadGroupDetails();
     this.loadGroupExams();
   }
@@ -49,8 +49,8 @@ export class DetailGroupComponent implements OnInit {
         console.error(err);
       }
     });
-  }*/
-
+  }*/ 
+  //----------------Load information-------------------
   loadGroupExams() {
     this.examService.getGroupExam(this.groupId).subscribe({
       next: (response: Message<groupExam[]>) => {
@@ -70,11 +70,21 @@ export class DetailGroupComponent implements OnInit {
   }
   formatDate(dateString: string): string {
     const date = new Date(dateString);
-    return date.toLocaleDateString('es-ES', {
+    return date.toLocaleString('es-ES', {
       day: '2-digit',
       month: '2-digit',
-      year: 'numeric'
-    });
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });  
   }
+
+  //-----------Navegacion----------
+  goBack() {
+    this.router.navigate(['/student/groups']);
+  }
+
+
 
 } 

@@ -76,16 +76,15 @@
   color: #e5520d;
   font-size: 1.1rem;
 }
-
-.group-actions {
-  margin-top: 1.2rem;
-  display: flex;
-  justify-content: flex-end;
+.group-actions button {
+  background-color: #f0530a;
+  color: white;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 8px 16px;
+  transition: background-color 0.3s ease;
 }
 
-.empty-msg {
-  text-align: center;
-  color: #666;
-  font-style: italic;
-  grid-column: 1 / -1;
+.group-actions button:hover {
+  background-color: #1565c0;
 }

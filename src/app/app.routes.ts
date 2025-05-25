@@ -21,7 +21,7 @@ export const routes: Routes = [
         component: StudentBoardComponent,
         children: [
             // Default child route with proper pathMatch
-            { path: '', redirectTo: 'profile', pathMatch: 'full' },
+            { path: '', redirectTo: 'groups', pathMatch: 'full' },
             { path: 'profile', component: ProfileComponent },
             { path: 'groups', component:GroupsComponent},
                 // Add course detail as child route under student
