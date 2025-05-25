@@ -123,53 +123,79 @@
 <!-- Segundo modal: asociar preguntas -->
 <div class="modal-overlay" *ngIf="showQuestionForm">
   <div class="modal-content create-exam-modal">
-    <h2>Agregar Preguntas al Examen #{{ createdExamId }} – {{ createdExamTitle }}</h2>
+    <h2>
+      Agregar preguntas al Examen #{{ createdExamId }}
+      <small>{{ createdExamTitle }}</small>
+    </h2>
 
+    <!-- Pestañas -->
     <div class="questions-tabs">
-      <button (click)="tab='publicas'"   [class.active]="tab==='publicas'">Comunidad</button>
-      <button (click)="tab='propias'"    [class.active]="tab==='propias'">Mis Preguntas</button>
+      <button (click)="tab = 'publicas'" [class.active]="tab === 'publicas'">
+        Comunidad
+      </button>
+      <button (click)="tab = 'propias'" [class.active]="tab === 'propias'">
+        Mis Preguntas
+      </button>
     </div>
 
+    <!-- Lista de tarjetas -->
     <div class="questions-list">
-      <div *ngIf="tab==='publicas'; else propiasList">
+      <!-- Comunidad -->
+      <div *ngIf="tab === 'publicas'; else propiasList">
         <div *ngFor="let q of preguntasPublicas" class="question-card-small">
           <h4>{{ q.enunciado | slice:0:60 }}…</h4>
           <small>{{ q.tipo }} • {{ q.dificultad }}</small>
-          <button (click)="addQuestionToExam(q.idPregunta)" [disabled]="isAdded(q.idPregunta)">➕</button>
+          <button
+            (click)="addQuestionToExam(q.idPregunta)"
+            [disabled]="isAdded(q.idPregunta)"
+          >➕</button>
         </div>
       </div>
+      <!-- Mis preguntas -->
       <ng-template #propiasList>
         <div *ngFor="let q of preguntasPropias" class="question-card-small">
           <h4>{{ q.enunciado | slice:0:60 }}…</h4>
           <small>{{ q.tipo }} • {{ q.dificultad }}</small>
-          <button (click)="addQuestionToExam(q.idPregunta)" [disabled]="isAdded(q.idPregunta)">➕</button>
+          <button
+            (click)="addQuestionToExam(q.idPregunta)"
+            [disabled]="isAdded(q.idPregunta)"
+          >➕</button>
         </div>
       </ng-template>
     </div>
 
-    <!-- Lista seleccionada con input de porcentaje -->
+    <!-- Seleccionadas -->
     <h3>Preguntas Seleccionadas</h3>
     <ul class="selected-questions">
       <li *ngFor="let qp of listaPreguntas; let i = index">
         {{ getPreguntaEnunciado(qp.idPregunta) | slice:0:50 }}…
-        <input type="number"
-               [(ngModel)]="qp.porcentaje"
-               name="pct{{i}}"
-               min="1" max="100" style="width:60px">
-        %
+        <input
+          type="number"
+          [(ngModel)]="qp.porcentaje"
+          name="porcentaje{{ i }}"
+          min="1"
+          max="100"
+          style="width: 60px; margin: 0 8px"
+        />%
         <button (click)="removeQuestionFromExam(i)">✖</button>
       </li>
     </ul>
 
+    <!-- Warning porcentaje -->
     <div *ngIf="getTotalPorcentaje() !== 100" class="percentage-warning">
-      <small>Σ Porcentaje = {{ getTotalPorcentaje() }}%  (debe ser 100%)</small>
+      <small>Σ Porcentaje = {{ getTotalPorcentaje() }}% (debe ser 100%)</small>
     </div>
 
+    <!-- Acciones -->
     <div class="form-actions">
-      <button class="btn-cancel" (click)="showQuestionForm=false">Cancelar</button>
-      <button class="btn-submit"
-              [disabled]="getTotalPorcentaje()!==100"
-              (click)="submitQuestions()">
+      <button class="btn-cancel" (click)="showQuestionForm = false">
+        Cancelar
+      </button>
+      <button
+        class="btn-submit"
+        [disabled]="getTotalPorcentaje() !== 100"
+        (click)="submitQuestions()"
+      >
         Guardar Asociaciones
       </button>
     </div>

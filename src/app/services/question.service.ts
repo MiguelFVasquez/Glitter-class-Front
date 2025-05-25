@@ -22,7 +22,7 @@ export class QuestionService {
     return this.http.get<Message<readPublicQuestion[]>>(`${this.apiURL}/obtener-preguntas-docente/${id}`);
   }
 
-  getQuestionByThem(idTheme:number):Observable<Message<readPublicQuestion[]>>{
+  getQuestionByTheme(idTheme:number):Observable<Message<readPublicQuestion[]>>{
     return this.http.get<Message<readPublicQuestion[]>>(`${this.apiURL}/obtener-preguntas-tema/${idTheme}`);
   }
   //Method to create a question

@@ -8,6 +8,7 @@ import { ProfessorBoardComponent } from './components/professor-board/professor-
 import { ProfessorProfileComponent } from './components/professor-profile/professor-profile.component';
 import { QuestionBoardComponent } from './components/question-board/question-board.component';
 import { ExamBoardComponent } from './components/exam-board/exam-board.component';
+import { GroupsComponent } from './components/groups/groups.component';
 
 export const routes: Routes = [
     // Main page route
@@ -21,7 +22,7 @@ export const routes: Routes = [
             // Default child route with proper pathMatch
             { path: '', redirectTo: 'profile', pathMatch: 'full' },
             { path: 'profile', component: ProfileComponent },
-            { path: 'courses', component:CourseComponent},
+            { path: 'groups', component:GroupsComponent},
                 // Add course detail as child route under student
             { path: 'courses/:id', component: DetailCourseComponent }
         ]

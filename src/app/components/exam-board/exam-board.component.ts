@@ -49,6 +49,7 @@ export class ExamBoardComponent implements OnInit {
   createExamThemId: number | null=null;
   createdExamTitle = '';
   listaPreguntas: preguntaExamenDto[]=[];
+  preguntasDisponibles: readPublicQuestion[] = [];
   
   tab: 'publicas' | 'propias' = 'publicas';
   // DTO para crear examen
@@ -171,9 +172,9 @@ export class ExamBoardComponent implements OnInit {
       next: (resp: Message<createdExam>) => {
         if (!resp.error) {
           this.createdExamId   = resp.respuesta.idExamen;
-          this.createExamThemId = resp.respuesta.idTemas;
+          this.createExamThemId = this.newExam.idTema;
           this.createdExamTitle = this.newExam.titulo;
-          showAlert(`Examen creado (#${resp.respuesta.idExamen}). Ahora asocia preguntas.`, 'success');
+          showAlert(`Examen creado (#${this.createdExamTitle}). Ahora asocia preguntas.`, 'success');
           this.loadQuestions();  
           this.showQuestionForm = true; // abre el segundo modal
       
@@ -219,12 +220,22 @@ export class ExamBoardComponent implements OnInit {
         showAlert('Ocurrió un error al asociar preguntas', 'error');
       }
     });
+
   }
 
 
   loadQuestions() {
-    // públicos
-    this.questionService.getQuestionByThem(this.idTheme.idTemas).subscribe(r => {
+    forkJoin({
+    pub: this.questionService.getQuestionByTheme(this.newExam.idTema),
+    own: this.questionService.getQuestions(this.newExam.idDocente)
+    }).subscribe(({pub, own}) => {
+      this.preguntasDisponibles = [
+        ... (pub.error ? [] : pub.respuesta),
+        ... (own.error ? [] : own.respuesta)
+      ];
+    });
+      // públicos
+    this.questionService.getQuestionByTheme(this.idTheme.idTemas).subscribe(r => {
       if (!r.error) this.preguntasPublicas = r.respuesta;
     });
     // propios (por idDocente)

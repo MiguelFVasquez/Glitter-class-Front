@@ -1,0 +1,39 @@
+<!-- ======== Sección: Grupos del Estudiante ======== -->
+<div class="groups-section">
+  <h2 class="section-title">
+    <i class="material-icons">groups</i>
+    Mis Grupos
+  </h2>
+  <div class="groups-list">
+    <div class="group-card" *ngFor="let group of groups">
+      <div class="group-image">
+        <img src="public/course-card.jpg" alt="Imagen del grupo">
+      </div>
+      <div class="group-content">
+        <div class="group-header">
+          <h3>{{ group.nombre }}</h3>
+          <span class="group-id">ID: {{ group.idGrupo }}</span>
+        </div>
+        <div class="group-details">
+          <div class="detail-item">
+            <i class="material-icons">school</i>
+            <span>{{ group.nombreCurso }}</span>
+          </div>
+          <div class="detail-item">
+            <i class="material-icons">tag</i>
+            <span>ID Curso: {{ group.idCurso }}</span>
+          </div>
+        </div>
+        <div class="group-actions">
+          <button mat-raised-button color="primary" (click)="openGroupDetails(group)">
+            <i class="material-icons">visibility</i>
+            Ver Detalles
+          </button>
+        </div>
+      </div>
+    </div>
+    <p *ngIf="groups.length === 0" class="empty-msg">
+      No estás inscrito en ningún grupo actualmente.
+    </p>
+  </div>
+</div>

@@ -39,7 +39,7 @@ export class ProfileComponent implements OnInit {
         }
       });
     }
-    //Load the courses of the professor
+    //Load the courses of the student
     this.publicService.getCoursesToStudent(idUsuario).subscribe({
       next: (response) => {
         if (!response.error) {

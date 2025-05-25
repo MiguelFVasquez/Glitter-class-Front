@@ -79,6 +79,9 @@ export class PublicService {
   }
   //-----------Grupos------------------
   getGruposProfessor(id:number):Observable<Message<grupoDocente[]>>{
-    return this.http.get<Message<grupoDocente[]>>(`${this.apiURL}//obtener-grupos-docente/${id}`);
+    return this.http.get<Message<grupoDocente[]>>(`${this.apiURL}/obtener-grupos-docente/${id}`);
+  }
+  getGruposStudent(id:number):Observable<Message<grupoDocente[]>>{
+    return this.http.get<Message<grupoDocente[]>>(`${this.apiURL}/obtener-grupos-estudiante/${id}`);
   }
 }
