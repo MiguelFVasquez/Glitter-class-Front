@@ -16,6 +16,7 @@ import { readPublicQuestion } from '../../model/questions/readQuestionDto';
 import { QuestionService } from '../../services/question.service';
 import { createdExam } from '../../model/exam/createdExamDto';
 import { forkJoin } from 'rxjs';
+import { cantidadPreguntas } from '../../model/exam/cantidadPreguntasDto';
 
 @Component({
   selector: 'app-exam-board',
@@ -51,7 +52,14 @@ export class ExamBoardComponent implements OnInit {
   listaPreguntas: preguntaExamenDto[]=[];
   preguntasDisponibles: readPublicQuestion[] = [];
   
-  tab: 'publicas' | 'propias' = 'publicas';
+  tab: 'publicas' | 'propias' = 'publicas'; //Mostrar diferentes secciones
+  
+  // para el modal de cantidad a mostrar
+  showQtyModal = false;
+  totalPreguntas = 0;
+  preguntasAMostrar: number=0
+
+
   // DTO para crear examen
   newExam: createExam = {
     idGrupo: 0,
@@ -213,7 +221,10 @@ export class ExamBoardComponent implements OnInit {
         showAlert('Todas las preguntas fueron agregadas exitosamente', 'success');
         this.showQuestionForm = false;
         this.listaPreguntas = [];
-        // refresca tu vista si es necesario
+        this.showCreateForm=false;
+         // abre el modal de cantidad
+        this.totalPreguntas = this.listaPreguntas.length;
+        this.showQtyModal = true;
       },
       error: err => {
         console.error('Error asociando preguntas:', err);
@@ -283,4 +294,40 @@ export class ExamBoardComponent implements OnInit {
   removeQuestionFromExam(index: number) {
     this.listaPreguntas.splice(index, 1);
   }
+
+  //---------Verificar preguntas-------------
+
+  cantidades: cantidadPreguntas = {
+    idExamen: this.createdExamId,
+    totalPreguntas: this.totalPreguntas,
+    preguntasMostrar: this.preguntasAMostrar
+  };
+  confirmDisplayCount() {
+    if (this.preguntasAMostrar == null || this.preguntasAMostrar < 1 || this.preguntasAMostrar > this.totalPreguntas) {
+      showAlert('Debe ingresar un número válido de preguntas a mostrar', 'error');
+      return;
+    }
+     this.examService.actualizarCantidadPreguntas(this.cantidades).subscribe({
+      next: (resp) => {
+        if (!resp.error) {
+          showAlert(resp.mensaje, 'success');
+          this.showQtyModal = false;
+          this.listaPreguntas = [];
+          this.loadExams(this.idUsuario);
+        } else {
+          showAlert(`Error: ${resp.mensaje}`, 'error');
+        }
+      },
+      error: (err) => {
+        console.error('Error al actualizar cantidad de preguntas:', err);
+        showAlert('Error de comunicación con el servidor', 'error');
+      }
+    });
+    showAlert(`Se mostrarán ${this.preguntasAMostrar} preguntas en el examen.`, 'success');
+    this.showQtyModal = false;
+    // limpia lista o cierra vista
+    this.listaPreguntas = [];
+    this.loadExams(this.idUsuario);
+  }
+
 }

@@ -201,5 +201,27 @@
     </div>
   </div>
 </div>
+<!-- Modal / Panel para pedir cuántas preguntas mostrar -->
+<div class="modal-overlay" *ngIf="showQtyModal">
+  <div class="modal-content create-exam-modal">
+    <h2>Configuración de examen</h2>
+    <p>La cantidad de preguntas asociadas es <strong>{{ totalPreguntas }}</strong>.</p>
+    <div class="form-group">
+      <label>¿Cuántas deseas mostrar al estudiante?</label>
+      <input type="number"
+             [(ngModel)]="preguntasAMostrar"
+             name="preguntasAMostrar"
+             min="1" [max]="totalPreguntas"
+             placeholder="Entre 1 y {{ totalPreguntas }}" />
+    </div>
+    <div class="form-actions">
+      <button class="btn-submit" (click)="confirmDisplayCount()"
+              [disabled]="!preguntasAMostrar || preguntasAMostrar < 1 || preguntasAMostrar > totalPreguntas">
+        Guardar
+      </button>
+    </div>
+  </div>
+</div>
+
 
 </div>

@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { readExam } from '../model/exam/readExamDto';
 import { createExam, preguntaExamenDto } from '../model/exam/createExamDto';
 import { createdExam } from '../model/exam/createdExamDto';
+import { groupExam } from '../model/exam/groupExamDto';
+import { cantidadPreguntas } from '../model/exam/cantidadPreguntasDto';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +19,7 @@ export class ExamService {
 
   //Method to get all professor exams
   getExams(idProfessor:number): Observable<Message<readExam[]>>{
-      return this.http.get<Message<readExam[]>>(`${this.apiURL}/listar-examenes-docente/${idProfessor}`);
+    return this.http.get<Message<readExam[]>>(`${this.apiURL}/listar-examenes-docente/${idProfessor}`);
   }
   //Method to create a exam, return an id
   createExam(newExamen:createExam):Observable<Message<createdExam>>{
@@ -25,9 +27,19 @@ export class ExamService {
   }
 
   // exam.service.ts
-   addQuestion(idExam: number, idPregunta: number): Observable<Message<number>> {
+  addQuestion(idExam: number, idPregunta: number): Observable<Message<number>> {
     return this.http.post<Message<number>>(`${this.apiURL}/agregar-pregunta-examen/${idExam}/${idPregunta}`,{});
   }
+  //Method to get all group exams
+  getGroupExam (idGroup: number): Observable<Message<groupExam[]>>{
+    return this.http.get<Message<groupExam[]>>(`${this.apiURL}/listar-examenes-grupo/${idGroup}`);
+  }
 
-
+  //Send total questions to the back
+  actualizarCantidadPreguntas(dto: cantidadPreguntas): Observable<Message<Record<string, any>>> {
+    return this.http.post<Message<Record<string, any>>>(
+      `${this.apiURL}/actualizar-cantidad-preguntas`,
+      dto
+    );
+  }
 }

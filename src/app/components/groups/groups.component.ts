@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import {userProfileDto } from '../../model/user/userProfileDTO';
-import { CourseDto } from '../../model/courses/courseDto';
+import { Router, RouterModule } from '@angular/router';
 import { PublicService } from '../../services/public.service';
 import { StorageService } from '../../services/storage.service';
 import { showAlert } from '../../model/alert';
 import { grupoDocente } from '../../model/grupos/grupoDto';
 import { CommonModule } from '@angular/common';
+import { ExamService } from '../../services/exam.service';
 @Component({
   selector: 'app-groups',
-  imports: [CommonModule],
+  imports: [CommonModule,RouterModule],
   templateUrl: './groups.component.html',
   styleUrl: './groups.component.css'
 })
@@ -17,7 +18,11 @@ export class GroupsComponent implements OnInit {
   usuario?: userProfileDto;
   groups: grupoDocente[]= [];
 
-  constructor(private publicService: PublicService, private storageService: StorageService){}
+  constructor(
+    private publicService: PublicService, 
+    private storageService: StorageService,
+    private examService: ExamService,
+    private router: Router,){}
 
   ngOnInit(): void {
     const id = this.storageService.get('userId');
@@ -43,8 +48,7 @@ export class GroupsComponent implements OnInit {
   }
 
   openGroupDetails(group: grupoDocente) {
-  // Aquí puedes implementar la navegación o mostrar detalles del grupo
   console.log('Grupo seleccionado:', group);
-  // Ejemplo: this.router.navigate(['/group', group.idGrupo]);
+    this.router.navigate(['/group/', group.idGrupo]);
   }
 }

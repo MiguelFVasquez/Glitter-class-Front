@@ -9,6 +9,7 @@ import { ProfessorProfileComponent } from './components/professor-profile/profes
 import { QuestionBoardComponent } from './components/question-board/question-board.component';
 import { ExamBoardComponent } from './components/exam-board/exam-board.component';
 import { GroupsComponent } from './components/groups/groups.component';
+import { DetailGroupComponent } from './components/detail-group/detail-group.component';
 
 export const routes: Routes = [
     // Main page route
@@ -24,7 +25,7 @@ export const routes: Routes = [
             { path: 'profile', component: ProfileComponent },
             { path: 'groups', component:GroupsComponent},
                 // Add course detail as child route under student
-            { path: 'courses/:id', component: DetailCourseComponent }
+            { path: 'group/:id', component: DetailGroupComponent }
         ]
     },
      // Professor routes

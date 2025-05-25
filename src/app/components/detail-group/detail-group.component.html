@@ -1,0 +1,98 @@
+<div class="group-detail-container">
+  <!-- Encabezado con información del grupo -->
+  <div class="group-header" *ngIf="groupDetails">
+    <div class="group-banner">
+      <img src="https://images.unsplash.com/photo-1551269901-5c5e14c25df7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" 
+           alt="Banner del grupo" class="banner-image">
+      <div class="group-info-overlay">
+        <h1>{{ groupDetails.nombre }}</h1>
+        <h2>{{ groupDetails.nombreCurso }}</h2>
+        <div class="group-meta">
+          <span class="group-id">ID Grupo: {{ groupDetails.idGrupo }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensajes de estado -->
+  <div *ngIf="loading" class="loading-message">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando información del grupo...</p>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Sección de exámenes -->
+  <div class="exams-section" *ngIf="!loading && !error">
+    <h2 class="section-title">
+      <mat-icon>assignment</mat-icon>
+      Exámenes del Grupo
+    </h2>
+
+    <div *ngIf="exams.length === 0" class="empty-exams">
+      <mat-icon>info_outline</mat-icon>
+      <p>No hay exámenes disponibles para este grupo.</p>
+    </div>
+
+    <div class="exams-grid">
+      <div class="exam-card" *ngFor="let exam of exams">
+        <div class="exam-header">
+          <h3>{{ exam.titulo }}</h3>
+          <span class="exam-status" [ngClass]="{
+            'available': exam.estado === 'Disponible',
+            'closed': exam.estado === 'Cerrado',
+            'pending': exam.estado === 'Pendiente'
+          }">
+            {{ exam.estado }}
+          </span>
+        </div>
+        
+        <div class="exam-body">
+          <p class="exam-description">{{ exam.descripcion }}</p>
+          
+          <div class="exam-details">
+            <div class="detail-item">
+              <mat-icon>topic</mat-icon>
+              <span>{{ exam.tema }}</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>help_outline</mat-icon>
+              <span>{{ exam.cantidadPreguntas }} preguntas</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>timer</mat-icon>
+              <span>{{ exam.tiempoLimite }} minutos</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>calendar_today</mat-icon>
+              <span>Disponible: {{ formatDate(exam.fechaDisponible) }}</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>event_available</mat-icon>
+              <span>Cierra: {{ formatDate(exam.fechaCierre) }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="exam-footer">
+          <button mat-raised-button color="primary" 
+                  *ngIf="exam.estado === 'Disponible'"
+                  [routerLink]="['/exam', exam.idExamen]">
+            <mat-icon>play_arrow</mat-icon>
+            Realizar Examen
+          </button>
+          
+          <button mat-stroked-button color="primary"
+                  *ngIf="exam.estado !== 'Disponible'"
+                  disabled>
+            <mat-icon>lock</mat-icon>
+            No Disponible
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

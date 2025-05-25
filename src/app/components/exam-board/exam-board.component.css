@@ -284,3 +284,33 @@
 }
 
 
+/* exam-board.component.css */
+
+/* reutiliza tu .modal-overlay */
+/* ... */
+
+.create-exam-modal {
+  max-width: 400px;
+  width: 90%;
+}
+
+/* form-group y form-actions ya los tienes definidos */
+/* si no, podrías añadir: */
+
+.modal-content .form-group {
+  margin: 1rem 0;
+}
+
+.modal-content .form-group input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.modal-content .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
