@@ -6,13 +6,9 @@ import { PublicService } from '../../services/public.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ExamService } from '../../services/exam.service';
 import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-detail-group',
-  imports: [CommonModule, MatIconModule,MatButtonModule, MatCardModule,MatProgressSpinnerModule,RouterModule],
+  imports: [CommonModule,RouterModule],
   templateUrl: './detail-group.component.html',
   styleUrl: './detail-group.component.css'
 })

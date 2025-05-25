@@ -36,10 +36,10 @@ export class ExamService {
   }
 
   //Send total questions to the back
-  actualizarCantidadPreguntas(dto: cantidadPreguntas): Observable<Message<Record<string, any>>> {
+  actualizarCantidadPreguntas(cantidades: cantidadPreguntas): Observable<Message<Record<string, any>>> {
     return this.http.post<Message<Record<string, any>>>(
       `${this.apiURL}/actualizar-cantidad-preguntas`,
-      dto
+      cantidades
     );
   }
 }

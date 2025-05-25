@@ -223,8 +223,7 @@ export class ExamBoardComponent implements OnInit {
         this.listaPreguntas = [];
         this.showCreateForm=false;
          // abre el modal de cantidad
-        this.totalPreguntas = this.listaPreguntas.length;
-        this.showQtyModal = true;
+        this.openCantidadModal()
       },
       error: err => {
         console.error('Error asociando preguntas:', err);
@@ -296,13 +295,22 @@ export class ExamBoardComponent implements OnInit {
   }
 
   //---------Verificar preguntas-------------
+  openCantidadModal() {
+    // recalcula cuántas preguntas tienes actualmente
+    this.totalPreguntas = this.listaPreguntas.length;
+    // por defecto muestra todas
+    this.preguntasAMostrar = this.totalPreguntas;
+    this.cantidades = {
+      idExamen: this.createdExamId,
+      totalPreguntas: this.totalPreguntas,
+      preguntasMostrar: this.preguntasAMostrar!
+    };
+    this.showQtyModal = true;
+  }
 
-  cantidades: cantidadPreguntas = {
-    idExamen: this.createdExamId,
-    totalPreguntas: this.totalPreguntas,
-    preguntasMostrar: this.preguntasAMostrar
-  };
+  cantidades!: cantidadPreguntas;
   confirmDisplayCount() {
+    this.cantidades.totalPreguntas= this.listaPreguntas.length
     if (this.preguntasAMostrar == null || this.preguntasAMostrar < 1 || this.preguntasAMostrar > this.totalPreguntas) {
       showAlert('Debe ingresar un número válido de preguntas a mostrar', 'error');
       return;
