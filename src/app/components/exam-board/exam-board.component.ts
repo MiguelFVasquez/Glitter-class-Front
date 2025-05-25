@@ -220,10 +220,10 @@ export class ExamBoardComponent implements OnInit {
       next: results => {
         showAlert('Todas las preguntas fueron agregadas exitosamente', 'success');
         this.showQuestionForm = false;
+        this.openCantidadModal()
         this.listaPreguntas = [];
         this.showCreateForm=false;
          // abre el modal de cantidad
-        this.openCantidadModal()
       },
       error: err => {
         console.error('Error asociando preguntas:', err);
@@ -295,6 +295,8 @@ export class ExamBoardComponent implements OnInit {
   }
 
   //---------Verificar preguntas-------------
+  
+  cantidades!: cantidadPreguntas;
   openCantidadModal() {
     // recalcula cuántas preguntas tienes actualmente
     this.totalPreguntas = this.listaPreguntas.length;
@@ -307,8 +309,6 @@ export class ExamBoardComponent implements OnInit {
     };
     this.showQtyModal = true;
   }
-
-  cantidades!: cantidadPreguntas;
   confirmDisplayCount() {
     this.cantidades.totalPreguntas= this.listaPreguntas.length
     if (this.preguntasAMostrar == null || this.preguntasAMostrar < 1 || this.preguntasAMostrar > this.totalPreguntas) {

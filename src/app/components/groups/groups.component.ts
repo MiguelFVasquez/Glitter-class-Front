@@ -49,6 +49,6 @@ export class GroupsComponent implements OnInit {
 
   openGroupDetails(group: grupoDocente) {
   console.log('Grupo seleccionado:', group);
-    this.router.navigate(['/group/', group.idGrupo]);
+  this.router.navigate(['/group', group.idGrupo]);
   }
 }
