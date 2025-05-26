@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule,Router } from '@angular/router';
 import { ExamService } from '../../services/exam.service';
 import { DetalleExamenDto, PreguntaOpcionesExamenDto } from '../../model/exam/examDetailDto';
 import { showAlert } from '../../model/alert';
@@ -26,8 +26,13 @@ export class ExamStudentComponent implements OnInit {
   answers: { [preguntaId: number]: number } = {};       // almacena la opción seleccionada
   answered: { [preguntaId: number]: boolean } = {};    // flags de “ya contestada”
 
+  // Para el modal
+  showScoreModal = false;
+  score: number | null = null;
+
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private examenService: ExamService
   ) {}
 
@@ -82,7 +87,8 @@ export class ExamStudentComponent implements OnInit {
     this.examenService.getCalificacion(this.idIntento).subscribe({
       next: (resp) => {
         if (!resp.error) {
-          showAlert(`Tu nota es: ${resp.respuesta}`, 'success');
+          this.score = resp.respuesta;
+          this.showScoreModal = true;
         } else {
           showAlert(`Error al calcular nota: ${resp.mensaje}`, 'error');
         }
@@ -92,6 +98,11 @@ export class ExamStudentComponent implements OnInit {
         showAlert('Error de comunicación al calcular nota', 'error');
       }
     });
+  }
+  closeScoreModal() {
+    this.showScoreModal = false;
+    // vuelve atrás
+    this.router.navigate(['../'], { relativeTo: this.route });
   }
 
 }

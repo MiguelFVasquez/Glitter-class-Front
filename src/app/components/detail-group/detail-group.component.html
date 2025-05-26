@@ -50,16 +50,6 @@
       <div class="exam-card" *ngFor="let exam of exams">
         <div class="exam-header">
           <h3>{{ exam.titulo }}</h3>
-          <span
-            class="exam-status"
-            [ngClass]="{
-              'available': exam.estado === 'Disponible',
-              'closed': exam.estado === 'Cerrado',
-              'pending': exam.estado === 'Pendiente'
-            }"
-          >
-            {{ exam.estado }}
-          </span>
         </div>
 
         <div class="exam-body">

@@ -35,3 +35,11 @@
     </div>
   </div>
 </div>
+<!-- ==== Modal de la nota ==== -->
+<div class="modal-overlay" *ngIf="showScoreModal">
+  <div class="modal">
+    <h2>Tu calificación</h2>
+    <p class="score-value">{{ score }} / 100</p>
+    <button class="btn-close" (click)="closeScoreModal()">Cerrar</button>
+  </div>
+</div>

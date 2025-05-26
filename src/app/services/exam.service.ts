@@ -60,7 +60,7 @@ export class ExamService {
   } 
 
   getCalificacion(idIntento: number):Observable<Message<number>>{
-     return this.http.get<Message<number>>(`${this.apiURL}/finalizar-intento-obtener-calificacion/${idIntento}`);
+    return this.http.post<Message<number>>(`${this.apiURL}/finalizar-intento-obtener-calificacion/${idIntento}`,{});
   }
 
 

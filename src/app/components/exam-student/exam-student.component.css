@@ -30,3 +30,79 @@ label {
   border-radius: 5px;
   cursor: pointer;
 }
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 320px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.modal h2 {
+  margin-top: 0;
+  color: #e5520d;
+}
+
+.score-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+.btn-close {
+  background: #e5520d;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-close:hover {
+  background: #d04a0b;
+}
+
+/* Ajustes generales del examen */
+.exam-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.pregunta {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-left: 4px solid #e5520d;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+.btn-enviar {
+  margin-top: 0.5rem;
+  background: #097887;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.respuesta-enviada {
+  color: #27ae60;
+  font-weight: bold;
+}
