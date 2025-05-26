@@ -38,6 +38,7 @@ export class DetailGroupComponent implements OnInit {
     this.groupId = Number(this.aRouter.snapshot.paramMap.get('id'));
     //this.loadGroupDetails();
     this.loadGroupExams();
+    console.log('id del usuario: ', this.idUsuario)
   }
 
   /*
@@ -101,7 +102,7 @@ export class DetailGroupComponent implements OnInit {
         if (!resp.error) {
           // Redirige al componente del examen con los dos parámetros
           showAlert('Examen del estudiante cargado con exito', 'success');
-          this.router.navigate(['/student/exam', idExamen, this.idUsuario]);
+          this.router.navigate(['/student', 'exam', idExamen, this.idUsuario]);
         } else {
           showAlert('Error: ' + resp.mensaje, 'error');
         }

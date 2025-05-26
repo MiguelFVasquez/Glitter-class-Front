@@ -44,6 +44,8 @@ export class ExamService {
       cantidades
     );
   }
+
+  //--------------Examen del estudiante-------------
   getDetailExam(idExam:number, idEstudiante:number): Observable<Message<DetalleExamenDto>>{
     return this.http.get<Message<DetalleExamenDto>>(`${this.apiURL}/obtener-examen-estudiante/${idExam}/${idEstudiante}`);
   }

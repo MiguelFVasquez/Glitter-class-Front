@@ -29,6 +29,7 @@ export class ExamStudentComponent implements OnInit {
   ngOnInit(): void {
     this.examenId = Number(this.route.snapshot.paramMap.get('idExamen'));
     this.idUsuario = Number(this.route.snapshot.paramMap.get('idUsuario'));
+    console.log('Id del examen: ', this.examenId, 'Id del estudiante: ', this.idUsuario);
     if (this.examenId) {
       this.examenService.getDetailExam(this.examenId,this.idUsuario).subscribe({
         next: (resp) => {
