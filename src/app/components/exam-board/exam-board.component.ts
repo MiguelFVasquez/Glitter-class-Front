@@ -172,30 +172,46 @@ export class ExamBoardComponent implements OnInit {
 
   
   //----------------Create exam-------------------------------\\
-
+    // Auxiliar que recibe "YYYY-MM-DDTHH:mm" y devuelve "YYYY-MM-DDTHH:mm:00"
+  private normalizeTimestamp(isoNoSeconds: string): string {
+    // separa fecha de hora
+    const [datePart, timePart] = isoNoSeconds.split('T');
+    // timePart es "HH:mm"
+    return `${datePart}T${timePart}:00`;
+  }
   // Envía el examen al backend
+
+
   submitExam() {
-    console.log("Examen enviado al back: " , this.newExam);
-    this.examService.createExam(this.newExam).subscribe({
+    // construye el payload ajustando los segundos
+    const payload: createExam = {
+      ...this.newExam,
+      fechaDisponible: this.normalizeTimestamp(this.newExam.fechaDisponible),
+      fechaCierre:     this.normalizeTimestamp(this.newExam.fechaCierre),
+    };
+
+    console.log("Payload enviado:", payload);
+
+    this.examService.createExam(payload).subscribe({
       next: (resp: Message<createdExam>) => {
         if (!resp.error) {
           this.createdExamId   = resp.respuesta.idExamen;
           this.createExamThemId = this.newExam.idTema;
           this.createdExamTitle = this.newExam.titulo;
           showAlert(`Examen creado (#${this.createdExamTitle}). Ahora asocia preguntas.`, 'success');
-          this.loadQuestions();  
-          this.showQuestionForm = true; // abre el segundo modal
-      
+          this.loadQuestions();
+          this.showQuestionForm   = true;
         } else {
           showAlert('Error creando examen: ' + resp.mensaje, 'error');
         }
       },
       error: err => {
-        console.error(err);
-        showAlert('Error de comunicación ' + err , 'error');
+        console.error('Error de comunicación', err);
+        showAlert('Error de comunicación al crear examen', 'error');
       }
     });
   }
+
 
 
 //-----------------ADD questions to exam-------------

@@ -6,12 +6,12 @@ import { ExamDetail } from '../../model/exam/examDetailDto';
 import { ExamService } from '../../services/exam.service';
 
 @Component({
-
   selector: 'app-exam-student',
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './exam-student.component.html',
   styleUrl: './exam-student.component.css'
 })
+
 export class ExamStudentComponent {
 
-  }
+}
