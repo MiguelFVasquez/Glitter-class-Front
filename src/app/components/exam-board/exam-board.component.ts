@@ -72,7 +72,8 @@ export class ExamBoardComponent implements OnInit {
     fechaCierre: new Date().toISOString().slice(0,16),
     pesoEnCurso: 0,
     umbralAprobacion: 0,
-    idUnidad: 0
+    idUnidad: 0,
+    idEstado:1
   };
   //User information
   idUsuario: number=0;

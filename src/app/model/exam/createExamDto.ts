@@ -10,6 +10,7 @@ export interface createExam {
   pesoEnCurso: number;
   umbralAprobacion: number;
   idUnidad: number;
+  idEstado:number;
 }
 export interface preguntaExamenDto {
   idPregunta: number;
