@@ -17,6 +17,8 @@ export class GroupsComponent implements OnInit {
   
   usuario?: userProfileDto;
   groups: grupoDocente[]= [];
+  idUsuario: number=0;
+
 
   constructor(
     private publicService: PublicService, 
@@ -26,8 +28,9 @@ export class GroupsComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.storageService.get('userId');
-    const idUsuario: number = Number(id);
-    this.loadGroups(idUsuario);
+    this.idUsuario = Number(id);
+    this.loadGroups(this.idUsuario);
+    console.log('id del usuario: ', this.idUsuario)
   }
 
   loadGroups(idUsuario:number){
