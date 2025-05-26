@@ -19,3 +19,7 @@ export interface OpcionRespuestaDto{
     textoOpcion: string,
     idTipoRespuesta: number
 }
+export interface ResultadoGeneracionExamenDTO{
+    idIntento: number,
+    resultado: number,
+}

@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { userProfileDto } from '../../model/user/userProfileDTO';
 import { StorageService } from '../../services/storage.service';
 import { showAlert } from '../../model/alert';
+import { ResultadoGeneracionExamenDTO } from '../../model/exam/examDetailDto';
 @Component({
   selector: 'app-detail-group',
   imports: [CommonModule,RouterModule],
@@ -99,10 +100,10 @@ export class DetailGroupComponent implements OnInit {
   //--------------METHOD TO CREATE A STUDENT EXAM------------------
   realizarExamen(idExamen: number): void {
     this.examService.generarExamenEstudiante(idExamen, this.idUsuario).subscribe({
-      next: (resp: Message<number>) => {
+      next: (resp: Message<ResultadoGeneracionExamenDTO>) => {
         if (!resp.error) {
           // Redirige al componente del examen con los dos parámetros
-          this.idIntento=resp.respuesta;
+          this.idIntento=resp.respuesta.idIntento;
           showAlert('Examen del estudiante cargado con exito', 'success');
           this.router.navigate(['/student', 'exam', idExamen, this.idUsuario,this.idIntento]);
         } else {
