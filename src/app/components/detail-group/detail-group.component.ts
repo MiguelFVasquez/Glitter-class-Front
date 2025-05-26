@@ -22,6 +22,7 @@ export class DetailGroupComponent implements OnInit {
   error: string | null = null;
 
   usuario?: userProfileDto;
+  idUsuario: number=0;
   constructor(
     private router: Router,
     private examService: ExamService,
@@ -32,7 +33,8 @@ export class DetailGroupComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.storageService.get('userId');
-    const idUsuario: number = Number(id);
+    this.idUsuario = Number(id);
+    
     this.groupId = Number(this.aRouter.snapshot.paramMap.get('id'));
     //this.loadGroupDetails();
     this.loadGroupExams();
@@ -94,13 +96,12 @@ export class DetailGroupComponent implements OnInit {
   } 
   //--------------METHOD TO CREATE A STUDENT EXAM------------------
   realizarExamen(idExamen: number): void {
-    const idUsuario = Number(this.storageService.get('userId'));
-    this.examService.generarExamenEstudiante(idExamen, idUsuario).subscribe({
+    this.examService.generarExamenEstudiante(idExamen, this.idUsuario).subscribe({
       next: (resp: Message<number>) => {
         if (!resp.error) {
           // Redirige al componente del examen con los dos parámetros
           showAlert('Examen del estudiante cargado con exito', 'success');
-          this.router.navigate(['/student/exam', idExamen, idUsuario]);
+          this.router.navigate(['/student/exam', idExamen, this.idUsuario]);
         } else {
           showAlert('Error: ' + resp.mensaje, 'error');
         }
