@@ -7,7 +7,7 @@ import { createExam, preguntaExamenDto } from '../model/exam/createExamDto';
 import { createdExam } from '../model/exam/createdExamDto';
 import { groupExam } from '../model/exam/groupExamDto';
 import { cantidadPreguntas } from '../model/exam/cantidadPreguntasDto';
-import { DetalleExamenDto } from '../model/exam/examDetailDto';
+import { DetalleExamenDto, PreguntaOpcionesExamenDto } from '../model/exam/examDetailDto';
 
 @Injectable({
   providedIn: 'root'
@@ -46,8 +46,8 @@ export class ExamService {
   }
 
   //--------------Examen del estudiante-------------
-  getDetailExam(idExam:number, idEstudiante:number): Observable<Message<DetalleExamenDto>>{
-    return this.http.get<Message<DetalleExamenDto>>(`${this.apiURL}/obtener-examen-estudiante/${idExam}/${idEstudiante}`);
+  getDetailExam(idExam:number, idEstudiante:number): Observable<Message<PreguntaOpcionesExamenDto[]>>{
+    return this.http.get<Message<PreguntaOpcionesExamenDto[]>>(`${this.apiURL}/obtener-examen-estudiante/${idExam}/${idEstudiante}`);
   }
   generarExamenEstudiante(idExamen: number, idEstudiante: number): Observable<Message<number>> {
   return this.http.post<Message<number>>(

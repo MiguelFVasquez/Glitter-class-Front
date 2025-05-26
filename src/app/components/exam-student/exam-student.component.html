@@ -3,7 +3,7 @@
 
 <div *ngIf="examen && !loading" class="exam-container">
   <form>
-    <div *ngFor="let pregunta of examen.preguntas; let i = index" class="pregunta">
+    <div *ngFor="let pregunta of preguntas; let i = index" class="pregunta">
       <h4>Pregunta {{ i + 1 }}:</h4>
       <p>{{ pregunta.enunciado }}</p>
 
