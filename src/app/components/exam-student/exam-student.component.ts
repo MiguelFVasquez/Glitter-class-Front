@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule,Router } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ExamService } from '../../services/exam.service';
 import { DetalleExamenDto, PreguntaOpcionesExamenDto } from '../../model/exam/examDetailDto';
+import { showAlert } from '../../model/alert';
 
 @Component({
   selector: 'app-exam-student',
@@ -19,7 +20,12 @@ export class ExamStudentComponent implements OnInit {
   preguntas: PreguntaOpcionesExamenDto[]=[]
   loading = true;
   error: string | null = null;
-  
+
+  //-----To answer questions----
+  idIntento:number=0;
+  answers: { [preguntaId: number]: number } = {};       // almacena la opción seleccionada
+  answered: { [preguntaId: number]: boolean } = {};    // flags de “ya contestada”
+
   constructor(
     private route: ActivatedRoute,
     private examenService: ExamService
@@ -30,11 +36,13 @@ export class ExamStudentComponent implements OnInit {
   ngOnInit(): void {
     this.examenId = Number(this.route.snapshot.paramMap.get('idExamen'));
     this.idUsuario = Number(this.route.snapshot.paramMap.get('idUsuario'));
+    this.idIntento  = Number(this.route.snapshot.paramMap.get('idIntento'));
     console.log('Id del examen: ', this.examenId, 'Id del estudiante: ',this.idUsuario);
     if (this.examenId) {
       this.examenService.getDetailExam(this.examenId,this.idUsuario).subscribe({
         next: (resp) => {
           this.preguntas = resp.respuesta;
+          console.log("respuesta del back: ", this.preguntas);
           this.loading = false;
         },
         error: (err) => {
@@ -45,5 +53,22 @@ export class ExamStudentComponent implements OnInit {
       });
     }
   }
+  
+  submitAnswer(preguntaId: number) {
+  const opcionId = this.answers[preguntaId];
+  if (!opcionId) return;
+  this.examenService
+    .submitSingleAnswer(this.idIntento, preguntaId, opcionId)
+    .subscribe({
+      next: () => {
+        this.answered[preguntaId] = true;
+      },
+      error: err => {
+        console.error(err);
+        showAlert('Error al enviar la respuesta', 'error');
+      }
+    });
+}
+
 
 }

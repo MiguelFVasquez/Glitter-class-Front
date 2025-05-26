@@ -1,24 +1,39 @@
-<div *ngIf="loading">Cargando examen...</div>
+<div *ngIf="loading">Cargando examen…</div>
 <div *ngIf="error">{{ error }}</div>
 
-<div *ngIf="examen && !loading" class="exam-container">
-  <form>
-    <div *ngFor="let pregunta of preguntas; let i = index" class="pregunta">
-      <h4>Pregunta {{ i + 1 }}:</h4>
-      <p>{{ pregunta.enunciado }}</p>
+<div *ngIf="!loading && preguntas.length" class="exam-container">
+  <div *ngFor="let pregunta of preguntas; let i = index" class="pregunta">
 
+    <h4>Pregunta {{ i + 1 }}:</h4>
+    <p>{{ pregunta.enunciado }}</p>
+
+    <!-- sólo muestro opciones si no está contestada -->
+    <div *ngIf="!answered[pregunta.idPregunta]">
       <div *ngFor="let opcion of pregunta.opciones">
         <label>
           <input
             type="radio"
             name="pregunta{{ pregunta.idPregunta }}"
             [value]="opcion.idOpcionRespuesta"
+            [(ngModel)]="answers[pregunta.idPregunta]"
+            [ngModelOptions]="{standalone: true}"
           />
           {{ opcion.textoOpcion }}
         </label>
       </div>
+      <button
+        class="btn-enviar"
+        (click)="submitAnswer(pregunta.idPregunta)"
+        [disabled]="!answers[pregunta.idPregunta]"
+      >
+        Enviar respuesta
+      </button>
     </div>
 
-    <button type="submit" class="btn-enviar">Enviar respuestas</button>
-  </form>
+    <!-- una vez contestada -->
+    <div *ngIf="answered[pregunta.idPregunta]">
+      <p class="respuesta-enviada">✅ Respuesta enviada</p>
+    </div>
+
+  </div>
 </div>

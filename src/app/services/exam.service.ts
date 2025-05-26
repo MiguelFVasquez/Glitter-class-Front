@@ -49,11 +49,14 @@ export class ExamService {
   getDetailExam(idExam:number, idEstudiante:number): Observable<Message<PreguntaOpcionesExamenDto[]>>{
     return this.http.get<Message<PreguntaOpcionesExamenDto[]>>(`${this.apiURL}/obtener-examen-estudiante/${idExam}/${idEstudiante}`);
   }
+
   generarExamenEstudiante(idExamen: number, idEstudiante: number): Observable<Message<number>> {
   return this.http.post<Message<number>>(
-    `${this.apiURL}/generar-examen-estudiante/${idExamen}/${idEstudiante}`, {}
-  );
-}
-
+    `${this.apiURL}/generar-examen-estudiante/${idExamen}/${idEstudiante}`, {});
+  }
+  submitSingleAnswer(intentoId: number, preguntaId: number, opcionId: number): Observable<Message<number>> {
+  return this.http.post<Message<number>>(
+    `${this.apiURL}/registrar-respuesta-estudiante/${intentoId}/${preguntaId}/${opcionId}`, {});
+  }
 
 }

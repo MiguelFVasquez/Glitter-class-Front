@@ -23,6 +23,7 @@ export class DetailGroupComponent implements OnInit {
 
   usuario?: userProfileDto;
   idUsuario: number=0;
+  idIntento: number=0;
   constructor(
     private router: Router,
     private examService: ExamService,
@@ -101,8 +102,9 @@ export class DetailGroupComponent implements OnInit {
       next: (resp: Message<number>) => {
         if (!resp.error) {
           // Redirige al componente del examen con los dos parámetros
+          this.idIntento=resp.respuesta;
           showAlert('Examen del estudiante cargado con exito', 'success');
-          this.router.navigate(['/student', 'exam', idExamen, this.idUsuario]);
+          this.router.navigate(['/student', 'exam', idExamen, this.idUsuario,this.idIntento]);
         } else {
           showAlert('Error: ' + resp.mensaje, 'error');
         }
