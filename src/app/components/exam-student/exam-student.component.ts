@@ -4,8 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule,Router } from '@angular/router';
 import { ExamService } from '../../services/exam.service';
 import { DetalleExamenDto } from '../../model/exam/examDetailDto';
-import { StorageService } from '../../services/storage.service';
-import { userProfileDto } from '../../model/user/userProfileDTO';
 
 @Component({
   selector: 'app-exam-student',
@@ -16,29 +14,23 @@ import { userProfileDto } from '../../model/user/userProfileDTO';
 
 export class ExamStudentComponent implements OnInit {
   examenId: number = 0;
-  usuario?: userProfileDto;
+  idUsuario: number=0;
   examen: DetalleExamenDto | null = null;
   loading = true;
   error: string | null = null;
   
   constructor(
     private route: ActivatedRoute,
-    private examenService: ExamService,
-    private storageService: StorageService,
-    
+    private examenService: ExamService
   ) {}
 
 
   //Load exam detail
- ngOnInit(): void {
-  const id = this.storageService.get('userId');
-  const idUsuario: number = Number(id); //LOad user id
-
-  this.route.params.subscribe(params => {
-    this.examenId = Number(params['idExamen']);
-
-    if (this.examenId && idUsuario) {
-      this.examenService.getDetailExam(this.examenId, idUsuario).subscribe({
+  ngOnInit(): void {
+    this.examenId = Number(this.route.snapshot.paramMap.get('idExamen'));
+    this.idUsuario = Number(this.route.snapshot.paramMap.get('idUsuario'));
+    if (this.examenId) {
+      this.examenService.getDetailExam(this.examenId,this.idUsuario).subscribe({
         next: (resp) => {
           this.examen = resp.respuesta;
           this.loading = false;
@@ -49,12 +41,7 @@ export class ExamStudentComponent implements OnInit {
           this.loading = false;
         }
       });
-    } else {
-      this.error = 'Parámetros inválidos.';
-      this.loading = false;
     }
-  });
-}
-
+  }
 
 }

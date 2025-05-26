@@ -100,7 +100,7 @@ export class DetailGroupComponent implements OnInit {
         if (!resp.error) {
           // Redirige al componente del examen con los dos parámetros
           showAlert('Examen del estudiante cargado con exito', 'success');
-          this.router.navigate(['student/exam', idExamen, idUsuario]);
+          this.router.navigate(['/student/exam', idExamen, idUsuario]);
         } else {
           showAlert('Error: ' + resp.mensaje, 'error');
         }
