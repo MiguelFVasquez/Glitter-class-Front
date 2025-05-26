@@ -1,0 +1,29 @@
+<div *ngIf="loading">Cargando examen...</div>
+<div *ngIf="error">{{ error }}</div>
+
+<div *ngIf="examen && !loading" class="exam-container">
+  <h2>{{ examen.titulo }}</h2>
+  <p><strong>Descripción:</strong> {{ examen.descripcion }}</p>
+  <p><strong>Tema:</strong> {{ examen.nombreTema }}</p>
+  <p><strong>Tiempo límite:</strong> {{ examen.tiempoLimite }} minutos</p>
+
+  <form>
+    <div *ngFor="let pregunta of examen.preguntas; let i = index" class="pregunta">
+      <h4>Pregunta {{ i + 1 }}:</h4>
+      <p>{{ pregunta.enunciado }}</p>
+
+      <div *ngFor="let opcion of pregunta.opciones">
+        <label>
+          <input
+            type="radio"
+            name="pregunta{{ pregunta.idPregunta }}"
+            [value]="opcion.idOpcionRespuesta"
+          />
+          {{ opcion.textoOpcion }}
+        </label>
+      </div>
+    </div>
+
+    <button type="submit" class="btn-enviar">Enviar respuestas</button>
+  </form>
+</div>

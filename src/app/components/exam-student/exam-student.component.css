@@ -1,0 +1,31 @@
+.exam-container {
+  max-width: 700px;
+  margin: auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px #ccc;
+}
+
+.pregunta {
+  margin-bottom: 25px;
+  padding: 10px;
+  border-left: 3px solid #e5520d;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+label {
+  display: block;
+  margin: 5px 0;
+}
+
+.btn-enviar {
+  margin-top: 20px;
+  background-color: #e5520d;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}

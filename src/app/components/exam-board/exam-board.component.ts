@@ -37,7 +37,7 @@ export class ExamBoardComponent implements OnInit {
   //After create
   idTheme: createdExam ={
     idExamen:0,
-    idTemas:0
+    idTema:0
   }
   // Listas para selects
   grupos: { idGrupo: number; nombre: string }[] = [];

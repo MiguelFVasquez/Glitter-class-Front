@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule,Router } from '@angular/router';
-import { ExamDetail } from '../../model/exam/examDetailDto';
 import { ExamService } from '../../services/exam.service';
+import { DetalleExamenDto } from '../../model/exam/examDetailDto';
 
 @Component({
   selector: 'app-exam-student',
@@ -12,6 +12,34 @@ import { ExamService } from '../../services/exam.service';
   styleUrl: './exam-student.component.css'
 })
 
-export class ExamStudentComponent {
+export class ExamStudentComponent implements OnInit {
+  examenId: number = 0;
+  examen: DetalleExamenDto | null = null;
+  loading = true;
+  error: string | null = null;
+
+  constructor(
+    private route: ActivatedRoute,
+    private examenService: ExamService
+  ) {}
+
+
+  //Load exam detail
+  ngOnInit(): void {
+    this.examenId = Number(this.route.snapshot.paramMap.get('id'));
+    if (this.examenId) {
+      this.examenService.getDetailExam(this.examenId).subscribe({
+        next: (resp) => {
+          this.examen = resp.respuesta;
+          this.loading = false;
+        },
+        error: (err) => {
+          this.error = 'Error al cargar el examen.';
+          console.error(err);
+          this.loading = false;
+        }
+      });
+    }
+  }
 
 }

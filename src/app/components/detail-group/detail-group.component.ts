@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { grupoDocente } from '../../model/grupos/grupoDto';
 import { groupExam } from '../../model/exam/groupExamDto';
 import { Message } from '../../model/message/messageDTO';
-import { PublicService } from '../../services/public.service';
 import { ActivatedRoute, RouterModule,Router } from '@angular/router';
 import { ExamService } from '../../services/exam.service';
 import { CommonModule } from '@angular/common';
+import { userProfileDto } from '../../model/user/userProfileDTO';
+import { StorageService } from '../../services/storage.service';
+import { showAlert } from '../../model/alert';
 @Component({
   selector: 'app-detail-group',
   imports: [CommonModule,RouterModule],
@@ -19,15 +21,18 @@ export class DetailGroupComponent implements OnInit {
   loading: boolean = true;
   error: string | null = null;
 
-
+  usuario?: userProfileDto;
   constructor(
     private router: Router,
     private examService: ExamService,
+    private storageService: StorageService,
     private aRouter: ActivatedRoute
 
   ) { }
 
   ngOnInit(): void {
+    const id = this.storageService.get('userId');
+    const idUsuario: number = Number(id);
     this.groupId = Number(this.aRouter.snapshot.paramMap.get('id'));
     //this.loadGroupDetails();
     this.loadGroupExams();
@@ -86,7 +91,27 @@ export class DetailGroupComponent implements OnInit {
   //-----------Navegacion----------
   goBack() {
     this.router.navigate(['/student/groups']);
+  } 
+  //--------------METHOD TO CREATE EXAM------------------
+  realizarExamen(idExamen: number): void {
+    const idEstudiante = Number(this.storageService.get('userId'));
+    this.examService.generarExamenEstudiante(idExamen, idEstudiante).subscribe({
+      next: (resp: Message<number>) => {
+        if (!resp.error) {
+          // Redirige al componente del examen con los dos parámetros
+          showAlert('Examen del estudiante cargado con exito', 'success');
+          this.router.navigate(['student/exam', idExamen, idEstudiante]);
+        } else {
+          showAlert('Error: ' + resp.mensaje, 'error');
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        showAlert('Ocurrió un error al generar el examen.', 'error');
+      }
+    });
   }
+
 
 
 

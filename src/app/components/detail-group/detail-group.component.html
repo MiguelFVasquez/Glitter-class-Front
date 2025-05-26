@@ -89,14 +89,14 @@
           </div>
         </div>
 
-        <div class="exam-footer">
-          <button
-            class="btn-activity"
-            *ngIf="exam.estado === 'activo'"
-            [routerLink]="['student/exam', exam.idExamen]"
-          >
-            ▶️ Realizar Examen
-          </button>
+          <div class="exam-footer">
+            <button
+              class="btn-activity"
+              *ngIf="exam.estado === 'activo'"
+              (click)="realizarExamen(exam.idExamen)"
+            >
+              ▶️ Realizar Examen
+            </button>
 
           <button class="btn-locked" *ngIf="exam.estado !== 'activo'" disabled>
             🔒 No Disponible
