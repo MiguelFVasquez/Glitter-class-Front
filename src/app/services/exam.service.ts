@@ -57,6 +57,11 @@ export class ExamService {
   submitSingleAnswer(intentoId: number, preguntaId: number, opcionId: number): Observable<Message<number>> {
   return this.http.post<Message<number>>(
     `${this.apiURL}/registrar-respuesta-estudiante/${intentoId}/${preguntaId}/${opcionId}`, {});
+  } 
+
+  getCalificacion(idIntento: number):Observable<Message<number>>{
+     return this.http.get<Message<number>>(`${this.apiURL}/finalizar-intento-obtener-calificacion/${idIntento}`);
   }
+
 
 }

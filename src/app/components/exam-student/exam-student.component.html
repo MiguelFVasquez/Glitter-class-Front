@@ -3,11 +3,10 @@
 
 <div *ngIf="!loading && preguntas.length" class="exam-container">
   <div *ngFor="let pregunta of preguntas; let i = index" class="pregunta">
-
     <h4>Pregunta {{ i + 1 }}:</h4>
     <p>{{ pregunta.enunciado }}</p>
 
-    <!-- sólo muestro opciones si no está contestada -->
+    <!-- Si no está contestada, mostramos las opciones y botón -->
     <div *ngIf="!answered[pregunta.idPregunta]">
       <div *ngFor="let opcion of pregunta.opciones">
         <label>
@@ -16,7 +15,7 @@
             name="pregunta{{ pregunta.idPregunta }}"
             [value]="opcion.idOpcionRespuesta"
             [(ngModel)]="answers[pregunta.idPregunta]"
-            [ngModelOptions]="{standalone: true}"
+            [ngModelOptions]="{ standalone: true }"
           />
           {{ opcion.textoOpcion }}
         </label>
@@ -30,10 +29,9 @@
       </button>
     </div>
 
-    <!-- una vez contestada -->
+    <!-- Una vez contestada, ocultamos opciones y mostramos confirmación -->
     <div *ngIf="answered[pregunta.idPregunta]">
       <p class="respuesta-enviada">✅ Respuesta enviada</p>
     </div>
-
   </div>
 </div>
