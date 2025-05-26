@@ -8,7 +8,6 @@ import { createdExam } from '../model/exam/createdExamDto';
 import { groupExam } from '../model/exam/groupExamDto';
 import { cantidadPreguntas } from '../model/exam/cantidadPreguntasDto';
 import { DetalleExamenDto } from '../model/exam/examDetailDto';
-import { REACTIVE_NODE } from '@angular/core/primitives/signals';
 
 @Injectable({
   providedIn: 'root'
@@ -50,7 +49,7 @@ export class ExamService {
   }
   generarExamenEstudiante(idExamen: number, idEstudiante: number): Observable<Message<number>> {
   return this.http.post<Message<number>>(
-    `${this.apiURL}/examen/generar-examen-estudiante/${idExamen}/${idEstudiante}`, {}
+    `${this.apiURL}/generar-examen-estudiante/${idExamen}/${idEstudiante}`, {}
   );
 }
 

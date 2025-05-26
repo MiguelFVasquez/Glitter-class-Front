@@ -17,7 +17,7 @@ export class ExamStudentComponent implements OnInit {
   examen: DetalleExamenDto | null = null;
   loading = true;
   error: string | null = null;
-
+  
   constructor(
     private route: ActivatedRoute,
     private examenService: ExamService
@@ -26,8 +26,8 @@ export class ExamStudentComponent implements OnInit {
 
   //Load exam detail
   ngOnInit(): void {
-    this.examenId = Number(this.route.snapshot.paramMap.get('id'));
-    const idEstudiante = Number(this.route.snapshot.paramMap.get('idEstudiante'));
+    this.examenId = Number(this.route.snapshot.paramMap.get('idExamen'));
+    const idEstudiante = Number(this.route.snapshot.paramMap.get('idUsuario'));
     if (this.examenId) {
       this.examenService.getDetailExam(this.examenId,idEstudiante).subscribe({
         next: (resp) => {
