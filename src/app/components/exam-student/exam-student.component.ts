@@ -102,7 +102,7 @@ export class ExamStudentComponent implements OnInit {
   closeScoreModal() {
     this.showScoreModal = false;
     // vuelve atrás
-    this.router.navigate(['../'], { relativeTo: this.route });
+    this.router.navigate(['/student/groups']);
   }
 
 }

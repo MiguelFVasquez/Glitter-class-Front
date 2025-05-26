@@ -40,7 +40,7 @@ export class QuestionBoardComponent implements OnInit {
 
   selectedQuestionType = '';
   filterType = '';
-  selectedTrueFalse: 'true' | 'false' | null = null;
+  selectedTrueFalse: 'verdadero' | 'falso' | null = null;
   //id usuario
   idUsuario:number=0;
   idUnidad:number=0;
@@ -375,11 +375,11 @@ opcionesToCreate: createOption[] = [];
       this.opcionesToCreate = [
         {
           textoOpcion: 'Verdadero',
-          idTipoRespuesta: this.selectedTrueFalse === 'true' ? 1 : 2
+          idTipoRespuesta: this.selectedTrueFalse === 'verdadero' ? 1 : 2
         },
         {
           textoOpcion: 'Falso',
-          idTipoRespuesta: this.selectedTrueFalse === 'false' ? 1 : 2
+          idTipoRespuesta: this.selectedTrueFalse === 'falso' ? 1 : 2
         }
       ];
     }

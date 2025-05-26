@@ -115,43 +115,35 @@
     </form>
   </div>
 
-  <!-- 1️⃣ Formulario de creación de PREGUNTA -->
-  <div *ngIf="showQuestionForm" class="question-form-section">
-    <form #qForm="ngForm" (ngSubmit)="submitQuestion()">
-      <!-- … campos de enunciado, select tema, tipo, … como antes, con [ngValue] para ID numérico … -->
-
-    </form>
-  </div>
-
   <!-- 2️⃣ Formulario de creación de OPCIONES -->
   <div *ngIf="showOptionForm" class="question-form-section">
     <h2>Agrega Opciones (Pregunta #{{ createdQuestionId }})</h2>
-          <!-- Si es verdadero/falso, muestra radios -->
-      <div *ngIf="isTrueFalseType()">
-        <label><strong>Selecciona la respuesta correcta:</strong></label>
-        <div class="form-group">
-          <label>
-            <input
-              type="radio"
-              name="trueFalseAnswer"
-              [value]="'Verdadero'"
-              [(ngModel)]="selectedTrueFalse"
-            />
-            Verdadero
-          </label>
-          <label style="margin-left: 2em;">
-            <input
-              type="radio"
-              name="trueFalseAnswer"
-              [value]="'Falso'"
-              [(ngModel)]="selectedTrueFalse"
-            />
-            Falso
-          </label>
-        </div>
-      </div>
+      
+  <!-- Si es verdadero/falso, muestra sólo los dos radios -->
+  <ng-container *ngIf="isTrueFalseType(); else multiOptions">
+    <label><strong>Selecciona la respuesta correcta:</strong></label>
+    <div class="form-group">
+      <label>
+        <input
+          type="radio"
+          name="trueFalseAnswer"
+          [value]="'Verdadero'"
+          [(ngModel)]="selectedTrueFalse"
+        /> Verdadero
+      </label>
+      <label style="margin-left: 2em;">
+        <input
+          type="radio"
+          name="trueFalseAnswer"
+          [value]="'Falso'"
+          [(ngModel)]="selectedTrueFalse"
+        /> Falso
+      </label>
+    </div>
+  </ng-container>
 
-
+  <!-- Si no, muestro el flujo normal de múltiples opciones -->
+  <ng-template #multiOptions>
     <div *ngFor="let opt of opcionesToCreate; let i = index" class="form-row">
       <input
         type="text"
@@ -159,6 +151,12 @@
         name="textoOpcion{{i}}"
         placeholder="Texto de la opción"
         required
+      />
+      <input
+        type="number"
+        name="porcentajeParcial{{i}}"
+        placeholder="% parcial"
+        min="0" max="100" required
       />
       <select
         [(ngModel)]="opt.idTipoRespuesta"
@@ -173,13 +171,20 @@
     <button type="button" class="btn-add-option" (click)="addOptionRow()">
       <i class="material-icons">add</i> Agregar Opción
     </button>
+  </ng-template>
 
-    <div class="form-actions">
-      <button class="btn-submit" (click)="submitOptions()" [disabled]="!opcionesToCreate.length">
-        Guardar Opciones
-      </button>
-    </div>
+  <div class="form-actions">
+    <button class="btn-submit"
+            (click)="submitOptions()"
+            [disabled]="
+              isTrueFalseType()
+                ? !selectedTrueFalse
+                : opcionesToCreate.length === 0
+            ">
+      Guardar Opciones
+    </button>
   </div>
+
 </div>
 
 
