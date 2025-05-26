@@ -94,13 +94,13 @@ export class DetailGroupComponent implements OnInit {
   } 
   //--------------METHOD TO CREATE A STUDENT EXAM------------------
   realizarExamen(idExamen: number): void {
-    const idEstudiante = Number(this.storageService.get('userId'));
-    this.examService.generarExamenEstudiante(idExamen, idEstudiante).subscribe({
+    const idUsuario = Number(this.storageService.get('userId'));
+    this.examService.generarExamenEstudiante(idExamen, idUsuario).subscribe({
       next: (resp: Message<number>) => {
         if (!resp.error) {
           // Redirige al componente del examen con los dos parámetros
           showAlert('Examen del estudiante cargado con exito', 'success');
-          this.router.navigate(['student/exam', idExamen, idEstudiante]);
+          this.router.navigate(['student/exam', idExamen, idUsuario]);
         } else {
           showAlert('Error: ' + resp.mensaje, 'error');
         }
