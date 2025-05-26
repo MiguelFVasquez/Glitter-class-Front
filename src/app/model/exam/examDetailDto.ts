@@ -1,11 +1,7 @@
 export interface DetalleExamenDto{
-    idExamen: number,
-    titulo: string,
-    descripcion: string,
-    idTema: number,
-    nombreTema: string,
-    tiempoLimite: number,
-    pesoEnCurso: number,
+    idExamenEstudiante: number,
+    idExamen:number,
+    idEstudiante:number
     preguntas :PreguntaOpcionesExamenDto[] 
 }
 
@@ -15,6 +11,7 @@ export interface PreguntaOpcionesExamenDto{
     idTipo: number,
     idDocente: number,
     idUnidad: number,
+    porcentaje:number,
     opciones: OpcionRespuestaDto[];
 }
 export interface OpcionRespuestaDto{

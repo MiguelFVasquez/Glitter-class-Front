@@ -27,8 +27,9 @@ export class ExamStudentComponent implements OnInit {
   //Load exam detail
   ngOnInit(): void {
     this.examenId = Number(this.route.snapshot.paramMap.get('id'));
+    const idEstudiante = Number(this.route.snapshot.paramMap.get('idEstudiante'));
     if (this.examenId) {
-      this.examenService.getDetailExam(this.examenId).subscribe({
+      this.examenService.getDetailExam(this.examenId,idEstudiante).subscribe({
         next: (resp) => {
           this.examen = resp.respuesta;
           this.loading = false;

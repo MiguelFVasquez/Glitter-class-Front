@@ -92,7 +92,7 @@ export class DetailGroupComponent implements OnInit {
   goBack() {
     this.router.navigate(['/student/groups']);
   } 
-  //--------------METHOD TO CREATE EXAM------------------
+  //--------------METHOD TO CREATE A STUDENT EXAM------------------
   realizarExamen(idExamen: number): void {
     const idEstudiante = Number(this.storageService.get('userId'));
     this.examService.generarExamenEstudiante(idExamen, idEstudiante).subscribe({
