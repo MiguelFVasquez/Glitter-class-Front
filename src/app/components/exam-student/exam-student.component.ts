@@ -129,22 +129,25 @@ submitAnswer(preguntaId: number) {
   let payload;
 
   switch (pregunta.idTipo) {
-    case 1:
-    case 2:
+    case 1: // Selección única
+    case 3: // Falso/Verdadero (también es selección única)
+    case 4: // Ordenar (también parece ser única opción)
+    case 6: // Completar (con opciones)
       payload = { opcionId: this.answers[preguntaId] };
       break;
-    case 3:
+
+    case 2: // Selección múltiple
       payload = { opcionesIds: this.multiAnswers[preguntaId] };
       break;
-    case 5:
-      payload = { respuestas: this.completeAnswers[preguntaId] };
-      break;
-    case 6:
+
+    case 5: // Emparejar
       payload = { respuestas: this.matchAnswers[preguntaId] };
       break;
+
     default:
       return;
   }
+
 
   this.examenService.submitSingleAnswer(this.idIntento, preguntaId, Number(payload.opcionId))
     .subscribe({
@@ -159,8 +162,6 @@ submitAnswer(preguntaId: number) {
       }
     });
 }
-
-
   calcularNota(){
     this.examenService.getCalificacion(this.idIntento).subscribe({
       next: (resp) => {
