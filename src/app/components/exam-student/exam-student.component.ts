@@ -62,7 +62,19 @@ export class ExamStudentComponent implements OnInit {
         }
       });
     }
-  }
+    this.preguntas.forEach(pregunta => {
+    if (pregunta.idTipo === 6) {
+      // Completar
+      this.completeAnswers[pregunta.idPregunta] = Array(pregunta.opciones.length).fill('');
+    } else if (pregunta.idTipo === 5) {
+      // Emparejar
+      this.matchAnswers[pregunta.idPregunta] = Array(pregunta.opciones.length).fill('');
+    } else if (pregunta.idTipo === 2) {
+      // Selección múltiple
+      this.multiAnswers[pregunta.idPregunta] = [];
+    }
+  });
+}
 //--------------VALIDATIONS---------------------------
 
 toggleMultiAnswer(idPregunta: number, opcionId: number) {

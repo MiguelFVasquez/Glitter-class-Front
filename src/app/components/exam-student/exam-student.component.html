@@ -8,9 +8,8 @@
 
     <!-- Si no está contestada, mostramos las opciones y botón -->
     <div *ngIf="!answered[pregunta.idPregunta]">
-
-  <!-- Verdadero/Falso o Selección única -->
-      <ng-container *ngIf="pregunta.idTipo === 1 || pregunta.idTipo === 2">
+      <!-- Tipo 1: Selección única -->
+      <ng-container *ngIf="pregunta.idTipo === 1">
         <div *ngFor="let opcion of pregunta.opciones">
           <label>
             <input
@@ -25,13 +24,12 @@
         </div>
       </ng-container>
 
-      <!-- Selección múltiple -->
-      <ng-container *ngIf="pregunta.idTipo === 3">
+      <!-- Tipo 2: Selección múltiple -->
+      <ng-container *ngIf="pregunta.idTipo === 2">
         <div *ngFor="let opcion of pregunta.opciones">
           <label>
             <input
               type="checkbox"
-              [value]="opcion.idOpcionRespuesta"
               [checked]="isChecked(pregunta.idPregunta, opcion.idOpcionRespuesta)"
               (change)="toggleMultiAnswer(pregunta.idPregunta, opcion.idOpcionRespuesta)"
             />
@@ -40,34 +38,36 @@
         </div>
       </ng-container>
 
-      <!-- Ordenar -->
-      <ng-container *ngIf="pregunta.idTipo === 4">
-        <p>Ordena los elementos (arrástralos en el orden correcto):</p>
-        <ul>
-          <li *ngFor="let opcion of pregunta.opciones">
+      <!-- Tipo 3: Falso/Verdadero (también selección única) -->
+      <ng-container *ngIf="pregunta.idTipo === 3">
+        <div *ngFor="let opcion of pregunta.opciones">
+          <label>
+            <input
+              type="radio"
+              name="pregunta{{ pregunta.idPregunta }}"
+              [value]="opcion.idOpcionRespuesta"
+              [(ngModel)]="answers[pregunta.idPregunta]"
+              [ngModelOptions]="{ standalone: true }"
+            />
             {{ opcion.textoOpcion }}
-          </li>
-        </ul>
-        <!-- Implementación de ordenamiento real puede hacerse con drag&drop -->
-      </ng-container>
-
-      <!-- Completar -->
-      <ng-container *ngIf="pregunta.idTipo === 5">
-        <div *ngFor="let opcion of pregunta.opciones; let i = index">
-          <label>Respuesta {{ i + 1 }}:</label>
-          <input
-            type="text"
-            [(ngModel)]="completeAnswers[pregunta.idPregunta][i]"
-            [ngModelOptions]="{ standalone: true }"
-            placeholder="Escribe la palabra o frase"
-          />
+          </label>
         </div>
       </ng-container>
 
-      <!-- Emparejar -->
-      <ng-container *ngIf="pregunta.idTipo === 6">
+      <!-- Tipo 4: Ordenar (simple, sin drag-drop aún) -->
+      <ng-container *ngIf="pregunta.idTipo === 4">
+        <ol>
+          <li *ngFor="let opcion of pregunta.opciones">
+            {{ opcion.textoOpcion }}
+          </li>
+        </ol>
+        <!-- Aquí puedes agregar soporte de drag and drop si deseas -->
+      </ng-container>
+
+      <!-- Tipo 5: Emparejar -->
+      <ng-container *ngIf="pregunta.idTipo === 5">
         <div *ngFor="let opcion of pregunta.opciones; let i = index">
-          <p>{{ opcion.textoOpcion }}</p>
+          <label>{{ opcion.textoOpcion }}</label>
           <input
             type="text"
             [(ngModel)]="matchAnswers[pregunta.idPregunta][i]"
@@ -77,7 +77,20 @@
         </div>
       </ng-container>
 
-      <!-- Botón Enviar (solo para tipos que requieren acción inmediata) -->
+      <!-- Tipo 6: Completar -->
+      <ng-container *ngIf="pregunta.idTipo === 6">
+        <div *ngFor="let opcion of pregunta.opciones; let i = index">
+          <label>Espacio {{ i + 1 }}:</label>
+          <input
+            type="text"
+            [(ngModel)]="completeAnswers[pregunta.idPregunta][i]"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="Completa aquí"
+          />
+        </div>
+      </ng-container>
+
+      <!-- Botón Enviar -->
       <button
         class="btn-enviar"
         (click)="submitAnswer(pregunta.idPregunta)"
