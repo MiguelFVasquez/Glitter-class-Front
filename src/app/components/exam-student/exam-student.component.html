@@ -15,7 +15,7 @@
             <input
               type="radio"
               name="pregunta{{ pregunta.idPregunta }}"
-              [value]="+opcion.idOpcionRespuesta"
+              [value]="opcion.idOpcionRespuesta"
               [(ngModel)]="answers[pregunta.idPregunta]"
               [ngModelOptions]="{ standalone: true }"
             />
@@ -45,7 +45,7 @@
             <input
               type="radio"
               name="pregunta{{ pregunta.idPregunta }}"
-              [value]="+opcion.idOpcionRespuesta"
+              [value]="opcion.idOpcionRespuesta"
               [(ngModel)]="answers[pregunta.idPregunta]"
               [ngModelOptions]="{ standalone: true }"
             />
@@ -61,7 +61,7 @@
             <input
               type="radio"
               name="pregunta{{ pregunta.idPregunta }}"
-              [value]="+opcion.idOpcionRespuesta"
+              [value]="opcion.idOpcionRespuesta"
               [(ngModel)]="answers[pregunta.idPregunta]"
               [ngModelOptions]="{ standalone: true }"
             />
@@ -84,7 +84,7 @@
           <div class="match-column">
             <select
               *ngFor="let opcion of pregunta.opciones; let i = index"
-              [(ngModel)]="respuestasUsuario[pregunta.idPregunta][i]"
+              [(ngModel)]="matchAnswers[pregunta.idPregunta][i]"
               [ngModelOptions]="{ standalone: true }"
               class="match-select"
             >

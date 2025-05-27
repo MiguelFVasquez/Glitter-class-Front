@@ -41,71 +41,71 @@ export class ExamStudentComponent implements OnInit {
 
 
   respuestasUsuario: { [idPregunta: number]: string[] } = {};
-
+  
 
   //Load exam detail
-ngOnInit(): void {
-  this.examenId = Number(this.route.snapshot.paramMap.get('idExamen'));
-  this.idUsuario = Number(this.route.snapshot.paramMap.get('idUsuario'));
-  this.idIntento  = Number(this.route.snapshot.paramMap.get('idIntento'));
+  ngOnInit(): void {
+    this.examenId = Number(this.route.snapshot.paramMap.get('idExamen'));
+    this.idUsuario = Number(this.route.snapshot.paramMap.get('idUsuario'));
+    this.idIntento  = Number(this.route.snapshot.paramMap.get('idIntento'));
 
-  if (this.examenId) {
-    this.examenService.getDetailExam(this.examenId, this.idUsuario).subscribe({
-      next: (resp) => {
-        this.preguntas = resp.respuesta;
-        this.loading = false;
+    if (this.examenId) {
+      this.examenService.getDetailExam(this.examenId, this.idUsuario).subscribe({
+        next: (resp) => {
+          this.preguntas = resp.respuesta;
+          this.loading = false;
 
-        // Inicializar estructuras de respuestas según tipo de pregunta
-        this.preguntas.forEach(pregunta => {
-          if (pregunta.idTipo === 6) {
-            this.completeAnswers[pregunta.idPregunta] = Array(pregunta.opciones.length).fill('');
-          } else if (pregunta.idTipo === 5) {
-            this.matchAnswers[pregunta.idPregunta] = Array(pregunta.opciones.length).fill('');
-          } else if (pregunta.idTipo === 2) {
-            this.multiAnswers[pregunta.idPregunta] = [];
-          }
-        });
-      },
-      error: (err) => {
-        this.error = 'Error al cargar el examen.';
-        console.error(err);
-        this.loading = false;
-      }
-    });
+          // Inicializar estructuras de respuestas según tipo de pregunta
+          this.preguntas.forEach(pregunta => {
+            if (pregunta.idTipo === 6) {
+              this.completeAnswers[pregunta.idPregunta] = Array(pregunta.opciones.length).fill('');
+            } else if (pregunta.idTipo === 5) {
+              this.matchAnswers[pregunta.idPregunta] = Array(pregunta.opciones.length).fill('');
+            } else if (pregunta.idTipo === 2) {
+              this.multiAnswers[pregunta.idPregunta] = [];
+            }
+          });
+        },
+        error: (err) => {
+          this.error = 'Error al cargar el examen.';
+          console.error(err);
+          this.loading = false;
+        }
+      });
+    }
   }
-}
 
-//--------------VALIDATIONS---------------------------
+  //--------------VALIDATIONS---------------------------
 
-isSingleChoice(p: PreguntaOpcionesExamenDto) {
-  return p.idTipo === 1 || p.idTipo === 3 || p.idTipo === 6;
-}
-
-isMultipleChoice(p: PreguntaOpcionesExamenDto) {
-  return p.idTipo === 2;
-}
-
-isMatching(p: PreguntaOpcionesExamenDto) {
-  return p.idTipo === 5;
-}
-
-isOrdering(p: PreguntaOpcionesExamenDto) {
-  return p.idTipo === 4;
-}
-// Función para mezclar las descripciones y evitar orden predecible
-getDescripcionesMezcladas(opciones: any[]): string[] {
-  const descripciones = opciones.map(op => op.textoPareja);
-  return this.shuffleArray([...descripciones]);
-}
-
-// Función auxiliar para mezclar un array (Fisher-Yates)
-shuffleArray(array: any[]): any[] {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
+  isSingleChoice(p: PreguntaOpcionesExamenDto) {
+    return p.idTipo === 1 || p.idTipo === 3 || p.idTipo === 6;
   }
-  return array;
-}
+
+  isMultipleChoice(p: PreguntaOpcionesExamenDto) {
+    return p.idTipo === 2;
+  }
+
+  isMatching(p: PreguntaOpcionesExamenDto) {
+    return p.idTipo === 5;
+  }
+
+  isOrdering(p: PreguntaOpcionesExamenDto) {
+    return p.idTipo === 4;
+  }
+  // Función para mezclar las descripciones y evitar orden predecible
+  getDescripcionesMezcladas(opciones: any[]): string[] {
+    const descripciones = opciones.map(op => op.textoPareja);
+    return this.shuffleArray([...descripciones]);
+  }
+
+  // Función auxiliar para mezclar un array (Fisher-Yates)
+  shuffleArray(array: any[]): any[] {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
 
 
 
@@ -131,9 +131,10 @@ isSubmitDisabled(pregunta: PreguntaOpcionesExamenDto): boolean {
     case 3:
       return !this.multiAnswers[pregunta.idPregunta]?.length;
     case 5:
-      return this.completeAnswers[pregunta.idPregunta]?.some(t => !t);
-    case 6:
+      // Cambiar completeAnswers por matchAnswers
       return this.matchAnswers[pregunta.idPregunta]?.some(t => !t);
+    case 6:
+      return this.completeAnswers[pregunta.idPregunta]?.some(t => !t);
     default:
       return false;
   }
