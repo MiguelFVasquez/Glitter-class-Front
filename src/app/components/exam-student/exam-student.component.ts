@@ -41,41 +41,57 @@ export class ExamStudentComponent implements OnInit {
 
 
   //Load exam detail
-  ngOnInit(): void {
-    this.examenId = Number(this.route.snapshot.paramMap.get('idExamen')); /*All information to load an exam*/
-    this.idUsuario = Number(this.route.snapshot.paramMap.get('idUsuario'));
-    this.idIntento  = Number(this.route.snapshot.paramMap.get('idIntento'));
+ngOnInit(): void {
+  this.examenId = Number(this.route.snapshot.paramMap.get('idExamen'));
+  this.idUsuario = Number(this.route.snapshot.paramMap.get('idUsuario'));
+  this.idIntento  = Number(this.route.snapshot.paramMap.get('idIntento'));
 
+  if (this.examenId) {
+    this.examenService.getDetailExam(this.examenId, this.idUsuario).subscribe({
+      next: (resp) => {
+        this.preguntas = resp.respuesta;
+        this.loading = false;
 
-    console.log('Id del examen: ', this.examenId, 'Id del estudiante: ',this.idUsuario);
-    if (this.examenId) {
-      this.examenService.getDetailExam(this.examenId,this.idUsuario).subscribe({
-        next: (resp) => {
-          this.preguntas = resp.respuesta;
-          console.log("respuesta del back: ", this.preguntas);
-          this.loading = false;
-        },
-        error: (err) => {
-          this.error = 'Error al cargar el examen.';
-          console.error(err);
-          this.loading = false;
-        }
-      });
-    }
-    this.preguntas.forEach(pregunta => {
-    if (pregunta.idTipo === 6) {
-      // Completar
-      this.completeAnswers[pregunta.idPregunta] = Array(pregunta.opciones.length).fill('');
-    } else if (pregunta.idTipo === 5) {
-      // Emparejar
-      this.matchAnswers[pregunta.idPregunta] = Array(pregunta.opciones.length).fill('');
-    } else if (pregunta.idTipo === 2) {
-      // Selección múltiple
-      this.multiAnswers[pregunta.idPregunta] = [];
-    }
-  });
+        // Inicializar estructuras de respuestas según tipo de pregunta
+        this.preguntas.forEach(pregunta => {
+          if (pregunta.idTipo === 6) {
+            this.completeAnswers[pregunta.idPregunta] = Array(pregunta.opciones.length).fill('');
+          } else if (pregunta.idTipo === 5) {
+            this.matchAnswers[pregunta.idPregunta] = Array(pregunta.opciones.length).fill('');
+          } else if (pregunta.idTipo === 2) {
+            this.multiAnswers[pregunta.idPregunta] = [];
+          }
+        });
+      },
+      error: (err) => {
+        this.error = 'Error al cargar el examen.';
+        console.error(err);
+        this.loading = false;
+      }
+    });
+  }
 }
+
 //--------------VALIDATIONS---------------------------
+
+isSingleChoice(p: PreguntaOpcionesExamenDto) {
+  return p.idTipo === 1 || p.idTipo === 3 || p.idTipo === 6;
+}
+
+isMultipleChoice(p: PreguntaOpcionesExamenDto) {
+  return p.idTipo === 2;
+}
+
+isMatching(p: PreguntaOpcionesExamenDto) {
+  return p.idTipo === 5;
+}
+
+isOrdering(p: PreguntaOpcionesExamenDto) {
+  return p.idTipo === 4;
+}
+
+
+
 
 toggleMultiAnswer(idPregunta: number, opcionId: number) {
   if (!this.multiAnswers[idPregunta]) this.multiAnswers[idPregunta] = [];

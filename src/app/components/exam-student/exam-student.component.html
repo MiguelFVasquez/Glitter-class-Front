@@ -56,37 +56,49 @@
 
       <!-- Tipo 4: Ordenar (simple, sin drag-drop aún) -->
       <ng-container *ngIf="pregunta.idTipo === 4">
-        <ol>
-          <li *ngFor="let opcion of pregunta.opciones">
+        <div *ngFor="let opcion of pregunta.opciones">
+          <label>
+            <input
+              type="radio"
+              name="pregunta{{ pregunta.idPregunta }}"
+              [value]="opcion.idOpcionRespuesta"
+              [(ngModel)]="answers[pregunta.idPregunta]"
+              [ngModelOptions]="{ standalone: true }"
+            />
             {{ opcion.textoOpcion }}
-          </li>
-        </ol>
-        <!-- Aquí puedes agregar soporte de drag and drop si deseas -->
+          </label>
+        </div>    
       </ng-container>
 
-      <!-- Tipo 5: Emparejar -->
+        <!-- Tipo 5: Emparejar -->
       <ng-container *ngIf="pregunta.idTipo === 5">
-        <div *ngFor="let opcion of pregunta.opciones; let i = index">
-          <label>{{ opcion.textoOpcion }}</label>
-          <input
-            type="text"
-            [(ngModel)]="matchAnswers[pregunta.idPregunta][i]"
-            [ngModelOptions]="{ standalone: true }"
-            placeholder="Emparejar con..."
-          />
+        <div *ngFor="let opcion of pregunta.opciones; let i = index" class="match-pair">
+          <div class="left">{{ opcion.textoOpcion }}</div>
+          <div class="right">
+            <input
+              type="text"
+              [(ngModel)]="matchAnswers[pregunta.idPregunta][i]"
+              [ngModelOptions]="{ standalone: true }"
+              [placeholder]="'Emparejar con: ' + opcion.textoPareja"
+            />
+          </div>
         </div>
       </ng-container>
 
+
       <!-- Tipo 6: Completar -->
       <ng-container *ngIf="pregunta.idTipo === 6">
-        <div *ngFor="let opcion of pregunta.opciones; let i = index">
-          <label>Espacio {{ i + 1 }}:</label>
-          <input
-            type="text"
-            [(ngModel)]="completeAnswers[pregunta.idPregunta][i]"
-            [ngModelOptions]="{ standalone: true }"
-            placeholder="Completa aquí"
-          />
+      <div *ngFor="let opcion of pregunta.opciones">
+          <label>
+            <input
+              type="radio"
+              name="pregunta{{ pregunta.idPregunta }}"
+              [value]="opcion.idOpcionRespuesta"
+              [(ngModel)]="answers[pregunta.idPregunta]"
+              [ngModelOptions]="{ standalone: true }"
+            />
+            {{ opcion.textoOpcion }}
+          </label>
         </div>
       </ng-container>
 
