@@ -128,13 +128,11 @@ isChecked(idPregunta: number, opcionId: number): boolean {
 isSubmitDisabled(pregunta: PreguntaOpcionesExamenDto): boolean {
   switch (pregunta.idTipo) {
     case 1: // Selección única
+    case 2:
     case 3: // Falso/Verdadero
     case 4: // Ordenar
     case 6: // Completar (opciones)
       return !this.answers[pregunta.idPregunta];
-
-    case 2: // Múltiple
-      return this.multiAnswers[pregunta.idPregunta]?.length === 0;
 
     case 5: // Emparejar
       return this.matchAnswers[pregunta.idPregunta]?.some(t => !t);
@@ -156,11 +154,6 @@ submitAnswer(preguntaId: number) {
     case 6: // Completar (con opciones)
       payload = { opcionId: this.answers[preguntaId] };
       break;
-
-    case 2: // Selección múltiple
-      payload = { opcioneId: this.multiAnswers[preguntaId] };
-      break;
-
     case 5: // Emparejar
       payload = { respuestas: this.matchAnswers[preguntaId] };
       break;
