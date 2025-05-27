@@ -47,7 +47,7 @@ export class ExamBoardComponent implements OnInit {
   //Modal to add question to exam
   showQuestionForm = false;    // para el segundo modal (asignar preguntas)
   createdExamId: number = 0;
-  createExamThemId: number | null=null;
+  createExamThemId: number =0; 
   createdExamTitle = '';
   listaPreguntas: preguntaExamenDto[]=[];
   preguntasDisponibles: readPublicQuestion[] = [];
@@ -275,8 +275,8 @@ export class ExamBoardComponent implements OnInit {
 
   loadQuestions() {
     forkJoin({
-      pub: this.questionService.getQuestionByTheme(this.newExam.idTema),
-      own: this.questionService.getQuestions(this.newExam.idDocente)
+      pub: this.questionService.getQuestionByTheme(this.createExamThemId),
+      own: this.questionService.getQuestionsByDocenteAndTheme(this.newExam.idDocente, this.createExamThemId)
     }).subscribe(({pub, own}) => {
       this.preguntasPublicas = pub.error ? [] : pub.respuesta;
       this.preguntasPropias = own.error ? [] : own.respuesta;
