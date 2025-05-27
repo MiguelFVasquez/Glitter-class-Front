@@ -427,30 +427,21 @@ opcionesToCreate: createOption[] = [];
 
   // Validar ordenar
   if (this.isOrderType()) {
-    const hasEmpty = this.opcionesToCreate.some(opt => !opt.textoOpcion);
+    const hasEmpty = this.opcionesToCreate.some(opt => !opt.textoOpcion || opt.idTipoRespuesta == null);
     if (hasEmpty) {
-      showAlert('Debes ingresar todos los elementos en orden.', 'warning');
+      showAlert('Debes ingresar todos los elementos, sus porcentajes y tipo de respuesta.', 'warning');
       return;
     }
-    // Asignar tipo de respuesta fija
-    this.opcionesToCreate.forEach(opt => {
-      opt.idTipoRespuesta = 1;
-    });
   }
 
   // Validar completar
   if (this.isCompleteType()) {
-    const hasEmpty = this.opcionesToCreate.some(opt => !opt.textoOpcion);
+    const hasEmpty = this.opcionesToCreate.some(opt => !opt.textoOpcion || opt.idTipoRespuesta == null);
     if (hasEmpty) {
-      showAlert('Debes ingresar todas las palabras o frases a completar.', 'warning');
+      showAlert('Debes ingresar todas las palabras/frases, sus porcentajes y tipo de respuesta.', 'warning');
       return;
     }
-    this.opcionesToCreate.forEach(opt => {
-      opt.textoPareja = '';
-      opt.idTipoRespuesta = 1;
-    });
   }
-
   // Validación general para selección única/múltiple
   if (this.isMultipleChoice()) {
     const hasEmpty = this.opcionesToCreate.some(opt => !opt.textoOpcion || opt.idTipoRespuesta == null);

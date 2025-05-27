@@ -173,40 +173,69 @@
   </ng-container>
 
   <!-- Ordenar -->
-  <ng-container *ngIf="isOrderType()">
-    <div *ngFor="let opt of opcionesToCreate; let i = index" class="form-row">
-      <input
-        type="text"
-        [(ngModel)]="opt.textoOpcion"
-        name="textoOrden{{i}}"
-        placeholder="Texto en orden correcto"
-        required
-      />
-      <!-- Internamente puede usarse idTipoRespuesta = 1 siempre -->
-      <button type="button" (click)="opcionesToCreate.splice(i, 1)">🗑️</button>
-    </div>
-    <button type="button" class="btn-add-option" (click)="addOptionRow()">
-      <i class="material-icons">add</i> Agregar Elemento
-    </button>
-  </ng-container>
+<ng-container *ngIf="isOrderType()">
+  <div *ngFor="let opt of opcionesToCreate; let i = index" class="form-row">
+    <input
+      type="text"
+      [(ngModel)]="opt.textoOpcion"
+      name="textoOrden{{i}}"
+      placeholder="Texto en orden correcto"
+      required
+    />
+    <input
+      type="number"
+      name="porcentajeOrden{{i}}"
+      placeholder="% parcial"
+      min="0" max="100"
+      required
+    />
+    <select
+      [(ngModel)]="opt.idTipoRespuesta"
+      name="tipoRespOrden{{i}}"
+      required
+    >
+      <option [ngValue]="1">Correcta</option>
+      <option [ngValue]="2">Incorrecta</option>
+    </select>
+    <button type="button" (click)="opcionesToCreate.splice(i, 1)">🗑️</button>
+  </div>
+  <button type="button" class="btn-add-option" (click)="addOptionRow()">
+    <i class="material-icons">add</i> Agregar Elemento
+  </button>
+</ng-container>
 
-  <!-- Completar -->
-  <ng-container *ngIf="isCompleteType()">
-    <div *ngFor="let opt of opcionesToCreate; let i = index" class="form-row">
-      <input
-        type="text"
-        [(ngModel)]="opt.textoOpcion"
-        name="textoCompletar{{i}}"
-        placeholder="Texto de respuesta correcta"
-        required
-      />
-      <!-- Puede tener idTipoRespuesta = 1 también -->
-      <button type="button" (click)="opcionesToCreate.splice(i, 1)">🗑️</button>
-    </div>
-    <button type="button" class="btn-add-option" (click)="addOptionRow()">
-      <i class="material-icons">add</i> Agregar Palabra
-    </button>
-  </ng-container>
+
+<ng-container *ngIf="isCompleteType()">
+  <div *ngFor="let opt of opcionesToCreate; let i = index" class="form-row">
+    <input
+      type="text"
+      [(ngModel)]="opt.textoOpcion"
+      name="textoCompletar{{i}}"
+      placeholder="Texto de respuesta correcta"
+      required
+    />
+    <input
+      type="number"
+      name="porcentajeCompletar{{i}}"
+      placeholder="% parcial"
+      min="0" max="100"
+      required
+    />
+    <select
+      [(ngModel)]="opt.idTipoRespuesta"
+      name="tipoRespCompletar{{i}}"
+      required
+    >
+      <option [ngValue]="1">Correcta</option>
+      <option [ngValue]="2">Incorrecta</option>
+    </select>
+    <button type="button" (click)="opcionesToCreate.splice(i, 1)">🗑️</button>
+  </div>
+  <button type="button" class="btn-add-option" (click)="addOptionRow()">
+    <i class="material-icons">add</i> Agregar Palabra
+  </button>
+</ng-container>
+
 
   <!-- Emparejar -->
   <ng-container *ngIf="isMatchType()">
@@ -231,6 +260,7 @@
       <i class="material-icons">add</i> Agregar Par
     </button>
   </ng-container>
+
 </ng-template>
 
 
