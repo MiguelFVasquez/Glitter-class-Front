@@ -29,9 +29,11 @@
         <div *ngFor="let opcion of pregunta.opciones">
           <label>
             <input
-              type="checkbox"
-              [checked]="isChecked(pregunta.idPregunta, opcion.idOpcionRespuesta)"
-              (change)="toggleMultiAnswer(pregunta.idPregunta, opcion.idOpcionRespuesta)"
+              type="radio"
+              name="pregunta{{ pregunta.idPregunta }}"
+              [value]="opcion.idOpcionRespuesta"
+              [(ngModel)]="answers[pregunta.idPregunta]"
+              [ngModelOptions]="{ standalone: true }"
             />
             {{ opcion.textoOpcion }}
           </label>
