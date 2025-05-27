@@ -41,7 +41,7 @@ export class ExamStudentComponent implements OnInit {
 
 
   respuestasUsuario: { [idPregunta: number]: string[] } = {};
-  
+  shuffledMatches: { [idPregunta: number]: string[] } = {};
 
   //Load exam detail
   ngOnInit(): void {
@@ -72,7 +72,15 @@ export class ExamStudentComponent implements OnInit {
           this.loading = false;
         }
       });
+      this.preguntas.forEach(pregunta => {
+        if (pregunta.idTipo === 5) {
+        this.shuffledMatches[pregunta.idPregunta] = 
+          this.shuffleArray(pregunta.opciones.map(op => op.textoPareja));
+        }
+      });
+    
     }
+
   }
 
   //--------------VALIDATIONS---------------------------
@@ -125,18 +133,20 @@ isChecked(idPregunta: number, opcionId: number): boolean {
 
 isSubmitDisabled(pregunta: PreguntaOpcionesExamenDto): boolean {
   switch (pregunta.idTipo) {
-    case 1:
-    case 2:
+    case 1: // Selección única
+    case 3: // Falso/Verdadero
+    case 4: // Ordenar
+    case 6: // Completar (opciones)
       return !this.answers[pregunta.idPregunta];
-    case 3:
-      return !this.multiAnswers[pregunta.idPregunta]?.length;
-    case 5:
-      // Cambiar completeAnswers por matchAnswers
+
+    case 2: // Múltiple
+      return this.multiAnswers[pregunta.idPregunta]?.length === 0;
+
+    case 5: // Emparejar
       return this.matchAnswers[pregunta.idPregunta]?.some(t => !t);
-    case 6:
-      return this.completeAnswers[pregunta.idPregunta]?.some(t => !t);
+
     default:
-      return false;
+      return true;
   }
 }
 submitAnswer(preguntaId: number) {

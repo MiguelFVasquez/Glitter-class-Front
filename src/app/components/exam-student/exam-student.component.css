@@ -38,7 +38,10 @@
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-
+.match-select.ng-invalid {
+  border-color: #ff0000;
+  background-color: #ffe6e6;
+}
 label {
   display: block;
   margin: 5px 0;

@@ -71,32 +71,29 @@
       </ng-container>
 
       <ng-container *ngIf="pregunta.idTipo === 5">
-        <h3>{{ pregunta.enunciado }}</h3>
-        <div class="match-container">
-          <!-- Columna izquierda (Cláusulas SQL) -->
-          <div class="match-column">
-            <div *ngFor="let opcion of pregunta.opciones; let i = index" class="match-item">
-              {{ opcion.textoOpcion }}
-            </div>
-          </div>
-
-          <!-- Columna derecha (Descripciones - opciones desordenadas) -->
-          <div class="match-column">
-            <select
-              *ngFor="let opcion of pregunta.opciones; let i = index"
-              [(ngModel)]="matchAnswers[pregunta.idPregunta][i]"
-              [ngModelOptions]="{ standalone: true }"
-              class="match-select"
-            >
-              <option value="">Seleccione...</option>
-              <!-- Mezclamos las descripciones para que no estén en orden -->
-              <option *ngFor="let desc of getDescripcionesMezcladas(pregunta.opciones)" [value]="desc">
-                {{ desc }}
-              </option>
-            </select>
+      <div class="match-container">
+        <!-- Columna izquierda -->
+        <div class="match-column">
+          <div *ngFor="let opcion of pregunta.opciones" class="match-item">
+            {{ opcion.textoOpcion }}
           </div>
         </div>
-      </ng-container>
+
+        <!-- Columna derecha -->
+        <div class="match-column">
+          <select
+            *ngFor="let opcion of pregunta.opciones; let i = index"
+            [(ngModel)]="matchAnswers[pregunta.idPregunta][i]"
+            class="match-select"
+          >
+            <option value="">Seleccione...</option>
+            <option *ngFor="let desc of shuffledMatches[pregunta.idPregunta]" [value]="desc">
+              {{ desc }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </ng-container>
 
 
       <!-- Tipo 6: Completar -->
