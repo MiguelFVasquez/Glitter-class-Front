@@ -377,48 +377,106 @@ opcionesToCreate: createOption[] = [];
   }
 
 
+  addOptionRow(isPair: boolean = false) {
+  const baseOption: any = {
+    textoOpcion: '',
+    idTipoRespuesta: 2 // Por defecto "Incorrecta"
+  };
 
-  addOptionRow() {
-    this.opcionesToCreate.push({
-      textoOpcion: '',
-      idTipoRespuesta: 2 // por defecto “incorrecta”
-    });
+  if (isPair) {
+    baseOption.textoPareja = '';
   }
+
+  this.opcionesToCreate.push(baseOption);
+}
 
   submitOptions() {
-    if (this.isTrueFalseType()) {
-      if (!this.selectedTrueFalse) {
-        showAlert('Debes seleccionar una opción verdadera/falsa.', 'warning');
-        return;
-      }
-
-      this.opcionesToCreate = [
-        {
-          textoOpcion: 'Verdadero',
-          idTipoRespuesta: this.selectedTrueFalse === 'verdadero' ? 1 : 2
-        },
-        {
-          textoOpcion: 'Falso',
-          idTipoRespuesta: this.selectedTrueFalse === 'falso' ? 1 : 2
-        }
-      ];
+  // Validar Verdadero/Falso
+  if (this.isTrueFalseType()) {
+    if (!this.selectedTrueFalse) {
+      showAlert('Debes seleccionar una opción verdadera/falsa.', 'warning');
+      return;
     }
 
-    const calls = this.opcionesToCreate.map(opt =>
-      this.questionService.createOption(this.createdQuestionId, opt)
-    );
-
-    forkJoin(calls).subscribe({
-      next: () => {
-        showAlert('Opciones guardadas correctamente', 'success');
-        this.resetAll();
+    this.opcionesToCreate = [
+      {
+        textoOpcion: 'Verdadero',
+        textoPareja: '',
+        idTipoRespuesta: this.selectedTrueFalse === 'verdadero' ? 1 : 2
       },
-      error: err => {
-        console.error(err);
-        showAlert('Error al guardar opciones: ' + err.mensaje, 'error');
+      {
+        textoOpcion: 'Falso',
+        textoPareja: '',
+        idTipoRespuesta: this.selectedTrueFalse === 'falso' ? 1 : 2
       }
+    ];
+  }
+
+  // Validar emparejar
+  if (this.isMatchType()) {
+    const hasInvalidPair = this.opcionesToCreate.some(opt => !opt.textoOpcion || !opt.textoPareja);
+    if (hasInvalidPair) {
+      showAlert('Debes completar todos los pares de emparejamiento.', 'warning');
+      return;
+    }
+    // Establecemos tipo de respuesta fija si aplica (por ejemplo 1 = correcta)
+    this.opcionesToCreate.forEach(opt => {
+      opt.idTipoRespuesta = 1;
     });
   }
+
+  // Validar ordenar
+  if (this.isOrderType()) {
+    const hasEmpty = this.opcionesToCreate.some(opt => !opt.textoOpcion);
+    if (hasEmpty) {
+      showAlert('Debes ingresar todos los elementos en orden.', 'warning');
+      return;
+    }
+    // Asignar tipo de respuesta fija
+    this.opcionesToCreate.forEach(opt => {
+      opt.idTipoRespuesta = 1;
+    });
+  }
+
+  // Validar completar
+  if (this.isCompleteType()) {
+    const hasEmpty = this.opcionesToCreate.some(opt => !opt.textoOpcion);
+    if (hasEmpty) {
+      showAlert('Debes ingresar todas las palabras o frases a completar.', 'warning');
+      return;
+    }
+    this.opcionesToCreate.forEach(opt => {
+      opt.textoPareja = '';
+      opt.idTipoRespuesta = 1;
+    });
+  }
+
+  // Validación general para selección única/múltiple
+  if (this.isMultipleChoice()) {
+    const hasEmpty = this.opcionesToCreate.some(opt => !opt.textoOpcion || opt.idTipoRespuesta == null);
+    if (hasEmpty) {
+      showAlert('Debes completar todas las opciones y definir si son correctas o incorrectas.', 'warning');
+      return;
+    }
+  }
+
+  // Envío al backend
+  const calls = this.opcionesToCreate.map(opt =>
+    this.questionService.createOption(this.createdQuestionId, opt)
+  );
+
+  forkJoin(calls).subscribe({
+    next: () => {
+      showAlert('Opciones guardadas correctamente', 'success');
+      this.resetAll();
+    },
+    error: err => {
+      console.error(err);
+      showAlert('Error al guardar opciones: ' + err.mensaje, 'error');
+    }
+  });
+}
+
 
 
   get filteredQuestions() {
