@@ -60,7 +60,8 @@
 
         <div class="form-group">
           <label for="idTipo">Tipo *</label>
-          <select id="idTipo" [(ngModel)]="newQuestion.idTipo" name="idTipo" required>
+          <select id="idTipo" [(ngModel)]="newQuestion.idTipo" name="idTipo" required
+>
             <option *ngFor="let tipo of questionTypes" [ngValue]="tipo.idTipo">
               {{ tipo.nombre }}
             </option>
@@ -110,19 +111,18 @@
     </form>
   </div>
 
-  <!-- 2️⃣ Formulario de creación de OPCIONES -->
   <div *ngIf="showOptionForm" class="question-form-section">
-    <h2>Agrega Opciones (Pregunta #{{ createdQuestionId }})</h2>
-      
-  <!-- Si es verdadero/falso, muestra sólo los dos radios -->
-  <ng-container *ngIf="isTrueFalseType(); else multiOptions">
+  <h2>Agrega Opciones (Pregunta: {{ newQuestion.enunciado}})</h2>
+
+  <!-- Verdadero/Falso -->
+  <ng-container *ngIf="isTrueFalseType(); else otherTypes">
     <label><strong>Selecciona la respuesta correcta:</strong></label>
     <div class="form-group">
       <label>
         <input
           type="radio"
           name="trueFalseAnswer"
-          [value]="'Verdadero'"
+          [value]="'verdadero'"
           [(ngModel)]="selectedTrueFalse"
         /> Verdadero
       </label>
@@ -130,55 +130,65 @@
         <input
           type="radio"
           name="trueFalseAnswer"
-          [value]="'Falso'"
+          [value]="'falso'"
           [(ngModel)]="selectedTrueFalse"
         /> Falso
       </label>
     </div>
   </ng-container>
 
-  <!-- Si no, muestro el flujo normal de múltiples opciones -->
-  <ng-template #multiOptions>
-    <div *ngFor="let opt of opcionesToCreate; let i = index" class="form-row">
-      <input
-        type="text"
-        [(ngModel)]="opt.textoOpcion"
-        name="textoOpcion{{i}}"
-        placeholder="Texto de la opción"
-        required
-      />
-      <input
-        type="number"
-        name="porcentajeParcial{{i}}"
-        placeholder="% parcial"
-        min="0" max="100" required
-      />
-      <select
-        [(ngModel)]="opt.idTipoRespuesta"
-        name="tipoResp{{i}}"
-        required>
-        <option [ngValue]="1">Correcta</option>
-        <option [ngValue]="2">Incorrecta</option>
-      </select>
-      <button type="button" (click)="opcionesToCreate.splice(i,1)">🗑️</button>
-    </div>
+  <!-- Otros tipos -->
+  <ng-template #otherTypes>
 
-    <button type="button" class="btn-add-option" (click)="addOptionRow()">
-      <i class="material-icons">add</i> Agregar Opción
-    </button>
+    <!-- Selección única/múltiple -->
+    <ng-container *ngIf="isMultipleChoice()">
+      <div *ngFor="let opt of opcionesToCreate; let i = index" class="form-row">
+        <input
+          type="text"
+          [(ngModel)]="opt.textoOpcion"
+          name="textoOpcion{{i}}"
+          placeholder="Texto de la opción"
+          required
+        />
+        <input
+          type="number"
+          name="porcentajeParcial{{i}}"
+          placeholder="% parcial"
+          min="0" max="100"
+          required
+        />
+        <select
+          [(ngModel)]="opt.idTipoRespuesta"
+          name="tipoResp{{i}}"
+          required
+        >
+          <option [ngValue]="1">Correcta</option>
+          <option [ngValue]="2">Incorrecta</option>
+        </select>
+        <button type="button" (click)="opcionesToCreate.splice(i, 1)">🗑️</button>
+      </div>
+      <button type="button" class="btn-add-option" (click)="addOptionRow()">
+        <i class="material-icons">add</i> Agregar Opción
+      </button>
+    </ng-container>
+
+    <!-- Ordenar, emparejar, completar... -->
+    <ng-container *ngIf="isOrderType() || isMatchType() || isCompleteType()">
+      <p>⚠️ Formulario para este tipo de pregunta aún no implementado.</p>
+    </ng-container>
+
   </ng-template>
 
+  <!-- Botón de guardar -->
   <div class="form-actions">
     <button class="btn-submit"
             (click)="submitOptions()"
-            [disabled]="
-              isTrueFalseType()
-                ? !selectedTrueFalse
-                : opcionesToCreate.length === 0
-            ">
+            [disabled]="isTrueFalseType() ? !selectedTrueFalse : opcionesToCreate.length === 0">
       Guardar Opciones
     </button>
   </div>
+</div>
+
 
 </div>
 

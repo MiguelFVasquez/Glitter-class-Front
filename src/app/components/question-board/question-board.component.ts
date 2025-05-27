@@ -355,10 +355,27 @@ opcionesToCreate: createOption[] = [];
     });
   }
 
-  //Method to valid the type seleceted: 
+  //--------------TO KNOW WHAT FORM SHOW--------------------------\\
   isTrueFalseType(): boolean {
-  return this.newQuestion.idTipo === 3; // Asegurar que el tipo verdadero o falso sea el id=3
+    return this.newQuestion.idTipo === 3;
   }
+
+  isMultipleChoice(): boolean {
+    return this.newQuestion.idTipo === 1 || this.newQuestion.idTipo === 2;
+  }
+
+  isOrderType(): boolean {
+    return this.newQuestion.idTipo === 4;
+  }
+
+  isMatchType(): boolean {
+    return this.newQuestion.idTipo === 5;
+  }
+
+  isCompleteType(): boolean {
+    return this.newQuestion.idTipo === 6;
+  }
+
 
 
   addOptionRow() {
@@ -369,9 +386,12 @@ opcionesToCreate: createOption[] = [];
   }
 
   submitOptions() {
-    // Enviar cada opción vinculada al id de pregunta
-    console.log("Opciones a enviar", this.opcionesToCreate);
-    if (this.selectedTrueFalse !== null && this.isTrueFalseType()) {
+    if (this.isTrueFalseType()) {
+      if (!this.selectedTrueFalse) {
+        showAlert('Debes seleccionar una opción verdadera/falsa.', 'warning');
+        return;
+      }
+
       this.opcionesToCreate = [
         {
           textoOpcion: 'Verdadero',
@@ -385,9 +405,9 @@ opcionesToCreate: createOption[] = [];
     }
 
     const calls = this.opcionesToCreate.map(opt =>
-      this.questionService
-        .createOption(this.createdQuestionId, opt)
+      this.questionService.createOption(this.createdQuestionId, opt)
     );
+
     forkJoin(calls).subscribe({
       next: () => {
         showAlert('Opciones guardadas correctamente', 'success');
@@ -395,10 +415,11 @@ opcionesToCreate: createOption[] = [];
       },
       error: err => {
         console.error(err);
-        showAlert('Error al guardar opciones' + err.mensaje, 'error');
+        showAlert('Error al guardar opciones: ' + err.mensaje, 'error');
       }
     });
   }
+
 
   get filteredQuestions() {
     if (!this.filterType) return this.questions;
