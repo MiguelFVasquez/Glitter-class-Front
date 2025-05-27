@@ -41,7 +41,7 @@ export class ExamStudentComponent implements OnInit {
 
 
   respuestasUsuario: { [idPregunta: number]: string[] } = {};
-  shuffledMatches: { [idPregunta: number]: string[] } = {};
+  
 
   //Load exam detail
   ngOnInit(): void {
@@ -70,12 +70,6 @@ export class ExamStudentComponent implements OnInit {
           this.error = 'Error al cargar el examen.';
           console.error(err);
           this.loading = false;
-        }
-      });
-      this.preguntas.forEach(pregunta => {
-        if (pregunta.idTipo === 5) {
-        this.shuffledMatches[pregunta.idPregunta] = 
-          this.shuffleArray(pregunta.opciones.map(op => op.textoPareja));
         }
       });
     
@@ -164,7 +158,7 @@ submitAnswer(preguntaId: number) {
       break;
 
     case 2: // Selección múltiple
-      payload = { opcionesIds: this.multiAnswers[preguntaId] };
+      payload = { opcioneId: this.multiAnswers[preguntaId] };
       break;
 
     case 5: // Emparejar
