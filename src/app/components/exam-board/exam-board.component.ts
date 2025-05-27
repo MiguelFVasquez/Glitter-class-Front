@@ -187,8 +187,8 @@ export class ExamBoardComponent implements OnInit {
     // construye el payload ajustando los segundos
     const payload: createExam = {
       ...this.newExam,
-      fechaDisponible: this.normalizeTimestamp(this.newExam.fechaDisponible),
-      fechaCierre:     this.normalizeTimestamp(this.newExam.fechaCierre),
+      fechaDisponible: createFormat(new Date(this.newExam.fechaDisponible)),
+      fechaCierre:     createFormat(new Date(this.newExam.fechaCierre)),
     };
 
     console.log("Payload enviado:", payload);
@@ -354,4 +354,7 @@ export class ExamBoardComponent implements OnInit {
     this.loadExams(this.idUsuario);
   }
 
+}
+const createFormat = (date: Date): string => {
+  return date.toUTCString();
 }
