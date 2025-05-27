@@ -70,17 +70,30 @@
         </div>    
       </ng-container>
 
-        <!-- Tipo 5: Emparejar -->
       <ng-container *ngIf="pregunta.idTipo === 5">
-        <div *ngFor="let opcion of pregunta.opciones; let i = index" class="match-pair">
-          <div class="left">{{ opcion.textoOpcion }}</div>
-          <div class="right">
-            <input
-              type="text"
-              [(ngModel)]="matchAnswers[pregunta.idPregunta][i]"
+        <h3>{{ pregunta.enunciado }}</h3>
+        <div class="match-container">
+          <!-- Columna izquierda (Cláusulas SQL) -->
+          <div class="match-column">
+            <div *ngFor="let opcion of pregunta.opciones; let i = index" class="match-item">
+              {{ opcion.textoOpcion }}
+            </div>
+          </div>
+
+          <!-- Columna derecha (Descripciones - opciones desordenadas) -->
+          <div class="match-column">
+            <select
+              *ngFor="let opcion of pregunta.opciones; let i = index"
+              [(ngModel)]="respuestasUsuario[pregunta.idPregunta][i]"
               [ngModelOptions]="{ standalone: true }"
-              [placeholder]="'Emparejar con: ' + opcion.textoPareja"
-            />
+              class="match-select"
+            >
+              <option value="">Seleccione...</option>
+              <!-- Mezclamos las descripciones para que no estén en orden -->
+              <option *ngFor="let desc of getDescripcionesMezcladas(pregunta.opciones)" [value]="desc">
+                {{ desc }}
+              </option>
+            </select>
           </div>
         </div>
       </ng-container>

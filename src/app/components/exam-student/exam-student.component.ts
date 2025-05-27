@@ -40,6 +40,9 @@ export class ExamStudentComponent implements OnInit {
   ) {}
 
 
+  respuestasUsuario: { [idPregunta: number]: string[] } = {};
+
+
   //Load exam detail
 ngOnInit(): void {
   this.examenId = Number(this.route.snapshot.paramMap.get('idExamen'));
@@ -89,7 +92,20 @@ isMatching(p: PreguntaOpcionesExamenDto) {
 isOrdering(p: PreguntaOpcionesExamenDto) {
   return p.idTipo === 4;
 }
+// Función para mezclar las descripciones y evitar orden predecible
+getDescripcionesMezcladas(opciones: any[]): string[] {
+  const descripciones = opciones.map(op => op.textoPareja);
+  return this.shuffleArray([...descripciones]);
+}
 
+// Función auxiliar para mezclar un array (Fisher-Yates)
+shuffleArray(array: any[]): any[] {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
 
 
 
