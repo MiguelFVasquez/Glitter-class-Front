@@ -209,7 +209,7 @@ opcionesToCreate: createOption[] = [];
 
   //Method to load all public questions
   loadPublicQuestions(){
-    this.publicService.getPublicQuestions().subscribe({
+    this.publicService.getPublicQuestions(this.idUnidad).subscribe({
       next: resp => {
         if(!resp.error){
           this.questions=resp.respuesta;

@@ -73,8 +73,8 @@ export class PublicService {
   }
 
   //------------Questions--------------
-  getPublicQuestions():Observable<Message<readPublicQuestion[]>>{
-    return this.http.get<Message<readPublicQuestion[]>>(`${this.apiURL}/obtener-preguntas-publicas`);
+  getPublicQuestions(idUnidad:number):Observable<Message<readPublicQuestion[]>>{
+    return this.http.get<Message<readPublicQuestion[]>>(`${this.apiURL}/obtener-preguntas-publicas/${idUnidad}`);
   }
   //-----------Exams-------------------
   getExams():Observable<Message<readExam[]>>{

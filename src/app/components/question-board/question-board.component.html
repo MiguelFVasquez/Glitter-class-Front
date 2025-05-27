@@ -60,12 +60,7 @@
 
         <div class="form-group">
           <label for="idTipo">Tipo *</label>
-          <select
-            id="idTipo"
-            [(ngModel)]="newQuestion.idTipo"
-            name="idTipo"
-            required
-          >
+          <select id="idTipo" [(ngModel)]="newQuestion.idTipo" name="idTipo" required>
             <option *ngFor="let tipo of questionTypes" [ngValue]="tipo.idTipo">
               {{ tipo.nombre }}
             </option>

@@ -23,7 +23,7 @@ export class QuestionService {
   }
   //Method to get all professor questions and filter per theme
   getQuestionsByDocenteAndTheme(idUsuario:number, idTheme:number):Observable<Message<readPublicQuestion[]>>{
-    return this.http.get<Message<readPublicQuestion[]>>(`${this.apiURL}/obtener-preguntas-docente/${idUsuario}/${idTheme}`);
+    return this.http.get<Message<readPublicQuestion[]>>(`${this.apiURL}/obtener-preguntas-docente-tema/${idUsuario}/${idTheme}`);
   }
 
   getQuestionByTheme(idTheme:number):Observable<Message<readPublicQuestion[]>>{
