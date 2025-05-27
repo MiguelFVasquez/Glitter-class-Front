@@ -23,9 +23,12 @@ export class ExamStudentComponent implements OnInit {
 
   //-----To answer questions----
   idIntento:number=0;
-  answers: { [preguntaId: number]: number } = {};       // almacena la opción seleccionada
-  answered: { [preguntaId: number]: boolean } = {};    // flags de “ya contestada”
-
+  //-------Kind of questions-----------
+  answers: { [idPregunta: number]: number } = {}; // para radio
+  multiAnswers: { [idPregunta: number]: number[] } = {}; // para checkbox
+  completeAnswers: { [idPregunta: number]: string[] } = {}; // para completar
+  matchAnswers: { [idPregunta: number]: string[] } = {}; // para emparejar
+  answered: { [idPregunta: number]: boolean } = {};
   // Para el modal
   showScoreModal = false;
   score: number | null = null;
@@ -60,28 +63,75 @@ export class ExamStudentComponent implements OnInit {
       });
     }
   }
+//--------------VALIDATIONS---------------------------
 
-  submitAnswer(preguntaId: number) {
-    const opcionId = this.answers[preguntaId];
-    if (!opcionId) return;
-    this.examenService
-      .submitSingleAnswer(this.idIntento, preguntaId, opcionId)
-      .subscribe({
-        next: () => {
-          this.answered[preguntaId] = true;
-          // si ya todas contestadas, calculamos la nota
-          const total = this.preguntas.length;
-          const done = Object.keys(this.answered).length;
-          if (done === total) {
-            this.calcularNota();
-          }
-        },
-        error: err => {
-          console.error(err);
-          showAlert('Error al enviar la respuesta', 'error');
-        }
-      });
+toggleMultiAnswer(idPregunta: number, opcionId: number) {
+  if (!this.multiAnswers[idPregunta]) this.multiAnswers[idPregunta] = [];
+  const index = this.multiAnswers[idPregunta].indexOf(opcionId);
+  if (index === -1) {
+    this.multiAnswers[idPregunta].push(opcionId);
+  } else {
+    this.multiAnswers[idPregunta].splice(index, 1);
   }
+}
+
+isChecked(idPregunta: number, opcionId: number): boolean {
+  return this.multiAnswers[idPregunta]?.includes(opcionId);
+}
+
+isSubmitDisabled(pregunta: PreguntaOpcionesExamenDto): boolean {
+  switch (pregunta.idTipo) {
+    case 1:
+    case 2:
+      return !this.answers[pregunta.idPregunta];
+    case 3:
+      return !this.multiAnswers[pregunta.idPregunta]?.length;
+    case 5:
+      return this.completeAnswers[pregunta.idPregunta]?.some(t => !t);
+    case 6:
+      return this.matchAnswers[pregunta.idPregunta]?.some(t => !t);
+    default:
+      return false;
+  }
+}
+submitAnswer(preguntaId: number) {
+  const pregunta = this.preguntas.find(p => p.idPregunta === preguntaId);
+  if (!pregunta) return;
+
+  let payload;
+
+  switch (pregunta.idTipo) {
+    case 1:
+    case 2:
+      payload = { opcionId: this.answers[preguntaId] };
+      break;
+    case 3:
+      payload = { opcionesIds: this.multiAnswers[preguntaId] };
+      break;
+    case 5:
+      payload = { respuestas: this.completeAnswers[preguntaId] };
+      break;
+    case 6:
+      payload = { respuestas: this.matchAnswers[preguntaId] };
+      break;
+    default:
+      return;
+  }
+
+  this.examenService.submitSingleAnswer(this.idIntento, preguntaId, Number(payload.opcionId))
+    .subscribe({
+      next: () => {
+        this.answered[preguntaId] = true;
+        const done = Object.keys(this.answered).length;
+        if (done === this.preguntas.length) this.calcularNota();
+      },
+      error: err => {
+        console.error(err);
+        showAlert('Error al enviar la respuesta', 'error');
+      }
+    });
+}
+
 
   calcularNota(){
     this.examenService.getCalificacion(this.idIntento).subscribe({

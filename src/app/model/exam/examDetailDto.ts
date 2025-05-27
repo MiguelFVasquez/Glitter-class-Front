@@ -17,6 +17,7 @@ export interface PreguntaOpcionesExamenDto{
 export interface OpcionRespuestaDto{
     idOpcionRespuesta: number,
     textoOpcion: string,
+    textoPareja: string,
     idTipoRespuesta: number
 }
 export interface ResultadoGeneracionExamenDTO{
