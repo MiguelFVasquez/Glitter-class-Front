@@ -33,6 +33,9 @@ export class PublicService {
   getTemasUnidad(idUnidad: number): Observable<Message<categoria[]>>{
     return this.http.get<Message<categoria[]>>(`${this.apiURL}/obtener-temas-unidad/${idUnidad}`);
   }
+  getTemasGrupo(idGrupo:number):Observable<Message<categoria[]>>{
+    return this.http.get<Message<categoria[]>>(`${this.apiURL}/obtener-temas-grupo/${idGrupo}`);
+  }
 
   //Method to get all dificulties of the questions
   getDificultades():Observable<Message<dificultad[]>>{

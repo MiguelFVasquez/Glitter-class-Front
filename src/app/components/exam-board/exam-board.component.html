@@ -43,9 +43,10 @@
         <div class="form-row">
           <div class="form-group">
             <label for="idGrupo">Grupo *</label>
-            <select id="idGrupo" [(ngModel)]="newExam.idGrupo" name="idGrupo" required>
-              <option *ngFor="let g of groups" [ngValue]="g.idGrupo">{{ g.nombre }} - {{g.nombreCurso}}</option>
-            </select>
+        <select
+          id="idGrupo" [(ngModel)]="newExam.idGrupo" name="idGrupo" (ngModelChange)="onGrupoChange($event)"required>
+          <option *ngFor="let g of groups" [ngValue]="g.idGrupo">{{ g.nombre }} - {{ g.nombreCurso }}</option>
+        </select>
           </div>
           <div class="form-group">
             <label for="idTema">Tema *</label>

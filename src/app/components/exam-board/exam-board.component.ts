@@ -170,6 +170,29 @@ export class ExamBoardComponent implements OnInit {
       error: () => console.error('Error cargando los temas')
     });
   }
+  onGrupoChange(idGrupo: number) {
+      this.newExam.idTema = 0; // Limpia selección anterior de tema si había
+      if (idGrupo) {
+        this.loadThemesByGrupo(idGrupo);
+      }
+  } 
+  loadThemesByGrupo(idGrupo: number) {
+  this.publicService.getTemasGrupo(idGrupo).subscribe({
+    next: (resp) => {
+      if (!resp.error) {
+        this.themes = resp.respuesta;
+      } else {
+        console.warn('Error en getTemasGrupo');
+        showAlert('Error al obtener los temas: ' + resp.mensaje, 'error');
+      }
+    },
+    error: () => {
+      console.error('Error cargando los temas');
+      showAlert('Fallo de comunicación con el servidor', 'error');
+    }
+  });
+}
+
 
   
   //----------------Create exam-------------------------------\\
